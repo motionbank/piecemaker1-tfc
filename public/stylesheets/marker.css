@@ -1,0 +1,19 @@
+.small a {
+  padding: 0px;
+  background: none;
+  color: #00c;
+  text-decoration: underline;
+ 	font-size:12px;}
+
+.a-marker{
+	background:#ccc;
+	margin-bottom:3px;
+	width:230px;
+	padding-left:3px;
+	font-size:18px;
+	color:#000;
+}
+.high{
+	background:#fcc;
+	color:#F00;
+}

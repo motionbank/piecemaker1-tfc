@@ -1,0 +1,31 @@
+<h1>Set Preferences for <%= current_user.login %></h1>
+<% form_tag({:controller => 'users', :action => 'store_prefs'}, :class => 'ajax') do %>
+
+	<%= hidden_field_tag(:piece_num, session[:pieceid] )  %>
+   Page Refresh: 
+   <%= select_tag(:refresh_rate, options_for_select(['Never','15','30','60'],@refresh.to_s)) %> Seconds&nbsp;&nbsp;
+  Display Notes:
+  <%= radio_button_tag 'noteshow', 'on', current_user.notes_on %>On
+  <%= radio_button_tag 'noteshow', 'off', !current_user.notes_on %>Off
+  &nbsp;&nbsp;
+ Display Markers:
+ <%= radio_button_tag 'markershow', 'on', current_user.markers_on %>On
+ <%= radio_button_tag 'markershow', 'off', !current_user.markers_on %>Off
+ <br /><br />
+  Inherit Cast From Previous Event: <%= check_box_tag 'inherit_cast', 'true', current_user.inherit_cast %>&nbsp;&nbsp;
+  Truncate Long Descriptions: <%= check_box_tag 'truncate', 'true', (current_user.truncate == 'more') %>
+
+<br /><br />
+   Select your time zone: <select id = 'tim' name = 'time_zone'>
+       <% time_zone_options_for_select(Time.zone.name).each do |zone| %>
+       <%= zone %>
+       <%- end -%>
+     </select>
+<br /><br /><br />
+
+  <%= submit_tag "Save Preferences" %>
+<% end %>
+
+<br />
+<%= link_to 'Cancel', {:controller => 'capture', :action => 'present'}, :class => 'cancel' %>
+<br />

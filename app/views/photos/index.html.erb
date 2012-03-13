@@ -1,0 +1,14 @@
+<h1>Photos</h1>
+<%= universal_table(
+  @photos,{
+  :columns => [{'ID' => 'id'},
+                {'Piece' => 'piece.title'},                
+                {'Created At' => 'created_at'}
+    ],
+  :actions => [
+              {'Destroy' => '/photos/delete_from_gallery'}
+    ],
+  :admin => {'Destroy'=>'normal_actions'},
+  :truncate => 15
+  })
+  %>

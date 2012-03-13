@@ -1,0 +1,8 @@
+<h3>Scratch Pad</h3>
+
+<%- form_tag({:action => 'update_scratchpad'},:class => 'ajax' ) do %>
+<%= text_area_tag 'scratchpad', @pad, :size => "82x22"  %></p>
+
+<%= submit_tag "Save" %>&nbsp;&nbsp;&nbsp;&nbsp;<%= link_to "Cancel",{ :controller => '', :action => ''}, :class => 'cancel-sc' %>
+<%- end -%>
+<br />

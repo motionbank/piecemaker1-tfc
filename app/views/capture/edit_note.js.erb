@@ -1,0 +1,4 @@
+$("#form_div").hide();
+$("#form_div").html('');
+$("#note-<%= @note.id %>").html("<%= escape_javascript(display_whole_note(@note)) -%>");
+$(".hdble").show();

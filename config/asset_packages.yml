@@ -1,0 +1,30 @@
+--- 
+javascripts: 
+- capture_package:
+  - jquery
+  - jquery-form
+  - jquery-scroll
+  - jquery-timer
+  - jquery-jedit
+  - jquery-hotkeys
+  - jquery-tools
+  - jquery-menubox
+  - jquery-periodical
+  - application
+  - capture
+- marker_package:
+  - jquery
+  - jquery-hotkeys
+  - jquery-form
+  - application
+  - marker
+stylesheets:
+- marker_package:
+  - scaffold
+  - piecemaker
+  - marker
+- capture_package:
+  - scaffold 
+  - piecemaker
+  - capture
+  - onglets

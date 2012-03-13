@@ -1,0 +1,207 @@
+body {
+	font-size:.6em;
+}
+#piecemaker_header{
+	display:none;
+}
+#jump {display:none;}
+#quick {display:none;}
+#main {
+	background: #fff;
+	padding-top: 0px;
+	padding-bottom: 10px;
+	position: absolute;
+	top: 40px;
+	
+}
+
+#tm_footnotes_debug{
+	display:none;
+	position:relative;
+	top:2000px;
+}
+.evpe a {
+	color:#000;
+}
+.ev{
+width:85%;
+line-height: 1.1em;
+font-size:1em;
+padding:4px;
+position: relative;
+margin-top:30px;
+clear:left;
+}
+.ev a{
+	text-decoration:none;
+}
+
+.ev strong {
+	background:#f7b;
+}
+
+.typelight_cue {
+	left: 2%;
+	width: 98%;
+	color:#090;
+}
+
+.typesound_cue {
+	left: 2%;
+	width: 98%;
+	color:#009;
+}
+
+.typescene {
+	left: 2%;
+	width: 98%;
+}
+
+.typediscussion {
+	left: 2%;
+	width: 98%;
+}
+
+
+.typesub_scene {
+	width: 95%;
+	left:5%;
+	font-style:italic;
+}
+
+.high{
+	background:#ffe5e5;
+	margin-top:2px;
+}
+.typevideo_in {
+	display:none;
+	left:-30px;
+	width: 150px;
+  	background-color: #fff;
+	border:3px;
+	border-color:#fcf;
+	border-style:solid;
+}
+
+.typedvd_timecode {
+	left:-15px;
+	width: 150px;
+  	background-color: #fff;
+}
+
+
+.typevideo_out {
+	display:none;
+	left:-30px;
+	width: 150px;
+}
+
+.typeheadline {
+	width:100%;
+	left:0%;
+	color:#f00;
+	margin-top:15px;
+}
+
+
+#edit_links{
+	text-align:right;
+}
+#note_toggle
+{
+	text-align:right;
+}
+.note {
+	position:relative;
+	left: 20%;
+	width: 25%;
+  	padding: 4px;
+	line-height: 12px;
+	border:2px;
+	border-color:#aaa;
+	border-style:solid;
+	margin-bottom:2px;
+}
+
+#dv_note_creation_info{
+	float:right;
+	text-align:right;
+}
+.note{
+	display:none;
+}
+.evtit{
+	font-family:arial;
+	font-weight:bold;
+	font-size:1.4em;
+	width:500px;
+	line-height:1.2em;
+	float:left;
+	clear:left;
+}
+.dvd_title{
+	font-size:1em;;
+}
+.evts{
+
+	top:0px;
+	right:1px;
+	width:100px;
+	float:right;
+	font-size:1em;
+	text-align:right;
+	clear:right;
+}
+.evci{
+
+	top:0px;
+	width:240px;
+	right:150px;
+	float:right;
+	text-align:right;
+	font-size:1em;
+}
+.evpe{
+	font-family:arial;
+	font-weight:bold;
+	font-size:1.1em;
+	margin-top:1.5em;
+	margin-left:1.5em;
+	width:90%;
+	clear:left;
+}
+.evex{
+	font-family:arial;
+	font-size:1.1em;
+	margin-top:1.8em;
+	margin-left:1.6em;
+	font-weight:bold;
+}
+.evdes{
+	font-family:times serif;
+	font-size:1.1em;
+	margin-top:2em;
+	margin-left:2em;
+	width:90%;
+}
+.noel{
+	display:none;
+	margin-top:1.5em;
+	text-align:right;
+}
+
+.evedlnk{
+	display:none;
+	text-align:right;
+	margin-top:1.5em;
+	clear:right;
+}
+.tag{
+	display:none;
+}
+#searched{
+	font-size:1.5em;
+}
+.jump{
+	display:none;
+}

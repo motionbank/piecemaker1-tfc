@@ -1,0 +1,4 @@
+<h2>Word Statistics for <%= @piece.title %></h2>
+<%- @stats.each do |word,stat| -%>
+<%= word %> : <%= stat %><br />
+<% end %>

@@ -1,0 +1,40 @@
+<b>Title:</b>
+<%= text_field 'video', 'title',:size => 50  %>
+<br />
+<b>Rating:</b>
+0<%= radio_button_tag 'video[rating]', '0' , @video.rating == 0 %>
+1<%= radio_button_tag 'video[rating]', '1' , @video.rating == 1 %>
+2<%= radio_button_tag 'video[rating]', '2' , @video.rating == 2 %>
+3<%= radio_button_tag 'video[rating]', '3' , @video.rating == 3 %>
+4<%= radio_button_tag 'video[rating]', '4' , @video.rating == 4 %>
+5<%= radio_button_tag 'video[rating]', '5' , @video.rating == 5 %>
+<br />
+<b>Type:</b>
+Rehearsal<%= radio_button_tag 'video[vid_type]', 'rehearsal' , @video.vid_type == 'rehearsal'%>
+Performance<%= radio_button_tag 'video[vid_type]', 'performance', @video.vid_type == 'performance' %>
+Other<%= radio_button_tag 'video[vid_type]', 'other', @video.vid_type == 'other' %>
+<br />
+<b>Recording started at:</b><%= text_field_tag 'video[recorded_at]',@video.recorded_at, :size => 30 %><br />
+<b>Duration:</b><%= text_field_tag 'video[duration]',@video.duration, :size => 10 %> Seconds
+<span style = 'color:#c00'><br />Changing the recording starting time will affect all events times!</span>
+<br /><br />
+<b>Meta Data</b><br />
+<%= text_area 'video', 'meta_data',:size => '50x5' %>
+<b>File Extensions:</b><br />
+<%= "Archive:" %>
+<%= text_field "video","fn_arch",:size => 6 %>&nbsp;&nbsp;
+<%= "S3:" %>
+<%= text_field "video","fn_s3",:size => 6 %>&nbsp;&nbsp;
+<%= "Local:" %>
+<%= text_field "video","fn_local",:size => 6 %><br />
+<b>Contains Pieces (uncheck to remove):</b><br />
+<ul style = 'list-style:none;'>
+<%- @video.video_recordings.each do |video_recording| -%>
+<li>
+  <%= check_box_tag 'subjects[]',video_recording.piece_id,true %> <%= video_recording.piece.title %>
+</li>
+<%- end -%>
+</ul>
+<h4>Add Content:</h4>
+<%= select_tag 'new_subject_id', options_for_select(piece_select_with_none,'') %>
+<br /><br />

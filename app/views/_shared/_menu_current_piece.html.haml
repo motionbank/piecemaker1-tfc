@@ -1,0 +1,19 @@
+
+- menu_first_level(truncate(current_piece.title,:length => 15)) do
+  %li= link_to "Show Details", :controller => "pieces", :action => 'show', :id => session[:pieceid]
+  %li= link_to 'List Assets', :controller => 'documents', :action => 'list_by_piece', :id => session[:pieceid]
+  %li= link_to 'List Meta Infos', :controller => 'meta_infos', :action => 'list_by_piece', :id => session[:pieceid]
+  %li= link_to 'Photo Gallery', :controller => 'photos', :action => 'gallery',:id => session[:pieceid]
+  %li= link_to 'New Asset', {:controller => 'documents', :action => 'new', :id => session[:pieceid]}
+  %li= link_to 'New Meta Info', :controller => 'meta_infos', :action => 'new', :id => session[:pieceid]
+  - if user_has_right?('advanced_actions')
+    %li= link_to 'List Videos', :controller => 'video', :action => 'index', :id => session[:pieceid]
+    %li= link_to 'Raw Event List', :controller => 'events', :action => 'list', :id => session[:pieceid]
+  -if Configuration.app_is_local?
+    %li= link_to("Upload Days Videos",{:controller => 'video',:action => 'process_days_videos',:id => session[:pieceid]},:class => 'process')
+
+  %li= link_to('Marker List',{:controller => 'capture', :action => 'marker_list',:id => session[:pieceid]})
+  
+
+
+

@@ -1,0 +1,43 @@
+<%- if params[:viewer] -%>
+$("#form_div").hide();
+$("#form_div").html('');
+$("#listing-<%= @event.id -%>").replaceWith("<%= escape_javascript(render(:partial => 'listing_span', :locals =>{:event => @event})) -%>");
+<%- else -%>
+
+<%- unless @incremental -%>
+$("#form_div").hide();
+$("#form_div").html('');
+<%- end -%>
+
+
+<%- if @create -%>
+ <%- if @after_id -%>
+  	$("#sort_<%= @after_id -%>").after("<%= escape_javascript(render(:partial => 'one_event', :locals => {:event => @event})) -%>");
+ <%- else #after id -%>
+		<%- if @event.video -%>
+$("#vid_<%= @event.video.id -%>").replaceWith("<%= escape_javascript(render(:partial => 'video_block', :locals => {:video => @event.video, :piece_id => current_piece.id})) -%>")
+		<%- else -%>
+		$('#events_presentation').append("<%= escape_javascript(render(:partial => 'one_event', :locals => {:event => @event})) -%>")
+		<%- end #event.video-%>
+
+ <%- end #else afterid-%>
+
+<%- else # if created-%>
+		<%- if @event.video -%>
+$("#vid_<%= @event.video.id -%>").replaceWith("<%= escape_javascript(render(:partial => 'video_block', :locals => {:video => @event.video, :piece_id => current_piece.id})) -%>")
+		<%- else -%>
+$("#sort_<%= @event.id -%>").replaceWith("<%= escape_javascript(render(:partial => 'one_event', :locals => {:event => @event})) -%>");
+		<%- end #event.video-%>
+
+
+<%- end -%>
+<%- if @dvd_quick -%>
+
+	$("#dvd_quick").html('<%= escape_javascript(video_quick_link) -%>')
+
+<%- end -%>
+<%- unless @incremental -%>
+$(".hdble").show();
+<%- end -%>
+flashMessage('<%= @flash_message || '' -%>');
+<%- end -%>

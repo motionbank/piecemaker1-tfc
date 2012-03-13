@@ -1,0 +1,17 @@
+<ul class = ''>
+  <%= render :partial => '_shared/menu_home' %>
+  <%- if (current_user)-%>
+    <%= render :partial => '_shared/menu_piece' %>
+    <%- if current_piece -%>
+    <%= render :partial => '_shared/menu_current_piece' %>
+    <% end -%>
+    <%- if((params[:controller] == 'capture')&&(params[:action]=='present'))-%>
+     <%= render :partial => '_shared/menu_show' %>
+     <%- if user_has_right?('normal_actions')-%>
+      <%= render :partial => '_shared/menu_create_new' %>
+     <% end %>
+    <%- end -%>
+    <%#= render :partial => '_shared/menu_video' %>
+     <%= render :partial => '_shared/menu_admin' %>
+  <%- end -%>
+</ul>

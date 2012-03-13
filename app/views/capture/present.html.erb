@@ -1,0 +1,62 @@
+<%- content_for :quick do -%>
+<%- if user_has_right?('normal_actions') -%>
+<div id="quick" data-shortcut = 'enabled'>
+<span class = 'hdble'>
+	<%- form_tag :action => 'present', :id => session[:piecid], :filter_type => 'text' do %>
+	<%= text_field_tag 'search', '',:size => 20 %>
+	<%= submit_tag 'Search' %><%= link_to 'Show All', :action => 'present', :id => session[:piecid] %>
+	<%- end %><br />
+<span class="short-cut">N </span><%= link_to('New Scene',{:action => 'new_event',:id => 'scene'}, :class => 'get sprep')-%><br />
+<span class="short-cut">M </span><%= link_to('New Marker',{:action => 'new_marker',:id => 'marker'}, :class => 'marker mprep', :id => 'marker')-%><br />
+<span class="short-cut">S </span><%= link_to('New Sub Scene',{:action => 'new_sub_scene'}, :class => 'get ssprep')-%>
+<%- if user_has_right?('normal_actions') -%>
+<br /><br />
+<span id='dvd_quick'><%= video_quick_link %></span>
+<% end -%><br /><br />
+</span>
+<%= link_to "Open Scratchpad",{:controller => 'capture',:action => 'open_scratchpad'},:class => 'get-sc' %>
+<br />
+<a class = 'collapse'>Collapse </a><a class = 'expand'>Expand</a>
+<br /><br /><br />
+<div id = "dates">
+<%- g = @grouped_events.map{|x| x.second[:start]}.uniq -%>
+<%- g.each_index do |index| -%>
+<a class = "dates"id= "dat-<%= index.to_s %>"><%= g[index].strftime("%d %b %Y") %></a><br />
+<% end %>
+</div>
+</div>
+<%- end -%>s
+<%- end -%>
+
+
+<div id='events_presentation' data-pieceid='<%= current_piece.id %>'>
+<%= render :partial => 'present_header' %>
+<%= render :partial => 'present_body' %>
+</div>
+
+<%- content_for :menus do  -%>
+<div id = 'event-menu' class = 'menn evm' style='display:none'>
+  <div id = 'menid'></div>
+  <div class = 'menclose'></div>
+  <div id='menin'>
+    <br />
+    <%= put_menu %>
+  </div>
+</div>
+<div id = 'video-menu' class = 'menn vim' style='display:none'>
+  <div id = 'vmenid'></div>
+  <div class = 'menclose'></div>
+  <div id='vmenin'>
+    <br />
+    <%= put_v_menu %>
+  </div>
+</div>
+<div id = 'sub-scene-menu' class = 'menn sum' style='display:none'>
+  <div id = 'smenid'></div>
+  <div class = 'menclose'></div>
+  <div id='smenin'>
+    <br />
+    <%= put_s_menu %>
+  </div>
+</div>
+<%- end -%>

@@ -1,0 +1,8 @@
+<b>Edit Video</b><br /><br />
+<%- form_tag({:action => 'update',:id => @video},:class => 'ajax',:id => @video.id) do -%>
+
+<%= render :partial => 'form' %>
+
+<%= submit_tag "Save Changes" %> <%= link_to 'Cancel',came_from_or({:action => 'index'}), :class => 'cancel' %>
+<% end %>
+<br />

@@ -1,0 +1,17 @@
+<h2>New Photo for <%= @piece.title %> Gallery</h2>
+
+<form id = 's3form' action = '/photos/create/<%= @photo.id %>' method = 'POST'>
+  <%= hidden_field_tag :title, nil, :id => 'title_field' %>
+  <%= hidden_field_tag :size, nil, :id => 'size_field' %>
+  <%= hidden_field_tag :contenttype, nil, :id => 'content_type_field' %>
+<%= s3_swf_upload_tag(:success => "document.getElementById('s3form').submit();",
+                      :selected => 'vv = filename;ss = size;ct = contenttype;
+                      document.getElementById("title_field").value=filename;
+                      document.getElementById("size_field").value=size;
+                      document.getElementById("content_type_field").value=contenttype;',
+                      :prefix => @prefix + '/original'
+                       )%>
+</form>
+
+<br /><br />
+<%= link_to("Cancel and go Back to Gallery",{:controller => 'photos', :action => 'cancel_new', :id => @photo.id }) -%>

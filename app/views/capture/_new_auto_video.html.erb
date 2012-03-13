@@ -1,0 +1,25 @@
+<%- unless @player -%>
+<h3 style = 'color:#c00'>Warning: Quicktime Player is not responding. No video will be recorded.<br />Please Click 'Cancel', make sure Quicktime Player is running and try again.<br />Click 'Create' if you're sure you want to continue without recording video.</h3>
+<%- else -%>
+<%- if current_configuration.use_auto_video && 'Start' == @text -%>
+<h3 style = 'color:#00c'> Please check the QuickTime Player is configured properly.</h3>
+<% end %>
+<%- end -%>
+
+<h3><%= 'Video' + ' ' + @text %></h3>
+<%- form_tag({:action => 'confirm_video_io',:id => @video},:class => 'ajax') do -%>
+
+Video Name: 
+<%- if @text == 'Start' -%>
+<%= text_field_tag 'video[title]',@video.title, :size => 30 %>
+<%= hidden_field_tag('quick_take',params[:quick_take]) %>
+<%- else -%>
+<%= @video.title %>
+<%- end -%>
+<%= hidden_field_tag('create', 'true') if @create -%>
+<%= hidden_field_tag('video[vid_type]','rehearsal') %>
+
+<br /><br />
+<%= submit_tag "#{@text} Video" %> <%= link_to 'Cancel',{:action => 'cancel_new_vid', :id => @video.id}, :class => 'cancel_mod' %>
+<%- end %>
+<br />

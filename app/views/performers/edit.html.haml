@@ -1,0 +1,5 @@
+%h1
+  Edit
+  = @performer.short_name
+- form_tag :action => 'update',:id => @performer.id do
+  = render :partial => 'form'

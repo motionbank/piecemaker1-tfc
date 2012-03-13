@@ -1,0 +1,10 @@
+<h3>Show Events from Selected Video:</h3>
+<% form_tag  :controller => 'capture', :action => 'present', :filter_type => 'video' do %>
+<%= hidden_field_tag(:video_filter, 'true') %><br />
+
+<%= select_tag("video", options_for_video_search) %>
+<br /><br />
+<%= submit_tag "Search" %> <%= link_to 'Cancel',{:action => 'present', :id => current_piece.id}, :class => 'cancel'%>
+<%- end -%>
+<br />
+

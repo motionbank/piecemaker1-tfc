@@ -1,0 +1,7 @@
+<h3>Edit Video</h3>
+<% form_tag "/video/update/#{@video.id}?came_from=#{params[:came_from]}" do %>
+  <%= render :partial => 'form' %>
+<%= submit_tag "Save Changes" %>
+<% end %>
+<br />
+<%= link_to 'Back to List', came_from_or({:action => 'index', :id => @return_to}) %>

@@ -1,0 +1,6 @@
+<%- form_for :tag, :action => 'edit_tag', :id => @tag.id do |t| %>
+Tag Name:<%= t.text_field :name %>
+<%= submit_tag 'Save' %>
+<%- end -%>
+<br /><br />
+<%= link_to "Back to Tag List", :action => 'list_tags', :id => @tag.piece_id %>

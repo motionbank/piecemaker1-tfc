@@ -1,0 +1,123 @@
+= content_tag :h2, @piece.title
+%ul#css-tabs.css-tabs
+  %li
+    %a#l1{:href => "#1"} Details
+  %li
+    %a#l2{:href => "#2"} Manage Events
+  %li
+    %a#l3{:href => "#3"} Meta Info
+  %li
+    %a#l4{:href => "#4"} Tags
+.panes
+  .css-panes.l1{:style => "display:block"}
+    %h3 
+      Title: 
+      =@piece.title
+      &nbsp;&nbsp;&nbsp;Short Name:
+      =@piece.short_name || 'none'
+      &nbsp;&nbsp;&nbsp; Created:
+      =@piece.created_at.strftime("%d/%m - %H:%M:%S %Z")
+    = @piece.events.length
+    events,
+    = @piece.events.select{|x| x.is_draft?}.length
+    drafts,
+    = @piece.events.select{|x| x.is_deleted?}.length
+    deleted &nbsp;&nbsp;&nbsp;
+    = @piece.is_active ? "Working Piece" : "Archive Piece"
+    %br/
+    %br/
+    = link_to 'Capture',:controller => 'capture', :action => 'present', :id => @piece
+    |
+    = link_to 'Edit', {:action => 'edit', :id => @piece},:class => 'get'
+    %br/
+    %br/
+
+  .css-panes.l2
+    .piecesshowbox
+      %strong Drafts:
+      - if user_has_right?('group_admin')
+        = link_to 'Destroy Drafts', :action =>  'destroy_drafts', :id => @piece
+      %br/
+      .pieceshow
+        - @piece.events.select{|x| x.is_draft?}.sort_by{|x| x.happened_at}.each_with_index do |draft,index|
+          =link_to "#{draft.id}",:controller => 'pieces',:action => 'normalfy_event',:id => draft.id
+          =link_to "view",:controller => 'events',:action => 'show',:id => draft.id,:came_from => @came_from
+          %br/
+          = draft.title
+          %br/
+          = truncate draft.description, :length => 20
+          %br/
+          %br/
+    .piecesshowbox
+      %strong Trash:
+      = link_to 'View',:controller => 'capture', :action => 'present', :id => @piece, :filter_type => 'trash'
+      |
+      = link_to 'Empty',:controller => 'capture', :action => 'empty_trash', :id => @piece
+      %br/
+      .pieceshow
+        - @piece.events.deleted.each_with_index do |trash,index|
+          =# index.to_s + ': ' + trash.title
+          %br/
+          =# trash.description
+          %br/
+          %br/
+    .piecesshowbox
+      %strong Locked:
+      %br/
+      .pieceshow
+        - @piece.events.locked.each_with_index do |locked,index|
+          = index.to_s + ': ' + locked.title
+          %br/
+          =link_to "#{locked.id}", "/pieces/unlock_event/#{locked.id}"
+          %br/
+          %br/
+    .piecesshowbox
+      %strong Dates:
+      %br/
+      .pieceshow
+        - i = 1
+        - @piece.date_list.each do |date|
+          = i.to_s + ': ' + link_to(date.strftime("%D"),:controller => :capture,:action => :present,:id => @piece.id,:filter_type => 'date_range', :start_date => date, :end_date => date+60*60*24)
+          %br/
+          - i += 1
+  .css-panes.l3
+    .piecesshowbox
+      %strong Locations:
+      =link_to 'Update',:controller => 'capture', :action => 'update_locations', :id => @piece
+      %br/
+      %br/
+      -@piece.location_list.each_with_index do |location, index|
+        = index + 1
+        -
+        = location[:date].strftime("%D")
+        -
+        = location[:location]
+        %br/
+    .piecesshowbox
+      %strong Meta Info:
+      %br/
+      .pieceshow
+        - @piece.meta_infos.each do |info|
+          = link_to(info.title, :controller => 'meta_infos' , :action => 'show', :id => info.id)
+          %br/
+          %br/
+  .css-panes.l4
+    %table
+      %tr
+        %th Tag Name
+        %th Tag Type
+        %th{:colspan => "2"} Actions
+      - @piece.tags.each do |tag|
+        %tr{:class => "<%= cycle('row-1','row-2') %>"}
+          %td 
+            = tag.name
+          %td 
+            = tag.tag_type
+          %td 
+            = link_to 'Edit', :controller => 'pieces', :action => 'edit_tag', :id => tag.id
+          %td 
+            = link_to 'Destroy',{ :controller => 'pieces', :action => 'destroy_tag', :id => tag.id,:came_from => @came_from + '?tab=l4'}, :confirm => 'Are you sure?', :method => :post
+
+<script type = 'text/javascript'>
+//goToTab('<%= params[:tab] || "l1" %>')
+</script>

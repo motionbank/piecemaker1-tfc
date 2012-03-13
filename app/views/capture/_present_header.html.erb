@@ -1,0 +1,20 @@
+<%- content_for 'present_header' do -%>
+<div  id = 'info_strip'>
+  <span id = 'info_title'><%= current_piece.title %></span>&nbsp;&nbsp;&nbsp;
+<%= @event_count %> of <%= @total_event_number %> Events&nbsp;&nbsp;&nbsp;
+<%- if @events.last -%>
+Last Modified by: <%= @events.last.created_by -%> at <%= @events.last.created_at.strftime("%d.%m - %H:%M:%S %Z") -%>
+<%- end -%>
+ auto video: <%= current_configuration.use_auto_video %>
+&nbsp;&nbsp;&nbsp;&nbsp;<span id = 'vitime'>Click to Show Current Video Time</span>
+
+
+<%- if (@filter_type == 'trash') -%>
+ &nbsp;&nbsp;&nbsp;<span style = "color:#f00"><b>Showing Deleted Events</b></span>
+<%- end -%>
+<%- if (@filter_type == 'page') -%>
+<%= render :partial => '_shared/pager', :locals =>{:events => @events} %>
+<%- end -%>
+
+</div>
+<%- end -%>

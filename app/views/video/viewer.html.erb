@@ -1,0 +1,83 @@
+<%- content_for 'present_header' do -%>
+<div  id = 'info_strip'>
+<span id = 'info_title'><%= @piece.title if @piece %></span>&nbsp;&nbsp;&nbsp;
+<%= content_tag :span, @event.title if @event %>
+<%= content_tag :span, "Video: #{@video.title}" %>
+&nbsp;&nbsp;
+<%= content_tag :span, "Time: #{@event.video_start_time.to_time_string}" if @event  %>
+<%= content_tag :span, "&nbsp;&nbsp;&nbsp;#{@flow_type} D: #{@ur}" %>
+</div>
+<% end -%>
+<script type="text/javascript" src="/javascripts/flowplayer-3.2.6.min.js"></script>
+
+<%#- if @flow_type == 's3' -%>
+<%#- @log_string = "log:{level:'warn',filter:'org.flowplayer.rtmp.*'}" -%>
+<%#- end %>
+
+<div	href="<%= flowplayer_div_url(@flow_type,@video) %>" id="rtmpPlayer"></div>
+<script>
+window.onload = function() {
+    
+  flowplayer("rtmpPlayer", "/swfs/flowplayer-3.2.7.swf", {
+	log : {
+			level  : 'debug',
+			filter : 'org.flowplayer.pseudostreaming.*'
+		},
+   plugins:  {
+     controls:  {            
+                    all: false, 
+                    scrubber: true,
+                    play: true,
+                    time: true,
+                    fullscreen:true,
+                    autoHide:{
+                      enabled: false}
+                }<%= flowplayer_type_string(@flow_type) %>
+      
+   },
+   clip: {
+     url: '<%= flowplayer_clip_url(@flow_type,@video,@ur) %>',
+     start: 0,
+     onStart: function(){startPolling();playerJumpTo(<%= params[:seek] %>)},
+     <%= flowplayer_provider_string(@flow_type) %>
+     scaling: 'fit'
+     
+   }
+  });
+}
+</script>
+
+<%= render 'viewer_nudge' %>
+<%- content_for :jump do -%>
+<%= render 'video_info_div',:video => @video %>
+<%- end -%>
+<%- content_for :menus do -%>
+<div class = 'menn eviewer' style='display:none'>
+  <div id = 'menid'></div>
+  <div class = 'menclose'></div>
+  <div id='menin'>
+    <br />
+    <%= put_viewer_menu %>
+  </div>
+</div>
+<div class = 'menn esviewer' style='display:none'>
+  <div id = 'menid'></div>
+  <div class = 'menclose'></div>
+  <div id='menin'>
+    <br />
+    <%= put_viewer_sub_menu %>
+  </div>
+</div>
+<%- end -%>
+
+  <div class = 'vidlinks' id = "mark" data-shortcut = 'enabled' data-vidid = "<%= @video.id %>" data-pieceid = "<%= @piece.id %>">
+    <button style = 'background:#bbb;color#000' onClick="makeAnnotation(<%= @video.id %>,<%= @piece.id %>)">New Annotation</button>
+    <button style = 'background:#bbb;color#000' onClick="makeSubAnnotation(<%= @video.id %>,<%= @piece.id %>)">New Sub Annotation</button>
+    <button  style = 'background:#bbb;color#000' onClick="makeMarker(<%= @video.id %>,<%= @piece.id %>)">New Marker (ctrl-v)</button>
+  </div>
+<div id = 'viewer-type-select'>
+  Show: <span id = 'toggle-markers' class = 'type-select greenish'>Markers</span> | <span id = 'toggle-others' class = 'type-select greenish'>Others</span>
+</div>
+<div id = 'listing_div'>
+<%= render 'listing_div', :video => @video  %>
+</div>

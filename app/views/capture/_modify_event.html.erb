@@ -1,0 +1,50 @@
+<%- if @viewer -%>
+viewer
+<% end -%>
+<div id = 'updater' class = 'update'style = 'display:none'>Updating...</div>
+<span style = 'font-weight:bold;font-size:1.6em'><%=h @event.event_type.humanize %></span>&nbsp;&nbsp; draft id:<%= @event.id %>&nbsp;&nbsp;original id: <%= @original_event.id if @original_event  %>&nbsp;&nbsp;happened_at: <%= @original_event.happened_at if @original_event %> <br />
+
+<%- form_tag({:action => 'modi_ev',:id => @event},:class => 'ajax timer',:id => @event.id) do -%>
+
+
+<p>
+<label for="event_title">Title: </label>
+<input id="event_title" name="event[title]" size="35" type="text" value = "<%= @event.title %>"/><%= inherit_check_or_select(@event) -%>
+
+&nbsp;&nbsp;<label for="event_type">Event Type:</label>
+
+<%= select_tag('event[event_type]', event_type_select_options(@event)) -%>
+</p>
+
+<%- if user_has_right?('group_admin') -%>
+Happened at: <input id="event_happened_at" name="event[happened_at]" size="30" type="text" value = "<%= @event.happened_at %>"/>
+<%- end -%>
+Location: <%= put_location_select(@event.location) %>
+<p>
+<label for="event_tags">Tags (separated by commas): </label>
+<input id="event_tags" name="tags" size="40" type="text" value = "<%= @event.tag_list %>"/>
+<div style = 'position:absolute;top:115px;left:493px '>
+<select id = 'taggs'><%= options_for_select(taglist) %></select>
+</div>
+</p>
+
+<p><label for="event_description">Description</label><br/>
+<%= text_area 'event', 'description',:size => '75x9'  %>
+</p>
+
+<%= put_edit_tip_block() -%>
+
+<% if @event.needs_performers_field? -%>
+<label for="event_performers">Performers</label><br />
+<%= checklist('performers[]',@event.piece.performers,['short_name'],events_performers(@event)) %> 
+<% end %>
+
+
+<%= hidden_field_tag('aid', @after_event.id) if @after_event -%>
+<%= hidden_field_tag('viewer', 'true') if @viewer -%>
+<%= hidden_field_tag('create', 'true') if @create -%>
+
+<br /><br />
+<%= submit_tag('Save Changes', :class => 'formhide') -%>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= link_to 'Cancel',{:action => cancel_path, :id => @event.id}, :class => 'cancel_mod' -%>
+<%- end # end of form tag-%>
+<br />

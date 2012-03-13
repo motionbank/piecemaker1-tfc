@@ -1,0 +1,17 @@
+<h1>Upload an Asset for "<%= current_piece.title %>"</h1>
+<br />
+<form id = 's3form' action = '/documents/create' method = 'POST'>
+  <%= hidden_field_tag :doc_title, nil, :id => 'title_field' %>
+  <%= hidden_field_tag :vid_id, @document.id, :id => 'id_field' %>
+  <%= hidden_field_tag :size, nil, :id => 'size_field' %>
+  <%= hidden_field_tag :contenttype, nil, :id => 'content_type_field' %>
+</form>
+<%= s3_swf_upload_tag(:success => "document.getElementById('s3form').submit();",
+                      :selected => 'vv = filename;ss = size;ct = contenttype;
+                      document.getElementById("title_field").value=filename;
+                      document.getElementById("size_field").value=size;
+                      document.getElementById("content_type_field").value=contenttype;',
+                      :prefix => @prefix
+                       )%>
+<br />
+<%= link_to('Cancel and Go Back To List', {:action => 'cancel_new', :id => @document.id},:class => 'cancel_up') %>

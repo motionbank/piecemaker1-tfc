@@ -1,0 +1,13 @@
+@came_from gets set on all requests
+came_from_string helper turns the came from into a clean url
+use it like this:
+link_to(action_label,"/controller/action/id/#{came_from_string}",:method => method, :confirm => confirm )
+
+put :came_from => @came_from in your links to a show or edit page then you can use came_from_or to get back:
+
+<%= link_to "Edit Video Content Information",{:controller => 'capture',:action => 'edit_video_from_viewer',:id => @video.id, :came_from => @came_from},:class => 'get pause' %>
+
+
+
+came_from_or will make the link take you back to where you were
+<%= link_to 'Cancel',came_from_or({:action => 'index'}), :class => 'cancel' %>

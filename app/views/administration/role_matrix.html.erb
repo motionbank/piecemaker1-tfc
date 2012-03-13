@@ -1,0 +1,22 @@
+<div style = 'position:absolute;left:-100px'>
+<h1> Rights - Roles</h1>
+<table style = "">
+    <tr>
+      <th>&nbsp;</th>
+    <%- Configuration.rights.each do |key,value| %>
+      <th style = 'font-size:1em'><%= h key %></th>
+    <% end %>
+    </tr>
+    <%- Configuration.roles.each do |role| -%>
+    <tr>
+      <td align = "right"><%= role %></td>
+      <%- Configuration.rights.each do |key,value| -%>
+      <%- flag =  value.include? role -%>
+      <td style = 'background:#<%= flag ? '5e5' : 'f56' %>'align = 'center'>
+      </td>
+      <%- end -%>
+    <%- end -%>
+
+  
+</table>
+</div>

@@ -1,0 +1,21 @@
+<h3>Videos</h3>
+<%= will_paginate(@videos) unless params[:search_term].present? %><br />
+
+<%= universal_table(
+@videos,
+{
+  :columns => [ {'ID' => 'id',:sort => 'id'},
+                #{'Title' => 'title'},
+                {'Existing Versions' => 'show_existing_versions'},
+                {'Content'=> 'show_subjects'},
+                {'Type' => 'vid_type'},
+                {'Annot.' => 'events.length'}
+              ],
+  :actions => [ {'Show' => '/video/show'},
+                {'Edit' => '/video/edit'},
+                {'Destroy' => '/video/delete'}
+              ],
+  :admin => {'Destroy'=>'group_admin','Data' => 'group_admin'},
+  :search_field => 'title'
+}
+) %>

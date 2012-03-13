@@ -1,0 +1,13 @@
+<h2>Performer Search:</h2>
+<% form_tag  :controller => 'capture', :action => 'present', :filter_type => 'performer' do %>
+<%= checklist('search_ids[]',current_piece.performers,['short_name','short_name']) -%>
+<br />
+<%= submit_tag "Search", :name => 'yes' %> search for scenes with exactly the checked performers<br /><br />
+<%= submit_tag "Search", :name => 'semi' %> search for scenes with any of the checked performers but no one else<br /><br />
+<%= submit_tag "Search", :name => 'no' %> search for scenes with the above performers and any number of others (except for full cast)<br /><br />
+<%= submit_tag "Search", :name => 'non_with_everyone' %> search for scenes with the above performers and any number of others (including full cast)<br /><br />
+<%= submit_tag "Search", :name => 'everyone' %> search for scenes with everyone<br />
+<br />
+<%- end -%>
+<%= link_to 'Cancel',{:action => 'present', :id => current_piece.id}, :class => 'cancel'%>
+<br />

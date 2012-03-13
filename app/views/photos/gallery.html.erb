@@ -1,0 +1,14 @@
+<h3>Photo Gallery for <%= current_piece.title %></h3>
+<%- if user_has_right?('normal_actions') -%>
+<a href='/photos/new/<%= current_piece.id %>'>Upload a Photo</a><br /><br />
+<%- end -%>
+
+<div id = "gallery">
+<%- @photos.each do |photo| -%>
+<%= render(:partial => 'one_photo', :locals =>{:photo => photo}) -%>
+<%- end -%>
+</div>
+<div id = 'ph' style = "display:none">
+  <div id = 'ph1'></div>
+<a style = 'text-decoration:none;background:#f00;position:absolute;top:2px;left:2px'class = 'photo-link-close'>X</a>
+</div>

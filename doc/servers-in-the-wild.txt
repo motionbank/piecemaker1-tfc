@@ -1,0 +1,35 @@
+Servers in the wild
+
+My Computer
+
+TFC Computer
+
+Jose Biondi Computer
+
+Martin Streit Computer
+
+Heroku app_name:git remote 
+  piecemaker:heroku
+  piecemaker-peisl:heroku-peisl
+  piecemaker-sylvie:heroku-sylvie
+  piecemaker-palucca:heroku-palucca
+  piecemaker-hay:heroku-hay
+  piecemaker-tfc:heroku-tfc
+  
+github  = origin
+origin	git@github.com:nutbits/piecemaker.git
+How to do it
+
+need a new entry in database yml like database: piecemaker-new
+you can comment out the differrent ones
+in myseql make a new database piecemaker-new
+make an app on heroku called piecemaker-new
+set env variables on heroku app
+make new git remote like heroku-new
+do git push heroku-new master
+
+make sure youre on the right database before you do any heroku db:pull or push
+
+
+
+  

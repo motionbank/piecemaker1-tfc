@@ -1,0 +1,9 @@
+<h1>Editing meta_info</h1>
+
+<% form_tag :action => 'update', :id => @meta_info do %>
+  <%= render :partial => 'form' %>
+  <%= submit_tag 'Edit' %>
+<% end %>
+
+<%= link_to 'Show', :action => 'show', :id => @meta_info %> |
+<%= link_to 'Back', :action => 'list' %>

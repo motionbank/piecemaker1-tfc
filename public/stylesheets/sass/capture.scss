@@ -1,0 +1,410 @@
+.ev{
+width:95%;
+line-height: 12px;
+font-size:11px;
+padding:6px;
+margin:4px;
+position: relative;
+}
+
+.geezer{
+	font-size:20px;
+	line-height:20px;
+}
+.ev strong {
+	background:#f7b;
+	font-size:1em;
+	line-height:1em;
+}
+.high {
+	border-style:solid;
+border-width:3px;
+border-color:#f00;
+margin-top:2px;
+}
+.ev p {
+	margin-top:15px;
+	font-size:11px;
+}
+.evtit{
+	font-weight:bold;
+	font-size:1.3em;
+	float:left;
+}
+.dvd_title{
+	font-size:1em;;
+}
+.evts{
+	float:right;
+	margin-left:1em;
+	font-size:1em;
+	text-align:right;
+
+}
+.evci{
+	text-align:right;
+	font-size:.96em;
+	color:#000;
+}
+.men{
+	float:right;
+	margin-left:1em;
+	font-size:1em;
+	line-height:1.5em;
+	text-align:right;
+}
+.summ{
+	float:none;
+}
+
+.men span{
+	font-size:16px;
+	color:#f66
+}
+
+.vid-men span{
+	font-size:16px;
+	color:#f66
+}
+.menn ul{
+	list-style:none;
+	margin-left:-30px;
+	line-height:18px;
+}
+.menn a{
+	color:#ccc;
+	text-decoration:none;
+}
+.menn a:hover{
+	color:#ff0;
+}
+.menn{
+	position:absolute;
+	top:200px;
+	left:200px;
+	width:140px;
+	background:#202;
+	opacity:.75;
+	padding:3px;
+	z-index:1000;
+}
+
+.menid{
+	position:absolute;
+	top:3px;
+	left:3px;
+	font-family:courier;
+	color:#ccc;
+}
+.menclose{
+	position:absolute;
+	top:3px;
+	right:3px;
+	width:11px;
+	height:11px;
+	background:#f00;
+}
+.evpe{
+	text-align:right;
+	margin-top:1.5em;
+	margin-right:.5em;
+	font-weight:bold;
+}
+.evdes{
+	margin-top:1em;
+	margin-left:1.5em;
+}
+.sub-scene{
+	padding:1px;
+	margin-top:.5em;
+	margin-left:1.5em;
+	background:#c5c5a5;
+}
+.sub-discussion{
+	padding:1px;
+	margin-top:.5em;
+	margin-left:1.5em;
+	background:#9dd;
+}
+.sub-dev_notes{
+	padding:1px;
+	margin-top:.5em;
+	margin-left:1.5em;
+	background:#dd8866;
+}
+
+.evedlnk{
+	text-align:right;
+	margin-top:1.5em;
+	clear:right;
+}
+.typesound_cue{
+	background:#ccf;
+	left:-1%;
+	width:98%
+}
+.typelight_cue{
+	background:#cfc;
+	left:-1%;
+	width:98%
+}
+$scene-background:#d5d5c5;
+.typescene{
+	background:$scene-background;
+	left:-1%;
+	width:98%
+}
+.typedev_notes{
+	background:#ffaa88;
+	left:-1%;
+	width:98%
+}
+.typeheadline{
+	background:#f99;
+	left:-5%;
+	width:90%
+}
+.typediscussion{
+	background:#aff;
+	left:-1%;
+	width:98%
+}
+.typeperformance_notes{
+	background:#caf;
+	left:-1%;
+	width:98%
+}
+.edit_links{
+	text-align:right;
+}
+.note_toggle{
+	text-align:right;
+}
+.nb{
+}
+.note {
+	position:relative;
+	left: 0%;
+	width: 99%;
+	padding:4px;
+	font-size:11px;
+	line-height: 11px;
+  background-color: #bbb;
+	border:1px;
+	margin-top:4px;
+	border-color:#eee;
+	border-style:none;
+}
+.noteinfo{
+	font-weight:bold;
+}
+.noel{
+	margin-top:1.5em;
+	text-align:right;
+}
+.nono{	
+	margin-left:.5em;
+	text-align:left;
+}
+.noci{
+	float:right;
+	text-align:right;
+	font-size:.96em;
+	color:#000;
+}
+.inline{
+	background:#bbb;
+}
+
+.tag {
+	opacity:.4;
+	background:#333;
+	color:#fff;
+	margin-bottom:0em;
+	margin-top:.4em;
+	border:0px;
+	padding:2px;
+}
+.ital {
+font-style: italic;
+}
+.grey {
+	color:#606060;
+}
+.s3green{
+	color:#0a0;
+}
+.video-label{
+	color:#66d;margin-left:-15px;
+}
+
+.fi{
+	
+}
+.image{
+	float:left;
+	width:200px;
+	height:240px;
+	padding:5px;
+}
+#ph{
+	position:absolute;
+	top:200px;
+	left:200px;
+	border: 4px solid #333;
+}
+a.dgdelp{
+	background:#f00;
+}
+.pieceshow{
+	overflow:auto;
+	width:140px;
+	height:200px;
+	border:solid 2px #009;
+	padding:2px;
+	margin-top:3px
+}
+.piecesshowbox{
+	float:left;
+	margin-right:6px;
+	margin-bottom:10px
+}
+.bar{
+	position:absolute;top:400px;left:33px;height:20px;width:325px;background:#666
+}
+.line{position:absolute;top:0px;height:20px;width:2px;background:#ccc}
+.vidlinks{
+	position:absolute;top:435px;left:10px;
+}
+.video-block{background:#e3e3e3; padding-left:20px; padding-top:2px; padding-bottom:4px; padding-right:4px; margin-left:-20px; width:900px;font-size:18px;color:#333;margin-bottom:3px;}
+
+.run{
+	color:#900;
+}
+.vid-men a{
+	font-size:11px;
+}
+.vid-men{
+	float:right;
+	margin-top:-2px;
+	margin-right:1em;
+	font-size:1em;
+	line-height:1.5em;
+	text-align:right;
+}
+#nudgers{
+	position:absolute;
+	top:405px;
+	left:10px;
+	display:block;
+	width:520px;
+	height:24px;
+}
+#nudgers a{
+	padding-right:4px;
+	padding-left:4px;
+}
+#video_info_div{
+	position:absolute;
+	left:20px;
+	width:200px;
+	top:130px;
+}
+#video_info_div a{display:inline;padding:2px;background:#55b;color:#ccc;text-decoration:none;}
+#video_info_div a:hover{background:#99c;}
+
+#rtmpPlayer{
+	position:absolute;
+	padding-left:5px;
+	top:20px;
+	display:block;
+	width:480px;
+	height:376px
+}
+table a{
+	font-size:.9em;
+}
+a#activetab{
+	background: #900;
+}
+#quick a { text-decoration:none;padding:2px;line-height:20px;}
+a.sprep{background:#ddc;}
+a.ssprep{background:#dda;}
+a.vprep{background:#8f8;}
+a.vout{background:#f9b;}
+a.vrel{background:#9af;}
+/* root element for tabs  */
+ul#css-tabs {  
+	margin:0 !important; 
+	padding:0;
+	height:30px;
+	border-bottom:1px solid #666;	 	
+}
+
+/* single tab */
+ul#css-tabs li {  
+	float:left;	 
+	padding:0; 
+	margin:0;  
+	list-style-type:none;	
+}
+
+/* link inside the tab. uses a background image */
+ul#css-tabs a { 
+	float:left;
+	font-size:13px;
+	display:block;
+	padding:5px 30px;	
+	text-decoration:none;
+	border:1px solid #666;	
+	border-bottom:0px;
+	height:18px;
+	background:#eee;
+	color:#777;
+	margin-right:2px;
+	-moz-border-radius-topleft: 4px;
+	-moz-border-radius-topright:4px;
+	position:relative;
+	top:1px;	
+}
+
+ul#css-tabs a:hover {
+	background-color:#F7F7F7;
+	color:#333;
+}
+	
+/* selected tab */
+ul#css-tabs a.current {
+	background-color:#ddd;
+	border-bottom:2px solid #ddd;	
+	color:#000;	
+	cursor:default;
+}
+
+	
+/* tab pane */
+div.css-panes {
+	display:none;
+	border:1px solid #666;
+	border-width:0 1px 1px 1px;
+	min-height:320px;
+	padding:15px 20px;
+	background-color:#ddd;	
+}
+.warning{
+	background:#fcc;
+}
+
+.sm a{
+	padding:0px; background:none;
+	color:#00c;
+	text-decoration: underline;
+}
+
+.men a{display:inline;padding:2px;background:#55b;color:#ccc;text-decoration:none;font-size:11px;}
+.men a:hover{background:#99c;}
+.small a{
+	padding:0px; background:none;
+	color:#00c;
+	text-decoration: underline;
+}

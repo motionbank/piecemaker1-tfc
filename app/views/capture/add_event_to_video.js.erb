@@ -1,0 +1,1 @@
+$("#vid_<%= @video.id -%>").replaceWith("<%= escape_javascript(render(:partial => 'video_block', :locals => {:video => @video,:piece_id => current_piece.id})) -%>")

@@ -1,0 +1,14 @@
+%h2 pieces with possible claimings
+= @possible_claimings.length
+%br/
+%br/
+%br/
+
+- @possible_claimings.each do |key,value|
+  %h3
+    = key
+  - value.each do |video|
+    = video[0].id
+    = video[1].id
+    %br/
+    

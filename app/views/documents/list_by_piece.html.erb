@@ -1,0 +1,80 @@
+<h2>"<%= @piece.title %>" </h2>
+<div class = '' style = 'display:block'>
+<h2>Assets</h2>
+<%- if @documents.length > 0 -%>
+<table id = 'doc_table'>
+  <tr>
+    <th>ID</th>
+    <th>File Name</th>
+    <th>Created At</th>
+    <th>Type</th>
+    <th>File Size</th>
+    <th>S3 OK?</th>
+    <th colspan = '3'>Actions</th>
+  </tr>
+  
+<% for document in @documents %>
+<tr class = "<%= cycle('row-1','row-2') %>">
+  <td><%=h document.id %></td>
+  <td><%=h document.doc_file_name %></td>
+  <td><%=h document.created_at %></td>
+  <td><%=h document.doc_content_type %></td>
+  <td><%=h document.doc_file_size %></td>
+  <td><%#=h document.s3_ok? %></td>
+  <td><%= link_to 'Show Details', :action => 'show', :id => document %></td>
+	<td><%= link_to 'Download',"http://s3.amazonaws.com/#{s3_bucket}/#{document.s3_path(false)}" %></td>
+  <td><%= link_to 'Destroy', { :action => 'destroy', :id => document }, :confirm => 'Are you sure?', :method => :post %></td>
+</tr>
+<% end %>
+</table>
+<%- else -%>
+<h3>No documents have been uploaded yet.</h3>
+<%- end -%>
+<br />
+<a href = "/documents/new/<%= @piece.id %>">Upload a New Asset</a>
+</div>
+
+<div class = ''>
+<h2>Photos</h2>
+<%- if @photos.length > 0 %>
+<table id = 'doc_table'>
+  <tr>
+    <th>File Name</th>
+    <th>Created At</th>
+    <th>Type</th>
+    <th>File Size</th>
+    <th>S3 OK?</th>
+    <th colspan = '2'>Actions</th>
+  </tr>
+<%- @photos.each do |photo| -%>
+<tr class = "<%= cycle('row-1','row-2') %>">
+  <td><%=h photo.picture_file_name %></td>
+  <td><%=h photo.created_at %></td>
+  <td><%=h photo.picture_content_type %></td>
+  <td><%=h photo.picture_file_size %></td>
+  <td><%#=h photo.s3_ok? %></td>
+	<td><%= link_to 'View',"http://s3.amazonaws.com/#{s3_bucket}/#{photo.s3_path}" %></td>
+  <td><%= link_to 'Destroy', { :controller => 'photos', :action => 'delete_from_gallery', :id => photo }, :confirm => 'Are you sure?', :method => :post %></td>
+</tr>
+<%- end -%>
+</table>
+<%- else -%>
+<h3>No photos have been uploaded yet.</h3>
+<%- end -%>
+<br />
+<a href = "/photos/new/<%= @piece.id %>">Upload a New Photo</a>
+</div>
+<div class = '' style = "line-height:24px">
+<h2>Uploaded Videos</h2>
+<%- if @videos.length > 0 %>
+<h4>(click to download)</h4>
+<%- @videos.each do |video| -%>
+<%= link_to "#{video.fn_s3 ? video.title  : 'no_title'}", "http://s3.amazonaws.com/#{s3_bucket}/#{video.s3_path}" %>
+<%- end -%>
+
+<%- else -%>
+<h4>No Videos Yet</h4>
+</div>
+<%- end -%>
+<br />
+<%= link_to 'Back to Capture', :controller => 'capture', :action => 'present', :id => session[:pieceid] -%>

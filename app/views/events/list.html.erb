@@ -1,0 +1,27 @@
+<h1>Listing Events
+<%- if @piece -%>
+in "<%= @piece.title %>"
+<%- end -%>
+</h1>
+<h2><%= @events.length %> Events</h2>
+<%= will_paginate @events %><br />
+<%= universal_table(
+  @events,{
+  :columns => [{'ID' => 'id',:sort => 'id'},
+                {'Piece' => 'piece.title'},
+                {'Type' => 'event_type'},
+                {'Title' => 'title',:sort => 'title'},
+                {'Description' => 'description'},
+                {'Created At' => 'created_at'},
+                {'Locked' => 'locked_by'},
+                {'Media Time' => 'video_start_time'},
+                {'State' => 'state'}
+    ],
+  :actions => [  {'Show' => '/events/show'},
+                  {'Edit' => '/events/edit'},
+                  {'Destroy' => 'delete_ev$'}
+    ],
+  :admin => {'Edit' => 'group_admin','Destroy'=>'normal_actions'},
+  :truncate => 15
+  })
+  %>

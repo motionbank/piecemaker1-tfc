@@ -1,0 +1,60 @@
+undo:
+
+at every change the block is cloned. The clone id is stored in the undo cue. Undo cue holds up to ten undos.
+ if you click it searches for the latest undo and puts that data into the original block. 
+ then the original block is put into the redo cue.
+ you need an algorithm to figure out the place in the undo redo cue.
+ blocks need a is_clone column
+ 
+ 
+ 
+ 
+uploading videos 
+videos/new renders video/_new
+goes to capture/create_video        cancel goes to capture/cancel_new_vid
+
+
+
+
+
+github ip firewall accept: -A INPUT -s 65.74.177.129 -j ACCEPT 
+
+cap sync_from_remote
+  does a database dump to yml, downloads it and loads it into the local machine
+  
+cap sync_from_local
+  dumps the local datbase, uploads it and loads it into the remote server
+  
+cap clear_logs
+  clears the log files on the production machine
+  
+cap deploy:migrate
+  migrates the database on the server
+
+to update swf upload
+
+copy swf_upload.swf and swf upload.js
+change helper
+
+you need to start delayed job on you r dev machine if you want to resize photos 
+do script/delayed_job start development
+
+video settings - h264 320x240 high quality aac sound use air app to reverse moov atom @@computer
+
+file upload path:
+  bucket/g-[group id]/p-[piece id]/
+  video/e-[event id]
+  photo/
+  asset/
+  
+
+  $ git remote rm heroku
+  $ git remote add heroku git@heroku.com:newname.git
+$ git remote add heroku-palucca git@heroku.com:piecemaker-palucca.git
+
+
+
+babushka
+  bash -c "`curl babushka.me/up`"
+  babushka install git
+  

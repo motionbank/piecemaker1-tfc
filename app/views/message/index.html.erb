@@ -1,0 +1,11 @@
+<h2>Messages</h2>
+<%= universal_table(
+  @messages,
+  {
+    :columns => [ {'ID' => 'id'},
+                  {'To' => 'user_id'},
+                  {'Message' => 'message'}],
+    :actions => [ {'Destroy' => '/message/destroy'}
+      ]
+  }
+  ) %>

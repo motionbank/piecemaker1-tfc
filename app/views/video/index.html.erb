@@ -1,0 +1,35 @@
+<%= content_tag :h2, "Video Recordings of \"#{@piece ? @piece.title : "unset piece"}\"" %>
+<strong><%= @videos.length %> Videos</strong><br />
+<%= will_paginate(@videos) unless params[:search_term].present? %><br />
+
+<%= universal_table(
+@videos,
+{
+  :columns => [ {'ID' => 'id',:sort => 'id'},
+                {'Title' => 'title',:sort => 'title'},
+                {'Loc' => 'local_show'},
+                {'S3' => 'S3_show'},
+                {'Content'=> 'show_subjects'},
+                {'Length' => 'duration'},
+                {'Data' => 'meta_data_present'},
+                {'Annot.' => 'events.length'},
+                {'Type' => 'vid_type',:sort => 'vid_type'}
+              ],
+  :actions => [ {'Annotate' => "/video_viewer/#{params[:id]}"},
+                {'Details' => '/video/show'},
+                {'Edit' => '/video/edit$'},
+                {'Destroy' => '/video/delete'},
+                {'Destroy All' => '/video/delete_all'}
+              ],
+  :admin => {'Destroy'=>'group_admin',
+    'Data' => 'group_admin',
+    'Destroy All' => 'group_admin'},
+  :form => {:show => show_form?,
+            'label_for_checkboxes' => 'vids[]',
+            'form' => video_form_stuff
+            },
+  :search_field => 'title'
+}
+) %>
+<br /><br />
+

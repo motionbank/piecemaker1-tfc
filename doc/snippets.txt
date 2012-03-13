@@ -1,0 +1,205 @@
+#############################################################################
+
+url for s3 normal
+http://s3.amazonaws.com/biarteca/#{@year.year.to_s}/gallery/slides/#{photo}
+
+
+
+
+# use raise exeption and rescue instead of a bunch of if ilsifs
+#helper for tabs
+
+
+
+
+def tab(name, options = {})
+s = "<li"
+s << "class = 'current'" if @current_tab == options[:name] || name.downcase
+s << '>'
+s << link_to(lang, options[:url] || send("#{name.downcase}_path") )
+s << '</li>'
+end
+
+#do this if there's conditions in the view
+editable do
+ html stuff
+end
+
+def editable(&block)
+ concat(block.call, block.binding)
+end
+
+
+class Song < ActiveRecord::Base
+  # Uses an integer of seconds to hold the length of the song
+
+  def length=(minutes)
+    write_attribute(:length, minutes.to_i * 60)
+  end
+
+  def length
+    read_attribute(:length) / 60
+  end
+end
+
+
+
+
+
+
+
+
+I needed images to be private within my application, and hosted on 
+Amazon S3. After some wrangling, this is the solution I came up with 
+to make it happen. It's not the most elegant but it works. 
+The 'url' method of the attachment doesn't seem to generate a 
+temporary publicly viewable url by default for Amazon S3 when you have 
+your permissions set to 'private'. 
+To fix this I have added the following to my Photo model: 
+  def time_limited_url(style) 
+    image.s3.interface.get_link(image.s3_bucket.to_s, 
+image.path(style), 1.hour) 
+  end 
+and here is the has_attached_file statement: 
+has_attached_file :image, 
+      :styles => { 
+        :square=> "50x50#", 
+        :small  => "175x250>" 
+      }, 
+        :storage => :s3, 
+        :s3_credentials => "#{RAILS_ROOT}/config/s3.yml", 
+        :s3_permissions => "private", 
+        :path => ":class/:id/:style.:extension", 
+        :bucket => "my-bucket" 
+        :s3_protocol => "https" 
+And then in the view: 
+        <%= image_tag photo.time_limited_url(:square) %></a> 
+This gives you an image that can be viewed from within your 
+application using your own authentication, with the image only being 
+available for a 1 hour period (you can change this to a shorter/longer 
+period as required). 
+If you're using caching, you could also wrap the image_tag in a time 
+expired cache of the same period to save on calls to S3. 
+If anyone has a better method for this please let me know. 
+Stef
+
+
+
+'
+tell application "QuickTime Player"
+	activate
+	new movie recording
+	tell application "System Events" to tell process "QuickTime Player"
+		click menu button 1 of window "Movie Recording"
+		delay 1
+		click menu item "Maximum" of menu 1 of menu button 1 of window "Movie Recording"
+		delay 1
+	end tell
+	tell document 0 to start
+end tell
+
+
+tell application "QuickTime Player"
+	activate
+	new movie recording
+	tell application "System Events" to tell process "QuickTime Player"
+		click menu button 1 of window "Movie Recording"
+		delay 1
+		click menu item "Maximum" of menu 1 of menu button 1 of window "Movie Recording"
+		delay 1
+		click menu button 1 of window "Movie Recording"
+		delay 1
+		click menu item "Choose…" of menu 1 of menu button 1 of window "Movie Recording"
+		
+	end tell
+	
+end tell
+
+
+
+add mod-streaming stuff into /usr/libexec/apache2
+  configure modh264 for 10.5
+  ./configure CFLAGS='-arch x86_64' APXSLDFLAGS='-arch x86_64' --with-apxs=/usr/sbin/apxs
+  make
+  sudo make install
+fix apache conf for mod-h264:
+  LoadModule h264_streaming_module libexec/apache2/mod_h264_streaming.so
+  AddHandler h264-streaming.extensions .mp4
+  
+fix apache confo to serve from video folder:
+  Alias /videofolder "/piecemaker_videos"
+  <Directory "/piecemaker_videos">
+    Options Indexes FollowSymLinks
+    AllowOverride None
+    Order allow,deny
+    Allow from all
+  </Directory>
+  
+if you are a dev machine you can also do this:
+  hosts file if necessary
+    make  an entry for piecemakelocal at 127.0.0.1
+  #in davidkern.conf for apache virtual host
+   <VirtualHost 127.0.0.1>
+     ServerName piecemakerlocal
+     DocumentRoot "/Users/davidkern/Sites/rails/piecemaker/public"
+     RailsEnv development
+     <directory "/Users/davidkern/Sites/rails/piecemaker/public">
+   		Options FollowSymLinks
+       Order allow,deny
+       Allow from all
+     </directory>
+   </VirtualHost>
+   
+   Optional: 
+       copy qt-faststart or recompile for 10.5
+       add some aliases to .profile also compress alias 'pmak; rake jobs:work'
+       
+       
+       
+delayed job
+
+class NewsletterJob < Struct.new(:text, :emails)
+    def perform
+      emails.each { |e| NewsletterMailer.deliver_text_to_email(text, e) }
+    end    
+  end  
+  
+  Delayed::Job.enqueue NewsletterJob.new('lorem ipsum...', Customers.find(:all).collect(&:email))
+
+
+There is also a second way to get jobs in the queue: send_later.
+
+  BatchImporter.new(Shop.find(1)).send_later(:import_massive_csv, massive_csv)
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  require 'yaml'
+  
+  filename = "#{Rails.root}/config/amazon_s3.yml"
+  file = File.open(filename)
+  config = YAML.load(file)
+  @@access_key_id     = ENV['S3_ACCESS_KEY_ID']
+  @@secret_access_key = ENV['S3_SECRET_ACCESS_KEY']
+  @@bucket            = ENV['S3_BUCKET'] || config[Rails.env]['bucket_name']
+
+
+
+
+
+  window.onload = function() {  
+  	flowplayer("example", '/video/flowplayer-3.1.0.swf',
+  	{
+  	  clip:{
+  	    url: "http://s3.amazonaws.com/<%= @bucket %>/<%= @video_paths[@bis].s3_path %>",
+  	    autoPlay: true
+  	  }
+  	}
+  	 )
+  }
+  </script>

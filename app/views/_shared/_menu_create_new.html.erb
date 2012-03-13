@@ -1,0 +1,15 @@
+<li><a>Create New Event</a>
+	<ul>
+
+  <%- Event.event_types.each do |one_type| -%>
+    <%- if one_type != 'dev_notes' || user_has_right?('view_dev_notes')-%>
+  <li>
+    <%= link_to(one_type.titleize,{:action => 'new_event',:id => one_type}, :class => 'get')-%>
+  </li>
+  <%- end %>
+  <%- end -%>
+  <li>
+    <%= link_to('Sub Scene',{:action => 'new_sub_scene'}, :class => 'get')-%>
+  </li>
+	</ul>
+</li>

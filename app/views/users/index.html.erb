@@ -1,0 +1,30 @@
+<h1>Users</h1>
+<%= link_to 'Add New User',:controller => :users, :action => 'new' %><br /><br />
+<table>
+  <tr>
+  <th style = "width:40px"><%= link_to 'id', :action => "index" , :sorter => 'id', :order => @order %></th>
+  <th style = "width:100px"><%= link_to 'name', :action => "index" , :sorter => 'login', :order => @order %></th>
+  <th style = "width:100px"><%= link_to 'role', :action => "index" , :sorter => 'role', :order => @order %></th>
+	<th style = "width:100px">performer</th>
+	<th style = "width:100px">last login</th>
+	<th colspan = '2'>Actions</th>
+  </tr>
+
+<% for user in @all_users %>
+  <tr>
+    <td><%= user.id %></td>
+    <td><%= user.login %></td>
+    <td><%= user.role_name %></td>
+    <td><span style = 'color:<%= user.performer ? "#090" : "#900" %>'> <%=  user.performer ? h(user.performer.short_name) : 'No' %></span></td>
+    <td><%= user.last_login %></td>
+    <td><%= link_to 'Edit', { :action => 'edit_user', :id => user } %></td>
+    <td><%= link_to 'Delete',  user_url(user), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'Add New User',:controller => :users, :action => 'new' %>
+
+

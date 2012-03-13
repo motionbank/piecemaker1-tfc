@@ -1,0 +1,13 @@
+<h2>Markers created by <%= current_user.login %> in <%= @piece.title %></h2>
+<%- @markers.each do |marker| -%>
+<div id = 'marker-list'>
+<%= render :partial => 'one_marker', :locals => {:marker => marker } %>
+</div>
+<% end %>
+<%- content_for 'quick' do -%>
+<div id="quick" data-shortcut = 'enabled'>
+  <span class="short-cut">ctrl-M </span>
+  <a class = 'marker mprep' id ='marker' href = '/capture/mark_from_marker_list/<%= @piece.id %>?user=<%= current_user.login %>'>New Marker</a>
+  <br />
+</div>
+<%- end -%>

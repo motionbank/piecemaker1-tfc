@@ -1,0 +1,72 @@
++                 movie name : 20081113_007_OUTER_DVD105_Night.mov 
++             movie duration : 2746.320 (68658000/25000) 
++          movie poster time : 0.000 (0/25000) 
++                 movie rate : 0.000000 
++       movie preferred rate : 1.000000 
++               movie volume : 256 
++     movie preferred volume : 256 
++                  movie box : (0,0,640,480) 
++       movie natural bounds : (0,0,640,480) 
++     movie display clip rgn : (null) 
++             movie clip rgn : (null) 
++   movie display bounds rgn : rectangular (0,0,640,480) 
++          movie track count : 2 
++
++                track index : 1 
++                   track id : 1 
++      track create/mod time : 3309459103 / 3309459103 
++              track enabled : yes 
++   track usage/layer/alt id : 14 / 0 / 1 
++               track volume : 0 
++               track offset : 0.000 (0/25000) 
++             track duration : 2746.320 (68658000/25000) 
++           track dimensions : (640,480) 
++             track clip rgn : (null) 
++   track display bounds rgn : rectangular (0,0,640,480) 
++     track movie bounds rgn : rectangular (0,0,640,480) 
++           track bounds rgn : rectangular (0,0,640,480) 
++             media duration : 2747.240 (68681000/25000) 
++             media language : 0 
++              media quality : 0 
++              media handler : vide/appl Apple Video Mediensteuerung 
++         media data handler : alis/appl Apple Alias-Datensteuerung 
++    media description count : 1 
++         media sample count : 68681 
++    media sync sample count : 5284 
++  media average sample rate : 25.00 
++ media preferred chunk size : 32768 
++            media file name : 20081113_007_OUTER_DVD105_Night.mov 
++     --- sample description : 1 of 1 
++               video format : avc1 H.264 
++   temporal/spatial quality : 512 / 512 
++         width/height/depth : 640 / 480 / 24 
++
++                track index : 2 
++                   track id : 2 
++      track create/mod time : 3309459103 / 3309459103 
++              track enabled : yes 
++   track usage/layer/alt id : 14 / 0 / 2 
++               track volume : 256 
++               track offset : 0.000 (0/25000) 
++             track duration : 2746.320 (68658000/25000) 
++           track dimensions : (0,0) 
++             track clip rgn : (null) 
++   track display bounds rgn : (empty) 
++     track movie bounds rgn : (empty) 
++           track bounds rgn : (empty) 
++             media duration : 2747.264 (87912448/32000) 
++             media language : 0 
++              media quality : 0 
++              media handler : soun/appl Apple Ton Mediensteuerung 
++         media data handler : alis/appl Apple Alias-Datensteuerung 
++    media description count : 1 
++         media sample count : 85852 
++    media sync sample count : 85852 
++  media average sample rate : 31.25 
++ media preferred chunk size : 6430 
++            media file name : 20081113_007_OUTER_DVD105_Night.mov 
++     --- sample description : 1 of 1 
++               sound format : mp4a MPEG-4 Audio 
++              bits/channels : 16 / 2 
++              sampling rate : 32000 
++

@@ -1,0 +1,20 @@
+<%- if @event -%>
+<h4>New Sub Scene in <%= @event.title %></h4>
+<%- form_tag({:action => 'create_sub_annotation',:id => @event.id},:class => 'ajax' ) do %>
+
+<label for="sub_scene">Title:</label>
+<input id="sub_scene_title" name="sub_scene[title]" size="35" type="text" value = "<%= @sub_scene.title %>"/>
+<p><label for="sub_scene_description">Description</label><br/>
+<%= text_area 'sub_scene', 'description', :size => "75x9"  %></p>
+<%= hidden_field_tag('sub_scene[happened_at]', @sub_scene.happened_at) -%>
+<%= hidden_field_tag('sub_scene[event_id]',@event.id) %>
+<!--[eoform:notes]-->
+<%= submit_tag "Save" %>
+<%- end -%>
+<% else %>
+<br />
+No Event Occurs before this point! Try Inserting an Annotation instead of a Sub Annotation.<br /><br /><br />
+<% end %>
+<%= link_to 'Cancel',{}, :class => 'cancel' -%>
+<br />
+<br />

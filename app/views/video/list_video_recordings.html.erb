@@ -1,0 +1,16 @@
+<h3>Video Recordings</h3>
+<%= will_paginate(@video_recordings) unless params[:search_term].present? %><br />
+<%= universal_table(
+  @video_recordings,{
+  :columns => [{'ID' => 'id'},
+                {'Piece' => 'piece.title'},
+                {'Video ID' => 'video_id'},
+                {'Created At' => 'created_at'}
+    ],
+  :actions => [
+              {'Destroy' => '/administration/delete_vid_rec'}
+    ],
+  :admin => {'Destroy'=>'normal_actions'},
+  :truncate => 15
+  })
+  %>

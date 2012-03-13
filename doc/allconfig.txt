@@ -1,0 +1,32 @@
+app_location
+s3_bucket
+s3_key
+s3_secret
+s3_max_file_size
+s3_acl
+use cdn or not
+arch type 32 or 64
+
+heroku stuff
+dont bundle dev and test
+
+
+
+Piecemaker Dependencies and what they're for
+
+Gems
+	aws-s3 			- allows you to connect to s3 see what you have i
+						might switch to fog
+	will-paginate 	- helps with pagination of long lists of stuff
+	prawn 			- creates pdfs, used to print assemblages
+	acts-as-list	- keeps records in order
+	haml			- makes writing html views easier
+
+System Stuff
+	QuicktimePlayer - makes video recordings
+	HandbrakeCLI	- compresses video
+	ffmpeg			- compresses video more versatile than handbrake
+	qt_fast			- prepares video for streaming
+	ImageMagick		- resizes photos
+	qt_info			- can get the quicktime metadata
+

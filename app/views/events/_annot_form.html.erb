@@ -1,0 +1,39 @@
+New Annotation for: <%= @video.title %>
+<%- action = @create ? 'create_annotation' : 'update_annotation' -%>
+
+<%- form_tag({:action => action,:id => @event},:class => 'ajax timer',:id => @event.id) do -%>
+
+ <p>
+ <label for="event_title">Title: </label>
+ <input id="event_title" name="event[title]" size="30" type="text" value = "<%= @event.title %>"/>
+ &nbsp;&nbsp;Type:
+ <%= select_tag('event[event_type]', event_type_select_options(@event)) -%>
+ </p>
+
+ <%= hidden_field_tag 'event[happened_at]', @event.happened_at %>
+
+ <p>
+ <label for="event_tags">Tags (separated by commas): </label>
+ <input id="event_tags" name="tags" size="25" type="text" value = "<%= @event.tag_list %>"/>
+ <select id = 'taggs'><%= options_for_select(taglist) %></select>
+ </p>
+
+ <p><label for="event_description">Description</label><br/>
+ <%= text_area 'event', 'description',:size => '50x9'  %>
+ </p>
+
+ <%#= put_edit_tip_block() -%>
+
+ <% if @event.needs_performers_field? -%>
+ <label for="event_performers">Performers</label><br />
+ <%= checklist('performers[]',current_piece.performers,['short_name'],events_performers(@event),nil,true,6) %> 
+ <% end %>
+
+
+ <%= hidden_field_tag('vid_id', @video.id) -%>
+
+ <%#= hidden_field_tag('aid', @after_id) if @after_id -%>
+ <%#= hidden_field_tag('create', 'true') if @create -%>
+ <br /><br />
+ <%= submit_tag('Save Changes', :class => 'formhide') -%>  <%= link_to 'Cancel',{}, :class => 'cancel' -%>
+ <%- end # end of form tag-%>

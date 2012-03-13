@@ -1,0 +1,16 @@
+- if params[:force] == 'true'
+  %h3
+    = "#{@list_of_uploading_videos.length} videos cued for uploading."
+
+- else
+  %h3
+    = "#{@list_of_uploading_videos.length} videos ready to be uploaded."
+  = link_to 'Start Uploading', :force => 'true'
+%p
+  - @list_of_uploading_videos.each_index do |index|
+    %h4
+      Video 
+      = index + 1
+    
+    = @list_of_uploading_videos[index]
+

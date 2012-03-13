@@ -1,0 +1,15 @@
+<h2>Upload video for "<%= @piece.title %>": <%= @video.title %></h2>
+<form id = 's3form' action = '/capture/create_video/<%= @video.id %>' method = 'POST'>
+  <%= hidden_field_tag :title, nil, :id => 'title_field' %>
+  <%= hidden_field_tag :size, nil, :id => 'size_field' %>
+  <%= hidden_field_tag :contenttype, nil, :id => 'content_type_field' %>
+<%= s3_swf_upload_tag(:success => "document.getElementById('s3form').submit();",
+                      :selected => 'vv = filename;ss = size;ct = contenttype;
+                      document.getElementById("title_field").value=filename;
+                      document.getElementById("size_field").value=size;
+                      document.getElementById("content_type_field").value=contenttype;',
+                      :prefix => @prefix
+                       )%>
+</form>
+<br /><br />
+<%= link_to("Cancel and go Back To Capture",{:controller => 'capture', :action => 'present', :id => @piece.id }) -%>

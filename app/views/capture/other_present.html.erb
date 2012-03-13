@@ -1,0 +1,20 @@
+
+
+<%- @grouped_events.group_by{|x| x.second[:start]}.each do |key,g_events| -%>
+  <%= put_date(key) %>
+  <%- g_events.each do |key, events| %>
+    <%- if events[:video] -%>
+      <%= open_video_html(events[:video]) %>
+      <%- events[:events].each do |event| %>
+        <%= render :partial => 'one_event', :locals => {:event => event} %>
+        <% end %>
+      </div>
+
+      <%- else -%>
+      <%- events[:events].each do |event| %>
+  
+      <%= render :partial => 'one_event', :locals => {:event => event} %>
+      <% end %>
+      <% end %> 
+  <% end %>
+<% end %>

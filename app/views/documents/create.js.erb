@@ -1,0 +1,2 @@
+jQuery("#form_div").hide();
+$('#doc_table tr:last').after("<%= escape_javascript(render(:partial => 'document',:object => @document)) -%>");

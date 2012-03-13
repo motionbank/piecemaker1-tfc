@@ -1,0 +1,3 @@
+$('.a-marker').removeClass('high')
+$('#marker-list').prepend('<%= escape_javascript(render :partial => "one_marker", :locals => {:marker => @event }) %>')
+$('#marker-<%=@event.id %>').addClass('high')

@@ -1,0 +1,23 @@
+apple developer tools
+git (not necessary for osx 10.7)
+make sure /usr/local/bin is in path
+get repository (this means having ssh credentials)
+update rubygems
+sudo gem install passenger
+database.yml uses sqlite
+environment variables
+httpd.conf virtual server
+name virtual server
+/etc/hosts file
+httpd.conf for passenger and env variables
+
+  > bundle install
+  > rake piecemaker:setup
+      this will create the video folders and create an admin user to start with
+      username: Administrator
+  	  password: Administrator
+      
+
+
+restart apache if you use it
+  > sudo apachectl graceful

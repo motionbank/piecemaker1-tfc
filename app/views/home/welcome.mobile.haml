@@ -1,0 +1,22 @@
+- if logged_in?
+  %span.ugr User: 
+  = current_user.login
+  &nbsp;
+  %span.ugr Role:
+  = current_user.role_name
+  %br/
+  = link_to 'Logout', '/logout'
+  %br/
+  %br/
+  %table
+    - @pieces.sort_by{|x| x.title}.each do |piece|
+      %tr
+        %td
+          = link_to piece.title, "/capture/quick_marker/#{piece.id}"
+- else
+  - form_tag :controller => 'usersessions', :action => 'create' do
+    Name:
+    = text_field_tag :login, params[:name], :size => 8, :class => "text"
+    Password:
+    = password_field_tag :password, params[:password], :size => 8, :class => "text"
+    = submit_tag "Login"

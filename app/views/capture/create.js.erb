@@ -1,0 +1,11 @@
+$("#form_div").hide();
+<%- @events.each do |event| -%>
+$("#sort_<%= event.id -%>").replaceWith("<%= escape_javascript(render(:partial => 'capture/one_event', :locals => {:event => event})) -%>");
+<%- end -%>
+$('.hdble').show();
+<%- te = '' -%>
+<%- if @video -%>
+<%- te = @video.title + @video.fn_s3 + ' id:' + @video.id.to_s -%>
+<%- end -%>
+var mes = "New Event Created:&nbsp;&nbsp;" + "<%= te -%>";
+flashMessage(mes);

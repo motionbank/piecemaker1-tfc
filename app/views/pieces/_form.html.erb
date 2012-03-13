@@ -1,0 +1,27 @@
+<%= error_messages_for 'piece' %>
+
+<!--[form:piece]-->
+<p><label for="piece_title">Title</label><br/>
+<%= text_field 'piece', 'title'  %></p>
+<p><label for="piece_short_name">Short Name</label><br/>
+<%= text_field 'piece', 'short_name'  %></p>
+
+<h4>Cast:</h4>
+<%- current = @performers.select{|x| x.is_current } -%>
+<%- alumni = @performers.select{|x| !x.is_current } -%>
+<br />
+<%= checklist('piece[performer_ids][]',current,['id','short_name'],@piece.performers,'id',false) %>
+<br />
+<%- if alumni.any? -%>
+<b>Inactive Performers</b><br />
+<%= checklist('piece[performer_ids][]',alumni,['id','short_name'],@piece.performers,'id') %>
+<%- end -%>
+<br /><br />
+<%- if user_has_right?('group_admin') -%>
+<b>Active Piece:</b><%= check_box_tag "piece[is_active]", 'true', @piece.is_active %> True or False
+<%- end -%>
+
+<br />
+<br />
+<!--[eoform:piece]-->
+

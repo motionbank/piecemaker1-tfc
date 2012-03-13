@@ -1,0 +1,8 @@
+<h1>Editing Configuration</h1>
+
+<% form_tag :action => 'update' do %>
+  <%= render :partial => 'form' %>
+  <%= submit_tag 'Save' %> <%= link_to 'Cancel', :action => 'show' %>
+<% end %>
+
+

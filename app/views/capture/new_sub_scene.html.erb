@@ -1,0 +1,26 @@
+<%- if @create_scene -%>
+<h2>Sub Scene in <%= @latest_event.title %> ...Continued...</h2>
+<%- else -%>
+<h2>Sub Scene in <%= @latest_event.title %></h2>
+<%- end -%>
+
+<%- if @sub_scene.id -%>
+<%= link_to "Promote to Scene", {:action => 'promote_to_scene', :id => @sub_scene.id },:class => 'promote' %>
+<%- end -%>
+<br /><br />
+<%- form_tag({:action => @action,:id => @sub_scene.id},:class => 'ajax' ) do %>
+<%= error_messages_for 'sub_scenes' %>
+
+<label for="sub_scene">Title:</label>
+<input id="sub_scene_title" name="sub_scene[title]" size="35" type="text" value = "<%= @sub_scene.title %>"/>
+<p><label for="sub_scene_description">Description</label><br/>
+<%= text_area 'sub_scene', 'description', :size => "75x9"  %></p>
+<%= hidden_field_tag('sub_scene[happened_at]', @sub_scene.happened_at) -%>
+<%= hidden_field_tag('sub_scene[event_id]',@latest_event.id) %>
+<%- if @create_scene -%>
+<%= hidden_field_tag('create_scene', 'true') %>
+<%- end -%>
+<!--[eoform:notes]-->
+<%= submit_tag "Save" %><%= link_to("Cancel",{:action => 'present', :id => session[:pieceid] },:class => 'cancel') -%>
+<%- end -%>
+<br />

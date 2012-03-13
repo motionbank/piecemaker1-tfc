@@ -1,0 +1,28 @@
+
+<%= error_messages_for :user %>
+<p><label for="user_name">Name</label><br />
+<%= text_field 'user', 'login'  %></p>
+<p><label for="user_password">Password</label><br />
+<%= password_field 'user', 'password'  %></p>
+<p><label for="user_name">Confirm Password</label><br />
+<%= password_field 'user', 'password_confirmation'  %></p>
+
+<p><label for="user_performer">User is also a Performer?</label><br />
+  <%= check_box_tag 'performer', 1, @user.performer %>Yes / No<br />
+
+    Performer First Name: <%= text_field_tag 'performer_first_name',@user.performer ? @user.performer.first_name : ''%><br />
+    Performer Last Name: <%= text_field_tag 'performer_last_name',@user.performer ? @user.performer.last_name : '' %><br />
+    Performer Short Name: <%= text_field_tag 'performer_short_name',@user.performer ? @user.performer.short_name : '' %><br />
+
+</p>
+
+<%- @user.role_name ||= 'user' -%>
+
+<%- if user_has_right?('group_admin') -%>
+<%= put_role_select(@user.role_name) %>
+<%- else -%>
+<%= hidden_field_tag :role_name,@user.role_name %>
+<%- end -%>
+<%= submit_tag 'Save' %>
+
+<%= link_to 'Cancel', :action => 'index' %>

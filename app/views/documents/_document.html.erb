@@ -1,0 +1,10 @@
+  <tr class = "<%= cycle('row-1','row-2') %>">
+    <td><%=h document.doc_file_name %></td>
+    <td><%=h document.created_at %></td>
+    <td><%=h document.doc_content_type %></td>
+    <td><%=h document.doc_file_size %></td>
+    <td><%=h document.s3_ok? %></td>
+    <td><%= link_to 'Show Details', :action => 'show', :id => document %></td>
+		<td><%= link_to 'Download',"http://s3.amazonaws.com/#{s3_bucket}/#{document.s3_path}" %></td>
+    <td><%= link_to 'Destroy', { :action => 'destroy', :id => document }, :confirm => 'Are you sure?', :method => :post %></td>
+  </tr>

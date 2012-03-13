@@ -1,0 +1,13 @@
+<h1>Editing event</h1>
+
+<% form_tag :action => 'update', :id => @event do %>
+  <%= render :partial => 'form' %>
+  <%= submit_tag 'Edit' %>
+<% end %>
+<br />
+<%= link_to 'Show', :action => 'show', :id => @event %> | 
+<%- if params[:return] == 'capture' -%>
+<%= link_to 'Back to Capture',:controller => 'capture', :action => 'present', :id => @event.piece_id  %> | 
+<% end -%>
+<%= link_to 'Back', :action => 'list', :id => @event.piece_id  %>
+

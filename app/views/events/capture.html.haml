@@ -1,0 +1,23 @@
+= @events.length
+-date_reference = @events[0]
+-video_reference = nil
+%h2
+  
+  = put_date(date_reference)
+  
+-@events.each do |event| 
+  - if video_ended(video_reference,event)
+    = close_video_block
+  - if event.happened_at.at_midnight != date_reference.happened_at.at_midnight
+    %h2
+      = put_date(event)
+    - date_reference = event
+  - if video_starting(video_reference,event)
+    = open_video_block(event)
+
+  - video_reference = event
+  = event.id
+  = event.title
+  
+  %br/
+    

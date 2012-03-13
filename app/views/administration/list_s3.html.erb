@@ -1,0 +1,19 @@
+<h2><%= s3_bucket %></h2>
+<%- if @list != 'false' -%>
+<table>
+  <tr>
+    <th>key</th>
+    <th>file-size</th>
+    <th>action</th>
+  </tr>
+<%- @list.each do |x| -%>
+<tr>
+<td><%= x.key %></td>
+<td><%= x.size %></td>
+<td><%= link_to('delete',:action => 'delete_s3',:id => CGI::escape(x.key)) %></td>
+</tr>
+<% end -%>
+</table>
+<%- else -%>
+No S3 Access
+<% end %>

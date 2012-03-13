@@ -1,0 +1,19 @@
+<h4>If you're interested in using Piecemaker for a project, or if you have any questions at all, please use this form to contact the developer.<br /> 
+We appreciate your questions.</h4>
+<%- form_tag :controller => 'home', :action => 'contact' do -%>
+<p>
+Subject:<br />
+<%= text_field_tag 'Subject', '', :size => 52 %>
+</p>
+
+<p>
+Your Message:<br />
+<%= text_area_tag 'Message', '',:size => '50x12'%>
+</p>
+
+<p>
+If you wish a reply, please leave your email address:<br />
+<%= text_field_tag 'Email',nil, :size =>52 %>
+</p>
+<%= submit_tag "Submit" %>
+<%- end -%>

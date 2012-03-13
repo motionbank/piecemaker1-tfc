@@ -1,0 +1,7 @@
+<h2>Are you sure you wish to delete this event?</h2>
+<p><%= @event.title %></p>
+
+<% form_tag  :controller => 'capture', :action => 'delete_event', :id => @event.id do %>	
+  <%= submit_tag "Delete" %> <%= button_to 'Cancel', :controller => 'capture', :action => 'present' %>
+<% end %>
+<br />
