@@ -237,7 +237,7 @@ class Event < ActiveRecord::Base
     if video
       video.title#.to_i
     else
-      Configuration.no_video_string
+      SetupConfiguration.no_video_string
     end
   end
   

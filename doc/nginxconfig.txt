@@ -1,4 +1,4 @@
-Configuration summary
+SetupConfiguration summary
   + using system PCRE library
   + OpenSSL library is not used
   + md5: using system crypto library

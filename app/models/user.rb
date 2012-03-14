@@ -1,10 +1,7 @@
 require 'digest/sha1'
 
 class User < ActiveRecord::Base
-  include Authentication
-  include Authentication::ByPassword
-  include Authentication::ByCookieToken
-  
+
   has_many :logins
   has_many :messages
   has_one :performer
@@ -12,7 +9,6 @@ class User < ActiveRecord::Base
   validates_presence_of     :login
   validates_length_of       :login,    :within => 3..40
   validates_uniqueness_of   :login,    :case_sensitive => false, :message => ' - There can\'t be two users with the same Username.'
-  validates_format_of       :login,    :with => RE_LOGIN_OK, :message => MSG_LOGIN_BAD
 
 
   #validates_presence_of     :email

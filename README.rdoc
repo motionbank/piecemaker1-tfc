@@ -226,7 +226,7 @@ app/helpers
   Helpers can be used to wrap functionality for your views into methods.
 
 config
-  Configuration files for the Rails environment, the routing map, the database,
+  SetupConfiguration files for the Rails environment, the routing map, the database,
   and other dependencies.
 
 db

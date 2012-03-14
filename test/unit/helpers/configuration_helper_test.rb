@@ -1,4 +1,4 @@
 require 'test_helper'
 
-class ConfigurationHelperTest < ActionView::TestCase
+class SetupConfigurationHelperTest < ActionView::TestCase
 end

@@ -264,7 +264,7 @@ class Video < ActiveRecord::Base
      result
   end
   def viewable?
-    if Configuration.app_is_local?
+    if SetupConfiguration.app_is_local?
       fn_arch || fn_local || fn_s3
     else
       fn_s3
@@ -274,9 +274,9 @@ class Video < ActiveRecord::Base
     meta_data ? 'True' : 'False'
   end
   def self.update_heroku
-    if Configuration.app_is_local?
+    if SetupConfiguration.app_is_local?
       Dir.chdir(RAILS_ROOT)
-      system "heroku db:push --app piecemaker-#{Configuration.s3_base_folder} --confirm piecemaker-#{Configuration.s3_base_folder}"
+      system "heroku db:push --app piecemaker-#{SetupConfiguration.s3_base_folder} --confirm piecemaker-#{SetupConfiguration.s3_base_folder}"
     end
   end
   

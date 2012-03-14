@@ -26,7 +26,7 @@ class VideoController < ApplicationController
       @event = Event.find(params[:event_id]) if params[:event_id]
       @piece = Piece.find(params[:piece_id]) if params[:piece_id]
       @ur = request.host
-      if !Configuration.app_is_local? && @video.fn_s3
+      if !SetupConfiguration.app_is_local? && @video.fn_s3
         @flow_type = 's3'
       else
         begin
@@ -36,11 +36,11 @@ class VideoController < ApplicationController
           line = false
         end
         if @video.fn_local && line
-            @flow_type = Configuration.pseudostreaming_type
+            @flow_type = SetupConfiguration.pseudostreaming_type
         elsif  @video.fn_arch  && Video.archive_dir_online?
             @flow_type = 'arch'
         elsif @video.fn_s3
-          if Configuration.cdn?
+          if SetupConfiguration.cdn?
             @flow_type = 's3'
           else
             @flow_type = 's3_plain'

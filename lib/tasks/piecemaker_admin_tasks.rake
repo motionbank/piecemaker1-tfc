@@ -43,7 +43,7 @@ namespace :piecemaker do
   end
   def uploadable_file_listing
     puts "Fetching S3 List"
-    bucket_list = S3Config.connect_and_get_list.select{|x| y = x.split('/'); y.first == Configuration.s3_base_folder && y[1] == 'video'}.map{|x| x.split('/').last}
+    bucket_list = S3Config.connect_and_get_list.select{|x| y = x.split('/'); y.first == SetupConfiguration.s3_base_folder && y[1] == 'video'}.map{|x| x.split('/').last}
     compressed_list = get_files_from_directory(compressed_folder).select{|x| !bucket_list.include?(x)}
   end
   def calculate_time(size)
@@ -140,7 +140,7 @@ namespace :piecemaker do
       puts "Starting #{start_time.strftime("%H:%M:%S")}" 
       uploadable_files.each do |filename|
         full_file_path = compressed_folder + '/' + filename
-        full_s3_path = Configuration.s3_base_folder + '/video/' + filename
+        full_s3_path = SetupConfiguration.s3_base_folder + '/video/' + filename
         if file = File.open(full_file_path)
           size = File.size(full_file_path)
           puts "#{Time.now.strftime('%H:%M:%S')} Uploading #{filename}  #{time_estimate_string(size)}"

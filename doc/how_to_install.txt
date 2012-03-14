@@ -128,7 +128,7 @@ In the instructions below, the '>' means you should type the command in your ter
         > git clone git@github.com:nutbits/piecemaker.git
 
 If you use script/server
-	Now go to Configuration Section...
+	Now go to SetupConfiguration Section...
 If you use apache/passenger
    - make sure you have the Apple developer tools installed
    - Set up apache / passenger (skip if you will use script/server)
@@ -195,7 +195,7 @@ If you want to serve a virtual host from apache you’re not quite done yet.
 
 	Now go to configuration section.
             
-  Configuration Overview
+  SetupConfiguration Overview
   
     Once you've installed the system stuff you have to configure the app itself.
       - What database will you use. sqlite is easiest

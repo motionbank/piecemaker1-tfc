@@ -3,12 +3,11 @@ class HomeController < ApplicationController
   #before_filter :unset_current_piece
   def welcome
     @title = 'Welcome to Piecemaker'
-    if current_user && mobile_device?
+    if current_user
       @pieces = Piece.all
     end
     respond_to do |format|
       format.html
-      format.mobile
     end
   end
 

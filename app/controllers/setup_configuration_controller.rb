@@ -1,4 +1,4 @@
-class ConfigurationController < ApplicationController
+class SetupConfigurationController < ApplicationController
   layout 'standard'
   before_filter :load_configuration, :only =>[:show, :edit, :edit_locations, :update_location,:update]
 
@@ -41,6 +41,6 @@ class ConfigurationController < ApplicationController
   end
   private
   def load_configuration
-    @configuration = Configuration.first
+    @configuration = SetupConfiguration.first
   end
 end

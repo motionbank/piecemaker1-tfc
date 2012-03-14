@@ -376,7 +376,7 @@ class EventTest < ActiveSupport::TestCase
 
 
       should 'report correctly no dvd' do
-        assert @event.fixed_media_number == Configuration.no_video_string
+        assert @event.fixed_media_number == SetupConfiguration.no_video_string
       end
 
   end

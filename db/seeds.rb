@@ -10,7 +10,7 @@ p = Piece.create(
   :short_name => 'DEFAULT',
   :is_active => false
   )  
-Configuration.create(
+SetupConfiguration.create(
   :location_id => l.id,
   :time_zone => 'Berlin',
   :s3_sub_folder => '',

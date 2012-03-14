@@ -9,7 +9,7 @@
   - if user_has_right?('advanced_actions')
     %li= link_to 'List Videos', :controller => 'video', :action => 'index', :id => session[:pieceid]
     %li= link_to 'Raw Event List', :controller => 'events', :action => 'list', :id => session[:pieceid]
-  -if Configuration.app_is_local?
+  -if SetupConfiguration.app_is_local?
     %li= link_to("Upload Days Videos",{:controller => 'video',:action => 'process_days_videos',:id => session[:pieceid]},:class => 'process')
 
   %li= link_to('Marker List',{:controller => 'capture', :action => 'marker_list',:id => session[:pieceid]})

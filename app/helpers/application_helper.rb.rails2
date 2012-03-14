@@ -337,7 +337,7 @@ module ApplicationHelper
   
   def put_role_select(selected)
    roleids = Hash.new
-   Configuration.roles.each do |role|
+   SetupConfiguration.roles.each do |role|
      roleids[role] = role
    end
     text = "Role: "+select_tag('user[role_name]', options_for_select(roleids,selected))+'<br /><br />'  
@@ -663,7 +663,7 @@ module ApplicationHelper
   end
   def display_title(event, search = nil)
     content_tag(:div,:class => "evtit#{event.tagged_with_title? ? ' ital' : ''}") do
-      text = event.title ? highlight(sanitize(event.title), search, Configuration.found_text_replacement_string) : ''
+      text = event.title ? highlight(sanitize(event.title), search, SetupConfiguration.found_text_replacement_string) : ''
       text << " (#{event.piece.title})" if @show_piece
       text
     end
@@ -687,7 +687,7 @@ module ApplicationHelper
           text << event.video_start_time.to_time_string
         end
       else
-        text << Configuration.no_video_string
+        text << SetupConfiguration.no_video_string
       end
     text << '</div>'
   end
@@ -720,7 +720,7 @@ module ApplicationHelper
     text
   end
   def more_string(event)
-    length = event.description.length - Configuration.truncate_length
+    length = event.description.length - SetupConfiguration.truncate_length
     string = '&nbsp;&nbsp;<a class = "more" href="'
     string << "#{event.id}"
     string << '">'+length.to_s+' More</a>'
@@ -736,12 +736,12 @@ module ApplicationHelper
       text = "<div class='sm evdes'>"
       
       tt = case @truncate
-        when :more then my_tags(truncate(event.description,:length => Configuration.truncate_length, :omission => more_string(event)))
-        when :less then event.description.length > Configuration.truncate_length ? my_tags(event.description) + less_string(event) : my_tags(event.description)
+        when :more then my_tags(truncate(event.description,:length => SetupConfiguration.truncate_length, :omission => more_string(event)))
+        when :less then event.description.length > SetupConfiguration.truncate_length ? my_tags(event.description) + less_string(event) : my_tags(event.description)
         else  my_tags(event.description)
         end
       if search
-        tt = highlight(tt,search,Configuration.found_text_replacement_string)
+        tt = highlight(tt,search,SetupConfiguration.found_text_replacement_string)
       end
       text << tt
       text << '</div>'
@@ -770,8 +770,8 @@ module ApplicationHelper
       text << '&nbsp;&nbsp;'
       ss.description ||= ''
       if search
-        ss.title = highlight(ss.title,search,Configuration.found_text_replacement_string)
-        ss.description = highlight(ss.description,search,Configuration.found_text_replacement_string)
+        ss.title = highlight(ss.title,search,SetupConfiguration.found_text_replacement_string)
+        ss.description = highlight(ss.description,search,SetupConfiguration.found_text_replacement_string)
       end
       text << "#{ss.title}"
       text << '</span><br />&nbsp;&nbsp;'

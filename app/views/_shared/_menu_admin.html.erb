@@ -7,7 +7,7 @@
 
     <li><%= link_to "Users", :controller => "users" -%></li>
     <li><%= link_to "Performers", :controller => "performers" -%></li>
-    <li><%= link_to "Configuration Info", :controller => "configuration", :action => 'show' -%></li>
+    <li><%= link_to "SetupConfiguration Info", :controller => "configuration", :action => 'show' -%></li>
     <li><%= link_to 'Event Types', :controller => "event_types", :action => 'list' -%></li>
     <li><%= link_to 'Role Matrix', :controller => "administration", :action => 'role_matrix' -%></li>
     <%- if user_has_right?('group_admin') -%>

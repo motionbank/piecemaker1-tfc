@@ -1,7 +1,7 @@
-class Configuration < ActiveRecord::Base
+class SetupConfiguration < ActiveRecord::Base
 belongs_to :location
 serialize :file_locations
-
+set_table_name 'configurations'
   def self.s3_base_folder
     @@s3b ||= first.s3_sub_folder
   end
@@ -32,23 +32,9 @@ serialize :file_locations
   def self.pseudostreaming_type
     ENV['PSEUDOSTREAM_TYPE'] || 'local_plain'
   end
-  def self.local_dir
-    ENV['VIDEO_BASE_PATH'] || self.video_base_path + 'full'
-  end
-  def self.compressed_dir
-    ENV['VIDEO_BASE_PATH'] || self.video_base_path + 'compressed'
-  end
-  def self.uncompressed_dir
-    ENV['VIDEO_BASE_PATH'] || self.video_base_path + 'full'
-  end
-  def self.temp_dir
-    ENV['VIDEO_BASE_PATH'] || self.video_base_path + 'temp'
-  end
-  def self.backup_dir
-    ENV['VIDEO_BASE_PATH'] || self.video_base_path + 'backup'
-  end
+  
   def self.app_is_local?
-    ENV['APP_LOCATION'] != 'heroku' #'server' heroku
+    false # ENV['APP_LOCATION'] != 'heroku' #'server' heroku
   end
   
   def locations

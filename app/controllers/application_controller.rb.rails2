@@ -72,12 +72,12 @@ class ApplicationController < ActionController::Base
     Time.zone = 'Berlin'#current_configuration.timezone
   end
   def read_only?
-    !Configuration.app_is_local? && current_configuration && current_configuration.read_only?
+    !SetupConfiguration.app_is_local? && current_configuration && current_configuration.read_only?
   end
   def user_has_right?(right)
     return false unless current_user
     return false if read_only?
-    result = Configuration.rights[right].include? current_user.role_name
+    result = SetupConfiguration.rights[right].include? current_user.role_name
   end
 
 
@@ -131,7 +131,7 @@ class ApplicationController < ActionController::Base
 
   def current_configuration
     if current_user
-     @cn ||= Configuration.first
+     @cn ||= SetupConfiguration.first
     end
   end
 

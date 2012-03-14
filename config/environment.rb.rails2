@@ -83,7 +83,7 @@ Rails::Initializer.run do |config|
   #   inflect.uncountable %w( fish sheep )
   # end
 
-  # See Rails::Configuration for more options
+  # See Rails::SetupConfiguration for more options
   # config.gem 'aws-s3', :lib => 'aws/s3'
   # config.gem 'prawn'
   # #config.gem 'pbosetti-rubyosa', :lib => 'rbosa'
