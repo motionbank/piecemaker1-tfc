@@ -8,7 +8,7 @@ ENV["RAILS_ENV"] = "test"
 require "webrat"
 require 'shoulda'
 require 'mocha'
-require 'factory_girl'
+require 'factory_girl_rails'
 #require 'authenticated_test_helper'
 require 'timecop'
 

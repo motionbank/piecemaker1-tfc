@@ -25,7 +25,7 @@ group :test do
 
 gem 'webrat'
 gem 'shoulda'
-gem 'factory_girl'
+gem 'factory_girl_rails'
 gem 'mocha'
 gem 'timecop'
 

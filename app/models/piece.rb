@@ -30,7 +30,7 @@ class Piece < ActiveRecord::Base
   def latest_scene(pos = nil) #tested
     scenes = self.events.sort_by{|x| x.happened_at}.select{|x| x.event_type == 'scene'}
     scenes.reject!{|x| x.is_draft?}
-    scenes.reject!{|x| x.happened_at >= pos} if pos
+    scenes.reject!{|x| x.happened_at > pos} if pos
     scenes.last
   end
   def empty_recordings
