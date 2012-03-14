@@ -19,20 +19,19 @@ class Event < ActiveRecord::Base
   has_and_belongs_to_many :users
   
   #acts_as_indexed :fields => [:title, :description]
-  named_scope :contains, lambda{|quer| {:conditions => ['title LIKE ? OR description LIKE ? OR performers LIKE ?', "%#{quer}%","%#{quer}%","%#{quer}%"],:include => :notes}}
-  
-  named_scope :highlighted, :conditions => "highlighted = '1'"
-  named_scope :scenes, :conditions => "event_type = 'scene'"
-  named_scope :headlines, :conditions => "event_type = 'headline'"
-  named_scope :in_piece, lambda{|piece_id| {:conditions => ['piece_id = ?', "#{piece_id}"]}}
-  named_scope :in_video, lambda{|video_id| {:conditions => ['video_id = ?', "#{video_id}"]}}
-  named_scope :located_at, lambda{|locate| {:conditions => locate ? ['location = ?',"#{locate}"] : 'location is NULL'}}
-  named_scope :within_date_range, lambda{|date1,date2| {:conditions => ["happened_at between '#{date1}' and '#{date2}'"]}}
-  named_scope :created_today, :conditions => "happened_at >= '#{Time.zone.now.at_midnight}'"
-  named_scope :deleted, :conditions => "state = 'deleted'"
-  named_scope :normal, :conditions => "state = 'normal'"
-  named_scope :locked, :conditions => "locked != 'none'"
-  named_scope :markers, :conditions => "state = 'normal' AND event_type = 'marker'"
+  scope :contains, lambda{|quer| {:conditions => ['title LIKE ? OR description LIKE ? OR performers LIKE ?', "%#{quer}%","%#{quer}%","%#{quer}%"],:include => :notes}}
+  scope :highlighted, :conditions => "highlighted = '1'"
+  scope :scenes, :conditions => "event_type = 'scene'"
+  scope :headlines, :conditions => "event_type = 'headline'"
+  scope :in_piece, lambda{|piece_id| {:conditions => ['piece_id = ?', "#{piece_id}"]}}
+  scope :in_video, lambda{|video_id| {:conditions => ['video_id = ?', "#{video_id}"]}}
+  scope :located_at, lambda{|locate| {:conditions => locate ? ['location = ?',"#{locate}"] : 'location is NULL'}}
+  scope :within_date_range, lambda{|date1,date2| {:conditions => ["happened_at between '#{date1}' and '#{date2}'"]}}
+  scope :created_today, :conditions => "happened_at >= '#{Time.zone.now.at_midnight}'"
+  scope :deleted, :conditions => "state = 'deleted'"
+  scope :normal, :conditions => "state = 'normal'"
+  scope :locked, :conditions => "locked != 'none'"
+  scope :markers, :conditions => "state = 'normal' AND event_type = 'marker'"
   
   delegate :recorded_at,:fn_arch,:fn_local,:fn_s3, :to => :video, :prefix => true
   delegate :tags, :to => :piece, :prefix => true

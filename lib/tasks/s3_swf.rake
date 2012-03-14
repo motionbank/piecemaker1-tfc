@@ -10,7 +10,7 @@ namespace :s3 do
   desc "put a standard crossdomain.xml into your bucket"
   task :make_crossdomain => :environment do
     connect_s3!
-    file = "#{RAILS_ROOT}/lib/tasks/crossdomain.xml"
+    file = "#{Rails.root}/lib/tasks/crossdomain.xml"
     AWS::S3::S3Object.store('crossdomain.xml', open(file), S3SwfUpload::S3Config.bucket, :access => :public_read)
   end
   

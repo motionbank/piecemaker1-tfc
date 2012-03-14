@@ -18,7 +18,18 @@ gem 'pg'
 #gem "sqlite3", :require => "sqlite3"
 #gem 'rake', '0.9.2.2'
 #gem 'rdoc'
+gem 'delayed_job_active_record'
+gem 'query_trace'
 
+group :test do
+
+gem 'webrat'
+gem 'shoulda'
+gem 'factory_girl'
+gem 'mocha'
+gem 'timecop'
+
+end
 
 
 

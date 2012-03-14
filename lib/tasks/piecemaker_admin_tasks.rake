@@ -1,5 +1,5 @@
 namespace :piecemaker do
-  require RAILS_ROOT + '/config/environment'
+ # require Rails.root + '/config/environment'
   def video_base_folder
     'video'
   end
@@ -100,14 +100,14 @@ namespace :piecemaker do
   
   desc 'Creating Video Folders'
   task :create_video_folders do
-    Dir.chdir(RAILS_ROOT + '/public')
+    Dir.chdir(Rails.root + '/public')
     if !File.exists? video_base_folder
       puts "Creating #{video_base_folder}."
       Dir.mkdir(video_base_folder,0777)
     else
       puts "Directory #{video_base_folder} exists already. Skipping."
     end
-    Dir.chdir(RAILS_ROOT + '/public/' + video_base_folder)
+    Dir.chdir(Rails.root + '/public/' + video_base_folder)
     %w[full compressed temp backup].each do |fold|
       if !File.exists? fold
         puts "Creating #{fold}."
@@ -178,8 +178,8 @@ namespace :piecemaker do
             if AWS::S3::Bucket.create(bucket_name)
               puts 'Bucket created.'
               puts 'Adding crossdomain.xml file.'
-              if File.exists?(RAILS_ROOT + '/lib/tasks/crossdomain.xml')
-                AWS::S3::S3Object.store('crossdomain.xml', open(RAILS_ROOT + '/lib/tasks/crossdomain.xml'), bucket_name)
+              if File.exists?(Rails.root + '/lib/tasks/crossdomain.xml')
+                AWS::S3::S3Object.store('crossdomain.xml', open(Rails.root + '/lib/tasks/crossdomain.xml'), bucket_name)
                 
               else
                 puts "I couldn't find crossdomain.xml file. It should be in lib/tasks."

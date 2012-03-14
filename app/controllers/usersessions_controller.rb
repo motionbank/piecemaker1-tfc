@@ -2,7 +2,6 @@
 class UsersessionsController < ApplicationController
   # Be sure to include AuthenticationSystem in Application Controller instead
   layout 'standard'
-  include AuthenticatedSystem
   skip_before_filter :login_required , :only =>[:new, :create]
   # render new.rhtml
   def new

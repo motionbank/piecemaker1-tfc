@@ -1,7 +1,7 @@
 class SetupConfiguration < ActiveRecord::Base
 belongs_to :location
 serialize :file_locations
-set_table_name 'configurations'
+self.table_name = 'configurations'
   def self.s3_base_folder
     @@s3b ||= first.s3_sub_folder
   end
@@ -21,7 +21,7 @@ set_table_name 'configurations'
     @@miet ||= first.min_entrance_time
   end
   def self.video_base_path
-    RAILS_ROOT + '/public/video/'
+    Rails.root + '/public/video/'
   end
   def self.arch_type
     ENV['ARCH_TYPE'] || 32

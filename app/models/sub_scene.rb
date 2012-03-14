@@ -1,6 +1,6 @@
 class SubScene < ActiveRecord::Base
   belongs_to :event
-  named_scope :contains, lambda{|quer| {:conditions => ['title LIKE ? OR description LIKE ?', "%#{quer}%","%#{quer}%"]}}
+  scope :contains, lambda{|quer| {:conditions => ['title LIKE ? OR description LIKE ?', "%#{quer}%","%#{quer}%"]}}
   
   def parse_performers_and_give_to_parent
     old_performers = event.performers

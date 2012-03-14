@@ -7,7 +7,7 @@ class Video < ActiveRecord::Base
   has_many :video_recordings, :dependent => :destroy
   has_many :subjects, :through => :video_recordings, :source => :piece, :uniq => true
   
-  named_scope :active, :conditions => "state = 'normal'"
+  scope :active, :conditions => "state = 'normal'"
 
 
   after_save :rename_files_on_title_change###################
@@ -275,7 +275,7 @@ class Video < ActiveRecord::Base
   end
   def self.update_heroku
     if SetupConfiguration.app_is_local?
-      Dir.chdir(RAILS_ROOT)
+      Dir.chdir(Rails.root)
       system "heroku db:push --app piecemaker-#{SetupConfiguration.s3_base_folder} --confirm piecemaker-#{SetupConfiguration.s3_base_folder}"
     end
   end

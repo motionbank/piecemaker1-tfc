@@ -8,8 +8,8 @@ class DocumentsController < ApplicationController
   end
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
-  verify :method => :post, :only => [ :destroy, :create, :update ],
-         :redirect_to => { :action => :list }
+  # verify :method => :post, :only => [ :destroy, :create, :update ],
+  #          :redirect_to => { :action => :list }
   def get_document_by_params_and_redirect_wrong
     @document = Document.find(params[:id])
   end
