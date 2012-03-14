@@ -7,19 +7,9 @@ class Video < ActiveRecord::Base
   has_many :video_recordings, :dependent => :destroy
   has_many :subjects, :through => :video_recordings, :source => :piece, :uniq => true
   
-  named_scope :in_archive, :conditions => "fn_arch is not null"
   named_scope :active, :conditions => "state = 'normal'"
 
-if Configuration.app_is_local?  
-  require 'video_definitions'
-  extend VideoDefinitions
-  require 'video_qt_player'
-  extend QtPlayer
-  require 'video_file_manipulation'
-  extend FileManipulation
-  include FileInstanceMethods
-end
-  
+
   after_save :rename_files_on_title_change###################
 
 
