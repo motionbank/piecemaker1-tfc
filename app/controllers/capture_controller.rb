@@ -459,7 +459,7 @@ class CaptureController < ApplicationController
   def create_sub_scene
     @event = Event.find(params[:sub_scene][:event_id])
     if params[:create_scene] == 'true'
-      @new_event = @event.clone
+      @new_event = @event.dup
       @new_event.title << ' ...Continued...'
       @new_event.video_id = video_in? ? video_in?.id : nil
       @new_event.happened_at = Time.now

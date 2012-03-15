@@ -2,7 +2,7 @@
 <%- if user_has_right?('normal_actions') -%>
 <div id="quick" data-shortcut = 'enabled'>
 <span class = 'hdble'>
-	<%- form_tag :action => 'present', :id => session[:piecid], :filter_type => 'text' do %>
+	<%= form_tag :action => 'present', :id => session[:piecid], :filter_type => 'text' do %>
 	<%= text_field_tag 'search', '',:size => 20 %>
 	<%= submit_tag 'Search' %><%= link_to 'Show All', :action => 'present', :id => session[:piecid] %>
 	<%- end %><br />
@@ -11,7 +11,7 @@
 <span class="short-cut">S </span><%= link_to('New Sub Scene',{:action => 'new_sub_scene'}, :class => 'get ssprep')-%>
 <%- if user_has_right?('normal_actions') -%>
 <br /><br />
-<span id='dvd_quick'><%= video_quick_link %></span>
+<span id='dvd_quick'><%= raw video_quick_link %></span>
 <% end -%><br /><br />
 </span>
 <%= link_to "Open Scratchpad",{:controller => 'capture',:action => 'open_scratchpad'},:class => 'get-sc' %>
@@ -40,7 +40,7 @@
   <div class = 'menclose'></div>
   <div id='menin'>
     <br />
-    <%= put_menu %>
+    <%= raw put_menu %>
   </div>
 </div>
 <div id = 'video-menu' class = 'menn vim' style='display:none'>
@@ -48,7 +48,7 @@
   <div class = 'menclose'></div>
   <div id='vmenin'>
     <br />
-    <%= put_v_menu %>
+    <%= raw put_v_menu %>
   </div>
 </div>
 <div id = 'sub-scene-menu' class = 'menn sum' style='display:none'>
@@ -56,7 +56,7 @@
   <div class = 'menclose'></div>
   <div id='smenin'>
     <br />
-    <%= put_s_menu %>
+    <%= raw put_s_menu %>
   </div>
 </div>
 <%- end -%>

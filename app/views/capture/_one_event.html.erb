@@ -1,12 +1,12 @@
 <div id="sort_<%= event.id -%>"class="sm fi ev<%= highlighted_class(event) -%> type<%= event.event_type  -%>" >
-<%= display_title(event, @terms)%>
-<%= display_menu_link(event,'evmm','','div',true) unless event.is_deleted? %>
-<%= display_vid_info(event)%>
-<%= display_creation_info(event)%>
-<%= display_performers(event,@terms)%>
-<%= display_description(event,@terms)%>
-<%= display_subscenes(event,@terms) %>
-<%= display_tags(event)%>
-<%= display_edit_links(event) if event.is_deleted? -%> 
-<%= display_notes(event) if current_user.notes_on %>
+<%= raw display_title(event, @terms)%>
+<%= raw display_menu_link(event,'evmm','','div',true) unless event.is_deleted? %>
+<%= raw display_vid_info(event)%>
+<%= raw display_creation_info(event)%>
+<%= raw display_performers(event,@terms)%>
+<%= raw display_description(event,@terms)%>
+<%= raw display_subscenes(event,@terms) %>
+<%= raw display_tags(event)%>
+<%= raw display_edit_links(event) if event.is_deleted? -%> 
+<%= raw display_notes(event) if current_user.notes_on %>
 </div>

@@ -4,12 +4,12 @@ viewer
 <div id = 'updater' class = 'update'style = 'display:none'>Updating...</div>
 <span style = 'font-weight:bold;font-size:1.6em'><%=h @event.event_type.humanize %></span>&nbsp;&nbsp; draft id:<%= @event.id %>&nbsp;&nbsp;original id: <%= @original_event.id if @original_event  %>&nbsp;&nbsp;happened_at: <%= @original_event.happened_at if @original_event %> <br />
 
-<%- form_tag({:action => 'modi_ev',:id => @event},:class => 'ajax timer',:id => @event.id) do -%>
+<%= form_tag({:action => 'modi_ev',:id => @event},:class => 'ajax timer',:id => @event.id) do -%>
 
 
 <p>
 <label for="event_title">Title: </label>
-<input id="event_title" name="event[title]" size="35" type="text" value = "<%= @event.title %>"/><%= inherit_check_or_select(@event) -%>
+<input id="event_title" name="event[title]" size="35" type="text" value = "<%= @event.title %>"/><%= raw inherit_check_or_select(@event) -%>
 
 &nbsp;&nbsp;<label for="event_type">Event Type:</label>
 
@@ -32,11 +32,11 @@ Location: <%= put_location_select(@event.location) %>
 <%= text_area 'event', 'description',:size => '75x9'  %>
 </p>
 
-<%= put_edit_tip_block() -%>
+<%= raw put_edit_tip_block() -%>
 
 <% if @event.needs_performers_field? -%>
 <label for="event_performers">Performers</label><br />
-<%= checklist('performers[]',@event.piece.performers,['short_name'],events_performers(@event)) %> 
+<%= raw checklist('performers[]',@event.piece.performers,['short_name'],events_performers(@event)) %> 
 <% end %>
 
 

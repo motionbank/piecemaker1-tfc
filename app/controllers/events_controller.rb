@@ -156,13 +156,13 @@ class EventsController < ApplicationController
     redirect_non_admins('normal_actions',home_url) and return
     if params[:id]
       @piece = Piece.find_by_id(params[:id])
-
-      @events = Event.paginate_all_by_piece_id(
-                      params[:id],
-                      :per_page => 50,
-                      :page => params[:page],
-                      :order => sort_from_universal_table_params,
-                      :include => [:piece])
+      @events = Event.find_all_by_piece_id(params[:id])
+      # @events = Event.paginate_all_by_piece_id(
+      #                       params[:id],
+      #                       :per_page => 50,
+      #                       :page => params[:page],
+      #                       :order => sort_from_universal_table_params,
+      #                       :include => [:piece])
     else
       redirect_non_admins('group_admin',home_url) and return
       @events = Event.paginate(

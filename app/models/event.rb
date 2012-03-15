@@ -306,7 +306,7 @@ class Event < ActiveRecord::Base
 
   
   def create_draft #tested
-    new_event = self.clone
+    new_event = self.dup
     new_event.make_draft(self.id)
     self.tags.each do |tag|
       new_event.tags << tag
