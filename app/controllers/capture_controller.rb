@@ -656,12 +656,54 @@ class CaptureController < ApplicationController
       end
     end
   end
-
-  def confirm_video_io
-    result = nil
+  def confirm_video_in
+    @after_id = params[:aid] #needed to tell jquery where to insert event
+    @create = true if params[:create] == 'true'
+    @video = Video.new(params[:video])
+    @video.recorded_at = Time.now
+    @video.save
+    current_piece.recordings << @video
+    @dvd_quick = 'out'    
+    if params[:quick_take] == 'true.js'
+      @create = true
+      @event = Event.create(
+      :happened_at => Time.now + 1)
+      params[:id] = 'scene'
+      @event.location = current_configuration.location.location
+      @after_event = @event.set_attributes_from_params(params,current_user,current_piece)
+    end
+    @truncate = :less unless @truncate == :none
+    respond_to do |format|
+      format.html {redirect_to :action => 'present', :id => session[:pieceid] }
+      format.js {render :action => 'confirm_video_in', :layout => false}
+    end
+  end
+  def confirm_video_out
     @after_id = params[:aid] #needed to tell jquery where to insert event
     @create = true if params[:create] == 'true'
     @video = Video.find_by_id(params[:id])
+    @stopping = true
+    @dvd_quick = 'insert'
+    @video.duration = Time.now - @video.recorded_at
+    @video.fn_local = '.mp4' if current_configuration.use_auto_video
+    @video.save
+    @truncate = :less unless @truncate == :none
+    respond_to do |format|
+      format.html {redirect_to :action => 'present', :id => session[:pieceid] }
+      format.js {render :action => 'confirm_video_out', :layout => false}
+    end
+  end
+  def confirm_video_io
+    result = nil
+    logger.warn {"************ #{params[:id]}"}
+    @after_id = params[:aid] #needed to tell jquery where to insert event
+    @create = true if params[:create] == 'true'
+    @video = Video.find_by_id(params[:id])
+    if @video
+      logger.info {"************* @video.id"}
+    else
+      logger.info {"************ video not found"}
+    end
     if !@video #starting video
       @video = Video.new(params[:video])
       @video.recorded_at = Time.now
@@ -680,6 +722,7 @@ class CaptureController < ApplicationController
         @after_event = @event.set_attributes_from_params(params,current_user,current_piece)
       end
     else #stopping video
+      @stopping = true
       @dvd_quick = 'insert'
       @video.duration = Time.now - @video.recorded_at
       @video.fn_local = '.mp4' if current_configuration.use_auto_video

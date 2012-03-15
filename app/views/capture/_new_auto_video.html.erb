@@ -7,7 +7,7 @@
 <%- end -%>
 
 <h3><%= 'Video' + ' ' + @text %></h3>
-<%- form_tag({:action => 'confirm_video_io',:id => @video},:class => 'ajax') do -%>
+<%= form_tag({:action => 'confirm_video_in',:id => @video},:class => 'ajax') do -%>
 
 Video Name: 
 <%- if @text == 'Start' -%>

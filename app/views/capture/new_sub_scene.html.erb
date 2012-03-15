@@ -8,8 +8,8 @@
 <%= link_to "Promote to Scene", {:action => 'promote_to_scene', :id => @sub_scene.id },:class => 'promote' %>
 <%- end -%>
 <br /><br />
-<%- form_tag({:action => @action,:id => @sub_scene.id},:class => 'ajax' ) do %>
-<%= error_messages_for 'sub_scenes' %>
+<%= form_tag({:action => @action,:id => @sub_scene.id},:class => 'ajax' ) do %>
+<%#= error_messages_for sub_scene %>
 
 <label for="sub_scene">Title:</label>
 <input id="sub_scene_title" name="sub_scene[title]" size="35" type="text" value = "<%= @sub_scene.title %>"/>

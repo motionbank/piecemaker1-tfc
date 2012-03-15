@@ -921,10 +921,7 @@ module ApplicationHelper
     text = ''
     if video_in?
       vvid = video ? video.id.to_s : video_in?.id.to_s
-      text << '<span class="short-cut">I </span><a id = "vidinout" class = "get hdble vout" href = "/capture/confirm_video_io/'+vvid+'">Stop Video</a>'
-      if current_configuration.use_auto_video
-        text << '<br/><span class="short-cut">R </span><a id = "vidreload" class = "dga hdble vrel" href = "/capture/reload_video/'+vvid+'">Reload Video</a>'
-      end
+      text << '<span class="short-cut">I </span><a id = "vidinout" class = "get hdble vout" href = "/capture/confirm_video_out/'+vvid+'">Stop Video</a>'
     else
       text << '<span class="short-cut">I </span><a id = "vidinout" class = "get hdble vprep" href = "/capture/new_auto_video_in">Prepare Video</a>'
       text << '<br /><span class="short-cut">B </span><a id = "vidinout" class = "get hdble vprep" href = "/capture/new_auto_video_in?quick_take=true">Prep. Vid & Scene</a>'

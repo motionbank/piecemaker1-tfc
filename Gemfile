@@ -19,7 +19,7 @@ gem 'pg'
 #gem 'rake', '0.9.2.2'
 #gem 'rdoc'
 gem 'delayed_job_active_record'
-gem 'query_trace'
+gem 'active_record_query_trace'
 
 group :test do
 

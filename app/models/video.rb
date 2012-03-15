@@ -292,6 +292,11 @@ class Video < ActiveRecord::Base
     end
   end
 
+
+  def destroy_all
+    delete_s3
+    destroy
+  end
 end
 
 

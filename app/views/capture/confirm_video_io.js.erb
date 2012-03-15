@@ -1,13 +1,13 @@
-<%- if @video.duration -%>
+<%- if @stopping -%>
+alert('stopping')
 $("#vid_<%= @video.id-%>").replaceWith("<%= escape_javascript(render(:partial => 'video_block',:locals =>{:video => @video, :piece_id => current_piece.id}))-%>")
 <%- else -%>
 $("#form_div").hide();
 $("#form_div").html('');
-$('#events_presentation').append("<%= escape_javascript(render(:partial => 'video_block',:locals =>{:video => @video, :piece_id => current_piece.id})) -%>")
-
+$('#events_presentation').append("<%= render(:partial => 'video_block',:locals =>{:video => @video, :piece_id => current_piece.id}) -%>")
 <%- end -%>
 var lastEvent = $(".fi:last")
-$("#dvd_quick").html('<%= escape_javascript(video_quick_link(@video)) -%>')
+$("#dvd_quick").html('<%= raw video_quick_link(@video) -%>')
 $(".hdble").show();
 flashMessage('<%= @flash_message || '' -%>');
 updateVideoTime();

@@ -33,7 +33,7 @@ $("#sort_<%= @event.id -%>").replaceWith("<%= escape_javascript(render(:partial 
 <%- end -%>
 <%- if @dvd_quick -%>
 
-	$("#dvd_quick").html('<%= escape_javascript(video_quick_link) -%>')
+	$("#dvd_quick").html('<%= raw video_quick_link -%>')
 
 <%- end -%>
 <%- unless @incremental -%>
