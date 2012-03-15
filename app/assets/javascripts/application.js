@@ -12,4 +12,13 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require_tree .
+//= require jquery-form
+//= require jquery-scroll
+//= require jquery-timer
+//= require jquery-jedit
+//= require jquery-hotkeys
+//= require jquery-tools
+//= require jquery-menubox
+//= require jquery-periodical
+//= require old-application
+//= require capture

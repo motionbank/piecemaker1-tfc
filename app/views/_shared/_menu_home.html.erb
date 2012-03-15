@@ -1,4 +1,4 @@
-<%- menu_first_level('About Piecemaker') do -%>
-  <li><%= span_if_here('home','welcome','Home') %></li>
-  <li><%= span_if_here('home','contact','Contact') %></li>
+<%= menu_first_level('About Piecemaker') do -%>
+  <li><%= raw span_if_here('home','welcome','Home') %></li>
+  <li><%= raw span_if_here('home','contact','Contact') %></li>
 <%- end -%>

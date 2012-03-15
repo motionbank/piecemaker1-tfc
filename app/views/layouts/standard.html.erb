@@ -13,7 +13,7 @@
   <%#= stylesheet_link_merged 'capture_package' %>
   <%#= stylesheet_link_tag('print', :media => :print) %>
 	<%#= javascript_include_merged 'capture_package' %>
-	<%= yield_authenticity_token %>
+	<%= raw yield_authenticity_token %>
 	<%= yield :js %>
 
 </head>

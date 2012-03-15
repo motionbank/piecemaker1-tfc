@@ -1,5 +1,5 @@
-<%- menu_first_level('Admin') do -%>
-<%- menu_second_level('Your Stuff',"#{current_user.login}") do -%>
+<%= menu_first_level('Admin') do -%>
+<%= menu_second_level('Your Stuff',"#{current_user.login}") do -%>
     <li><%= link_to "#{current_user.messages.length} Messages", :controller => "message",:action => 'index', :id => current_user.id -%></li>
     <li><%= link_to 'Settings', '/pref' , :class => 'get' -%></li>
 <%- end -%>
@@ -7,17 +7,16 @@
 
     <li><%= link_to "Users", :controller => "users" -%></li>
     <li><%= link_to "Performers", :controller => "performers" -%></li>
-    <li><%= link_to "SetupConfiguration Info", :controller => "configuration", :action => 'show' -%></li>
-    <li><%= link_to 'Event Types', :controller => "event_types", :action => 'list' -%></li>
+    <li><%= link_to "SetupConfiguration Info", :controller => "setup_configuration", :action => 'show' -%></li>
     <li><%= link_to 'Role Matrix', :controller => "administration", :action => 'role_matrix' -%></li>
     <%- if user_has_right?('group_admin') -%>
-    <%- menu_second_level('Video Maintenance','Video Maintenance') do -%>
+    <%= menu_second_level('Video Maintenance','Video Maintenance') do -%>
       <li><%= link_to 'Upload Entire Compressed Folder', '/video/upload_compressed_to_s3' -%></li>
       <li><%= link_to 'List S3', :controller => "administration", :action => 'list_s3' -%></li>
       <li><%= link_to 'Delayed Jobs', :controller => "video", :action => 'index_delayed_jobs' -%></li>
     <% end %>
     
-    <%- menu_second_level('Last 50','Last 50') do -%>
+    <%= menu_second_level('Last 50','Last 50') do -%>
     
       <li><%= link_to 'Events', :controller => "events", :action => 'list',:id => nil -%></li>
       <li><%= link_to 'Sub Scenes', :controller => "sub_scene", :action => 'list',:id => nil -%></li>

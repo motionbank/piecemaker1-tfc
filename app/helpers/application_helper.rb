@@ -1,5 +1,15 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
+  
+  def error_messages_for(thing)
+    if thing.errors.any?
+      text = '<ul>'
+        thing.errors.full_messages.each do |msg|
+          text << '<li>' + msg + '</li>'
+        end
+      text << '</ul>'
+    end
+  end
   def came_from_string
     @cf ||= '?came_from='+@came_from.to_s.gsub('/','%2F')
   end
@@ -254,32 +264,30 @@ module ApplicationHelper
   end
 
   def menu_first_level(title, &block)
-  content = capture(&block)
-  concat(menu_open_first_level(title))
-  concat(content)
-  concat(menu_close_first_level)
+  content = with_output_buffer(&block)
+  menu_open_first_level(title) + content + menu_close_first_level
   end
   
   def menu_open_first_level(title)
-    html = "<li><a>" + title + '</a>' + "<ul>\n"#opens list of menu items
+    html = raw "<li><a>" + title + '</a>' + "<ul>\n"#opens list of menu items
   end
   def menu_close_first_level
-    html = "</ul></li>\n"
+    html = raw "</ul></li>\n"
   end
   
   def menu_second_level(tip, title, &block)
-  content = capture(&block)
-  concat(menu_open_second_level(tip, title))
-  concat(content)
-  concat(menu_close_second_level)
+    content = with_output_buffer(&block)
+    menu_open_second_level(tip, title) + content + menu_close_second_level 
   end
 
   def menu_open_second_level(tip, title)
-    html = "<li><a class='drop' href='#' title='" + tip + "'>" + title + "</a>\n"
-    html << "<ul class = 'right'>\n" #opens second level list
+    html = raw "<li><a class='drop' href='#' title='" + tip + "'>" + title + "</a>\n"
+    html2 = raw "<ul class = 'right'>\n" #opens second level list
+    html = html + html2
   end
+  
   def menu_close_second_level
-    html =  "</ul>\n</li>"
+    html =  raw "</ul>\n</li>"
   end
 
   def display_duration_select(label, duration, prefix = 'duration')
@@ -294,6 +302,7 @@ module ApplicationHelper
     string << select_second(duration_hash[:seconds], :prefix => prefix)
     content_tag :p, string    
   end
+  
   def display_menu_link(item,css_class,size = '',tag = 'div', rate = false)
     return '' unless user_has_right?('normal_actions')
     text = "<#{tag} class = 'men #{css_class} #{size}' id = 'm-#{item.id}'>"

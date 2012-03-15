@@ -1,7 +1,7 @@
 %h1
   Listing Pieces
 
-= universal_table(@piecess,
+= raw universal_table(@piecess,
   {:columns =>[ {'ID' => 'id',:sort => 'id'},
   {'Title' => 'title',:sort => 'title'},
   {'Abbrev.' => 'short_name',:sort => 'short_name'},
@@ -9,7 +9,7 @@
   {'Active' => 'is_active',:sort => 'is_active'}],
   :actions => [ {'Show Details' => 'show'},
   {'Capture' => "/capture/present"},
-  {'Archive' => "/video/index"},
+  {'Videos' => "/video/index"},
   {'Destroy' => 'destroy'}],
   :admin => {'Destroy'=>'group_admin'}})
 %br/

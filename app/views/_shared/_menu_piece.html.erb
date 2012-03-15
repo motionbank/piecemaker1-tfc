@@ -1,10 +1,10 @@
-<%- menu_first_level('Pieces') do -%>
+<%= menu_first_level('Pieces') do -%>
   <%- if cookies[:current_piece_id] -%>
     <li><%= link_to 'Capture '+cookies[:current_piece_title], :controller => :capture, :action => :present, :id => cookies[:current_piece_id] %></li>
   <% end %>
 <%- @pieces.reject! {|x| !x.is_active || x.id == current_configuration.default_piece_id } -%>
   <%- if @pieces.length > 0-%> 
-    <%- menu_second_level('Show Piece Details','Open Piece') do -%>
+    <%= menu_second_level('Show Piece Details','Open Piece') do -%>
       <%- @pieces.sort_by{|x| x.title}.each do |piece| -%>
       <li><%= link_to piece.title, :controller => :capture, :action => :present, :id => piece.id %></li>
       <%- end -%>

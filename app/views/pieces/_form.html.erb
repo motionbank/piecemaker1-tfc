@@ -1,4 +1,4 @@
-<%= error_messages_for 'piece' %>
+<%= error_messages_for @piece %>
 
 <!--[form:piece]-->
 <p><label for="piece_title">Title</label><br/>
@@ -10,7 +10,7 @@
 <%- current = @performers.select{|x| x.is_current } -%>
 <%- alumni = @performers.select{|x| !x.is_current } -%>
 <br />
-<%= checklist('piece[performer_ids][]',current,['id','short_name'],@piece.performers,'id',false) %>
+<%= raw checklist('piece[performer_ids][]',current,['id','short_name'],@piece.performers,'id',false) %>
 <br />
 <%- if alumni.any? -%>
 <b>Inactive Performers</b><br />

@@ -3,7 +3,7 @@
 = link_to "Create a New Performer", {:action => 'new'}, :class => 'get'
 %br/
 %br/
-= universal_table(                                                  |
+= raw universal_table(                                                  |
 @performers,                                                           |
 {                                                                   |
   :columns => [ {'ID' => 'id',:sort => 'id'},                       |

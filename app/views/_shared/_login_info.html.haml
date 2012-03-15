@@ -16,7 +16,7 @@
   = link_to 'Logout', '/logout'
   %br/
 - else
-  - form_tag :controller => 'usersessions', :action => 'create' do
+  = form_tag :controller => 'usersessions', :action => 'create' do
     Name:
     = text_field_tag :login, params[:name], :size => 8, :class => "text"
     Password:

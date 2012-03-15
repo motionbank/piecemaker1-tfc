@@ -1,5 +1,4 @@
-
-- menu_first_level(truncate(current_piece.title,:length => 15)) do
+= menu_first_level(truncate(current_piece.title,:length => 15)) do
   %li= link_to "Show Details", :controller => "pieces", :action => 'show', :id => session[:pieceid]
   %li= link_to 'List Assets', :controller => 'documents', :action => 'list_by_piece', :id => session[:pieceid]
   %li= link_to 'List Meta Infos', :controller => 'meta_infos', :action => 'list_by_piece', :id => session[:pieceid]

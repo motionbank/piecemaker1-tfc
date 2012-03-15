@@ -1,5 +1,5 @@
 <h1>Set Preferences for <%= current_user.login %></h1>
-<% form_tag({:controller => 'users', :action => 'store_prefs'}, :class => 'ajax') do %>
+<%= form_tag({:controller => 'users', :action => 'store_prefs'}, :class => 'ajax') do %>
 
 	<%= hidden_field_tag(:piece_num, session[:pieceid] )  %>
    Page Refresh: 
@@ -17,9 +17,7 @@
 
 <br /><br />
    Select your time zone: <select id = 'tim' name = 'time_zone'>
-       <% time_zone_options_for_select(Time.zone.name).each do |zone| %>
-       <%= zone %>
-       <%- end -%>
+       <%= time_zone_options_for_select(Time.zone.name)%>
      </select>
 <br /><br /><br />
 
