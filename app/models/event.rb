@@ -458,13 +458,13 @@ class Event < ActiveRecord::Base
   end
   
   def latest_scene #tested
-    scenes = Event.find_all_by_piece_id(self.piece_id, :conditions => "event_type = 'scene'",:order => :happened_at)
+    scenes = Event.where("piece_id = ? AND event_type = 'scene'",piece_id).order("happened_at")
     scenes.reject!{|x| !x.is_active?}
     scenes.reject!{|x| x.happened_at >= self.happened_at}
     scenes.last
   end
   def next_scene#tested
-    @next_scene ||= Event.find_all_by_piece_id(self.piece_id,:conditions => "event_type = 'scene'",:order => :happened_at ).select{|x| x.is_active?}.select{|x| x.happened_at > self.happened_at}.first
+    @next_scene ||= Event.where("piece_id = ? AND event_type = 'scene'",piece_id).order("happened_at").select{|x| x.is_active?}.select{|x| x.happened_at > self.happened_at}.first
   end
   
   def in_which_video
@@ -499,7 +499,7 @@ class Event < ActiveRecord::Base
     self.performers = self.performers.sort if self.performers
   end
   def insert_at_time(time)
-    Event.find_all_by_happened_at(time).each do |conflicting_event|
+    Event.where("happened_at = ?", time).each do |conflicting_event|
       conflicting_event.insert_at_time(time+1) #unless id == conflicting_event.id
     end
     self.happened_at = time
@@ -557,8 +557,7 @@ class Event < ActiveRecord::Base
 
   
   def compute_duration
-    next_event = Event.find_all_by_piece_id(piece_id,
-      :order => 'happened_at')
+    next_event = Event.where("piece_id = ?"piece_id).order('happened_at')
     next_event = next_event.select{|x| x.happened_at > happened_at}.first
     if video
       if next_event && next_event.video == video

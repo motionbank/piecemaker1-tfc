@@ -13,7 +13,7 @@ class NotesController < ApplicationController
   #          :redirect_to => { :action => :list }
 
   def list
-    @notes = Note.find(:all)
+    @notes = Note.all
   end
 
   def show

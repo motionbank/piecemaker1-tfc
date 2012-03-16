@@ -1,10 +1,10 @@
 class MessageController < ApplicationController
   layout 'standard'
   def index
-    @messages = Message.find_all_by_user_id(params[:id])
+    @messages = Message.where("user_id = ?",params[:id])
   end
   def list_all
-    @messages = Message.find(:all)
+    @messages = Message.all
     render :action => 'index'
   end
   def destroy

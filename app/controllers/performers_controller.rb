@@ -1,7 +1,7 @@
 class PerformersController < ApplicationController
   layout 'standard'
   def index
-    @performers = Performer.find(:all,:order => sort_from_universal_table_params)
+    @performers = Performer.order(sort_from_universal_table_params)
   end
   def new
     @performer = Performer.new
@@ -36,7 +36,7 @@ class PerformersController < ApplicationController
     redirect_to :action => 'index', :id => current_configuration.id
   end
   def create_performers_from_users
-    perfs = Performer.find(:all)
+    perfs = Performer.all
     perfs.each do |perf|
       us = User.find_by_login(perf.short_name)
       perf.user_id = us.id

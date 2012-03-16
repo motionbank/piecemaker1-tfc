@@ -21,7 +21,7 @@ class PiecesController < ApplicationController
   def list
     unset_current_piece
     @title = 'Pieces'
-    @piecess = Piece.find(:all,:order => sort_from_universal_table_params('title'))
+    @piecess = Piece.order(sort_from_universal_table_params('title'))
     respond_to do |wants|
       wants.html {  }
     end

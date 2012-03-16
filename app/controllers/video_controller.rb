@@ -22,7 +22,7 @@ class VideoController < ApplicationController
 
     def viewer
       @flow_type = false
-      @video = Video.find(params[:id],:include => [{:events => :sub_scenes}])
+      @video = Video.find(params[:id]).includes([{:events => :sub_scenes}])
       @event = Event.find(params[:event_id]) if params[:event_id]
       @piece = Piece.find(params[:piece_id]) if params[:piece_id]
       @ur = request.host
@@ -100,7 +100,7 @@ class VideoController < ApplicationController
 
     
     def index_delayed_jobs
-      @djs = DelayedJob.find(:all,:order => sort_from_universal_table_params, :conditions => filter_from_universal_table_params)
+      @djs = DelayedJob.where(filter_from_universal_table_params).order(sort_from_universal_table_params)
     end
     def destroy_delayed_job
       dj = DelayedJob.find(params[:id])
@@ -116,9 +116,9 @@ class VideoController < ApplicationController
     
     def index
       if params[:id]
-        @piece = Piece.find_by_id(params[:id])
+        @piece = Piece.find(params[:id])
       else
-        @piece = Piece.find_by_id(session[:pieceid])
+        @piece = Piece.find(session[:pieceid])
       end
       
       sorter = params[:sorter] ? params[:sorter] : 'id'

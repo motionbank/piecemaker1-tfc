@@ -12,7 +12,7 @@ class MetaInfosController < ApplicationController
   def list
     redirect_non_admins and return
     if user_has_right('group_admin')
-      @meta_infos = MetaInfo.find(:all)
+      @meta_infos = MetaInfo.all
     else
       redirect_to pieces_url
     end

@@ -14,9 +14,11 @@ class HomeController < ApplicationController
   def contact
     @title = 'Contact'
     if request.post?
-      Notifier.notify_david((params['Email'],params['Subject'],message_body = params['Message'])).deliver
+      Notifier.notify_david(params['Email'],params['Subject'],message_body = params['Message']).deliver
+      flash[:notice] = 'Thank you for your message.'
+      redirect_to :action => :welcome
     end
-    redirect_to :action => :welcome,:notice => 'Thank you for your message.'
+
   end
 
 end

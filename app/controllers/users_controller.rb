@@ -79,7 +79,7 @@ class UsersController < ApplicationController
     order = params[:order] ? params[:order] : 'DESC'
     @order = order == 'ASC' ? 'DESC' : 'ASC'
     sorts = {'id' => 'id', 'login' => 'login', 'role' => 'role_name'}
-    @all_users = User.find(:all, :order => sorts[params[:sorter]],:include => [:performer] )
+    @all_users = User.order(sorts[params[:sorter]]).includes(:performer)
   end
 
   def update

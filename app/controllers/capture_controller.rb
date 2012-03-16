@@ -68,12 +68,10 @@ class CaptureController < ApplicationController
   end
   
   def get_events(piece_id = session[:pieceid])
-    conditions = user_has_right?('view_dev_notes') ? '' :  "AND (event_type != 'dev_notes') "
+    conditions = "(state = 'normal') "
+    conditions += user_has_right?('view_dev_notes') ? '' :  "AND (event_type != 'dev_notes') "
     conditions += current_user.markers_on ? '' : "AND (event_type != 'marker')"
-    Event.find_all_by_piece_id(piece_id,
-    :order => 'happened_at',
-    :conditions => ("(state = 'normal')" + conditions),
-    :include => [{:video => :events},:sub_scenes,:tags,:notes,:users])
+    Event.where(conditions).order('happened_at').includes([{:video => :events},:sub_scenes,:tags,:notes,:users])
   end
 
   def do_present
@@ -87,7 +85,7 @@ class CaptureController < ApplicationController
         @videos = []
       when 'span'
         span_count = params[:span_count] ? params[:span_count].to_i : 50
-        @events = Event.find(:all, :order => 'happened_at DESC', :limit => span_count)
+        @events = Event.order('happened_at DESC').limit(span_count)
         @show_piece = true
         @videos = []
       when 'one_event'
@@ -154,17 +152,10 @@ class CaptureController < ApplicationController
         @events = current_piece.events.select{|x| x.is_deleted?}
         @videos = []
       when 'rating'
-        @events = Event.find_all_by_piece_id(session[:pieceid],
-        :order => 'happened_at',
-        :conditions => "(state = 'normal') and (rating > #{params[:rating].to_i})",
-        :include => [:video,:sub_scenes,:tags,:notes])
+        @events = Event.where("piece_id = ? AND (state = 'normal') AND (rating > ?)",session[:pieceid],params[:rating].to_i).order('happened_at').includes([:video,:sub_scenes,:tags,:notes])
         @videos = []
       when 'tail'
-        @events = Event.find_all_by_piece_id(session[:pieceid],
-        :conditions => "(state = 'normal')",
-        :order => 'happened_at desc',
-        :limit => 100,
-        :include => [:sub_scenes,:tags,:notes,:video])
+        @events = Event.where("piece_id = ? AND (state = 'normal')",session[:pieceid]).order('happened_at DESC').includes([:video,:sub_scenes,:tags,:notes]).limit(100)
         vids = @events.map{|x| x.video}.uniq.compact
         @videos = current_piece.clean_recordings.reject{|x| vids.include?(x) || x. recorded_at < @events.first.happened_at}
       when  'none'
@@ -828,7 +819,7 @@ class CaptureController < ApplicationController
     end
 
     def cheap_rtf
-      @events = Event.find_all_by_piece_id(session[:pieceid], :order => 'happened_at')
+      @events = Event.where("pieceid = ?", session[:pieceid]).order('happened_at')
     end
 
 
