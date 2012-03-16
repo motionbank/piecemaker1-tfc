@@ -1,6 +1,6 @@
 <h2>Search by Tag</h2>
 <%- if current_piece.owned_tags -%>
-<%- form_tag({:action => 'present', :id => session[:pieceid], :filter_type => 'tag'}) do %>
+<%= form_tag({:action => 'present', :id => session[:pieceid], :filter_type => 'tag'}) do %>
 <%= select_tag 'taggs', options_for_select(current_piece.owned_tags) %>
 <%= submit_tag 'Search' %>
 <%- end %>

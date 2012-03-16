@@ -1,4 +1,4 @@
-<%- content_for 'present_header' do -%>
+<%- content_for :present_header do -%>
 <div  id = 'info_strip'>
 <span id = 'info_title'><%= @piece.title if @piece %></span>&nbsp;&nbsp;&nbsp;
 <%= content_tag :span, @event.title if @event %>

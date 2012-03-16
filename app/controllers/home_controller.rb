@@ -13,17 +13,10 @@ class HomeController < ApplicationController
 
   def contact
     @title = 'Contact'
-    if (request.post?)
-      subject = params['Subject']
-      message_body = params['Message']
-      from = params['Email']
-      message_to_david = Notifier.create_notify_david(subject, 'nutbits@gmail.com', message_body, from)
-      Notifier.deliver(message_to_david)
-      flash[:notice] = 'Thank you for your message.'
-      redirect_to :action => :welcome
-    else
-      
+    if request.post?
+      Notifier.notify_david((params['Email'],params['Subject'],message_body = params['Message'])).deliver
     end
+    redirect_to :action => :welcome,:notice => 'Thank you for your message.'
   end
 
 end

@@ -1,6 +1,6 @@
 	<h2>New Note</h2>
-	<%- form_tag({:action => 'new_note',:id => params[:id]},:class => 'ajax' ) do %>
-  <%= error_messages_for 'note' %>
+	<%= form_tag({:action => 'new_note',:id => params[:id]},:class => 'ajax' ) do %>
+  <%= error_messages_for @note %>
 
   <!--[form:notes]-->
   <p><label for="note_note">Note</label><br/>

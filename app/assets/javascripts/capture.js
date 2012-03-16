@@ -332,10 +332,7 @@ $(function(){
 				}
 				return false;
 		});
-		$(document).bind('keydown', 'Ctrl+b', function(){
-			getFunction($('#vidinout').attr('href') + '?quick_take=true.js')
-			return false;
-		});
+
 		$(document).bind('keydown', 'Ctrl+r', function(){
 			if($('#vidreload').hasClass('vrel')){
 				$(".hdble").hide();

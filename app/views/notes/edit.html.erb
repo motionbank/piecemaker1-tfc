@@ -1,6 +1,6 @@
 <h1>Editing note ID: <%= @note.id %></h1>
 
-<% form_tag :controller => 'notes', :action => 'update', :id => @note do %>
+<%= form_tag :controller => 'notes', :action => 'update', :id => @note do %>
   <%= render :partial => 'editform' %>
   <%= submit_tag 'Edit' %>
 <% end %>

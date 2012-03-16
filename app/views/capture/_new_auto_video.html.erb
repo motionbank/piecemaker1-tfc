@@ -12,7 +12,6 @@
 Video Name: 
 <%- if @text == 'Start' -%>
 <%= text_field_tag 'video[title]',@video.title, :size => 30 %>
-<%= hidden_field_tag('quick_take',params[:quick_take]) %>
 <%- else -%>
 <%= @video.title %>
 <%- end -%>

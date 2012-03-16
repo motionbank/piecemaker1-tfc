@@ -1,7 +1,7 @@
 <h3>Videos</h3>
 <%= will_paginate(@videos) unless params[:search_term].present? %><br />
 
-<%= universal_table(
+<%= raw universal_table(
 @videos,
 {
   :columns => [ {'ID' => 'id',:sort => 'id'},

@@ -572,7 +572,7 @@ module ApplicationHelper
     out = ""
 
     if !@include_s3_upload
-      out << '<script type="text/javascript" src="/javascripts/s3_upload.js"></script>' 
+      out << '<script type="text/javascript" src="/assets/s3_upload.js"></script>' 
       @include_s3_upload = true
     end
 
@@ -839,7 +839,7 @@ module ApplicationHelper
     text << note.note + '&nbsp;&nbsp;--'
     text << "<span class = 'noteinfo'>#{note.created_by} @ #{note.created_at.strftime("%d/%m - %H:%M")}:</span>&nbsp;&nbsp;"
     
-    text << display_note_edit_links(note)
+    text << raw(display_note_edit_links(note))
     text
   end
   def display_note_edit_links(note)
@@ -924,7 +924,6 @@ module ApplicationHelper
       text << '<span class="short-cut">I </span><a id = "vidinout" class = "get hdble vout" href = "/capture/confirm_video_out/'+vvid+'">Stop Video</a>'
     else
       text << '<span class="short-cut">I </span><a id = "vidinout" class = "get hdble vprep" href = "/capture/new_auto_video_in">Prepare Video</a>'
-      text << '<br /><span class="short-cut">B </span><a id = "vidinout" class = "get hdble vprep" href = "/capture/new_auto_video_in?quick_take=true">Prep. Vid & Scene</a>'
     end
     text
   end

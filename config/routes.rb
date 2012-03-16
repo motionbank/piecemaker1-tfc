@@ -17,7 +17,6 @@ Piecemakerlite::Application.routes.draw do
     match '/add_marker/:piece_id/:id/:time.:format' => 'events#add_marker'
     match '/edit_annotation/.:format' => 'events#edit_annotation'
     match '/edit_sub_annotation/.:format' => 'sub_scene#edit_sub_annotation'
-    match '' => 'home#welcome'
     match ':controller/service.wsdl' => '#wsdl'
     match '/:controller(/:action(/:id))'
     match ':controller/:action.:format' => '#index'
@@ -71,7 +70,7 @@ Piecemakerlite::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  # root :to => 'welcome#index'
+   root :to => 'home#welcome'
 
   # See how all your routes lay out with "rake routes"
 

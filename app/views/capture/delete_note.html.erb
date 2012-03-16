@@ -1,7 +1,7 @@
 <h2>Are you sure you wish to delete this note?</h2>
 <p><%= @note.note %></p>
 
-<% form_tag  :controller => 'capture', :action => 'delete_note', :id => @note.id do %>	
+<%= form_tag  :controller => 'capture', :action => 'delete_note', :id => @note.id do %>	
   <%= submit_tag "Delete" %> <%= button_to 'Cancel', :controller => 'capture', :action => 'present' %>
 <% end %>
 <br />

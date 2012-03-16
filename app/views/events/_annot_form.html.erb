@@ -1,7 +1,7 @@
 New Annotation for: <%= @video.title %>
 <%- action = @create ? 'create_annotation' : 'update_annotation' -%>
 
-<%- form_tag({:action => action,:id => @event},:class => 'ajax timer',:id => @event.id) do -%>
+<%= form_tag({:action => action,:id => @event},:class => 'ajax timer',:id => @event.id) do -%>
 
  <p>
  <label for="event_title">Title: </label>

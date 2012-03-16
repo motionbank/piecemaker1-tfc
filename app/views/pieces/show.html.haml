@@ -77,7 +77,7 @@
       .pieceshow
         - i = 1
         - @piece.date_list.each do |date|
-          = i.to_s + ': ' + link_to(date.strftime("%D"),:controller => :capture,:action => :present,:id => @piece.id,:filter_type => 'date_range', :start_date => date, :end_date => date+60*60*24)
+          = raw(i.to_s + ': ' + link_to(date.strftime("%D"),:controller => :capture,:action => :present,:id => @piece.id,:filter_type => 'date_range', :start_date => date, :end_date => date+60*60*24))
           %br/
           - i += 1
   .css-panes.l3

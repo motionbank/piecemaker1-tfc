@@ -10,7 +10,7 @@
   :admin => {'Destroy'=>'group_admin','Data' => 'group_admin'}
 }
 ) %>
-<% form_tag :action => 'add_location', :id => @configuration do %>
+<%= form_tag :action => 'add_location', :id => @configuration do %>
   <p><label for="location">Add a Location</label><br/>
   <%= text_field_tag 'location'%></p>
   <%= submit_tag 'Add' %>

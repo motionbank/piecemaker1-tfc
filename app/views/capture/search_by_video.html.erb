@@ -1,5 +1,5 @@
 <h3>Show Events from Selected Video:</h3>
-<% form_tag  :controller => 'capture', :action => 'present', :filter_type => 'video' do %>
+<%= form_tag  :controller => 'capture', :action => 'present', :filter_type => 'video' do %>
 <%= hidden_field_tag(:video_filter, 'true') %><br />
 
 <%= select_tag("video", options_for_video_search) %>

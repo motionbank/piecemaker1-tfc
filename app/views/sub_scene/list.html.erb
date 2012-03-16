@@ -5,7 +5,7 @@ in "<%= @piece.title %>"
 </h1>
 <h2><%= @sub_scenes.length %> Sub Scenes</h2>
 <%= will_paginate @sub_scenes %><br />
-<%= universal_table(
+<%= raw universal_table(
   @sub_scenes,{
   :columns => [{'ID' => 'id',:sort => 'id'},
                 {'Piece' => 'event.piece.title'},

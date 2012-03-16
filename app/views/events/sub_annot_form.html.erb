@@ -1,6 +1,6 @@
 <%- if @event -%>
 <h4>New Sub Scene in <%= @event.title %></h4>
-<%- form_tag({:action => 'create_sub_annotation',:id => @event.id},:class => 'ajax' ) do %>
+<%= form_tag({:action => 'create_sub_annotation',:id => @event.id},:class => 'ajax' ) do %>
 
 <label for="sub_scene">Title:</label>
 <input id="sub_scene_title" name="sub_scene[title]" size="35" type="text" value = "<%= @sub_scene.title %>"/>

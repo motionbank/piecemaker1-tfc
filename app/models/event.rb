@@ -88,7 +88,8 @@ class Event < ActiveRecord::Base
   end
   
   def get_tag_or_create(new_tag_name,title = nil)#tesed
-    unless nn = Tag.find_by_name(new_tag_name, :conditions => "piece_id = '#{piece_id}'")
+    #Tag.where("name = ? and piece_id = ?",new_tag_name, piece_id)
+    unless nn = Tag.where("name = ? and piece_id = ?",new_tag_name, piece_id).first
       nn = Tag.create(
         :name => new_tag_name,
         :tag_type => title ? 'title' : 'normal'

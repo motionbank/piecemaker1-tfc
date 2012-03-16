@@ -105,7 +105,7 @@ class Piece < ActiveRecord::Base
   
   def location_list #tested
     locations = []
-    headlines = Event.find_all_by_piece_id(self.id,:conditions => "event_type = 'headline'")
+    headlines = Event.where("piece_id = ? AND event_type = ?", self.id, 'headline')
     headlines.each do |event|
       if event.location && (! locations.first || event.location != locations.last[:location])
         locations << {:location => event.location,:date => event.happened_at} 

@@ -6,7 +6,3 @@ $("#dvd_quick").html('<%= raw video_quick_link(@video) -%>');
 $(".hdble").show();
 flashMessage('<%= @flash_message || '' -%>');
 updateVideoTime();
-<%- if params[:quick_take] == 'true.js'-%>
-$("#form_div").html("<%= escape_javascript(render(:partial => 'modify_event'))-%>");
-$("#form_div").show();
-<%- end -%>
