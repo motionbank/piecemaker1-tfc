@@ -20,10 +20,7 @@ class VideoTest < ActiveSupport::TestCase
       @piece.videos << @video2
       @video3.piece = @piece2
     end
-    should 'remove default piece and give to piece' do
-      @video3.give_to_piece(@piece2,@piece)
-      assert_equal @video3.subjects,[@piece]
-    end
+
     should 'return date prefix false if no prefix title' do
       assert !@video2.date_prefix
     end
