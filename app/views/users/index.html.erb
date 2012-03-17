@@ -5,8 +5,9 @@
   <th style = "width:40px"><%= link_to 'id', :action => "index" , :sorter => 'id', :order => @order %></th>
   <th style = "width:100px"><%= link_to 'name', :action => "index" , :sorter => 'login', :order => @order %></th>
   <th style = "width:100px"><%= link_to 'role', :action => "index" , :sorter => 'role', :order => @order %></th>
-	<th style = "width:100px">performer</th>
+	<th style = "width:100px">full name</th>
 	<th style = "width:100px">last login</th>
+	<th style = "width:100px">performer</th>
 	<th colspan = '2'>Actions</th>
   </tr>
 
@@ -15,8 +16,9 @@
     <td><%= user.id %></td>
     <td><%= user.login %></td>
     <td><%= user.role_name %></td>
-    <td><span style = 'color:<%= user.performer ? "#090" : "#900" %>'> <%=  user.performer ? h(user.performer.short_name) : 'No' %></span></td>
+    <td><%= "#{user.first_name} #{user.last_name}" %></td>
     <td><%= user.last_login %></td>
+    <td><%= user.is_performer %></td>
     <td><%= link_to 'Edit', { :action => 'edit_user', :id => user } %></td>
     <td><%= link_to 'Delete',  user_url(user), :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>

@@ -4,7 +4,7 @@ class SubScene < ActiveRecord::Base
   
   def parse_performers_and_give_to_parent
     old_performers = event.performers
-    all_performers = self.event.piece.performers.map{|x| x.short_name}
+    all_performers = self.event.piece.performers.map{|x| x.login}
     all_performers = all_performers.reject{|x| [nil,''].include?(x)}
     low_desc =  self.description ? self.description.downcase : ''
     low_title = self.title ? self.title.downcase : ''

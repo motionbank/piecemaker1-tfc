@@ -6,7 +6,6 @@
 <%- if user_has_right?('group_admin') -%>
 
     <li><%= link_to "Users", :controller => "users" -%></li>
-    <li><%= link_to "Performers", :controller => "performers" -%></li>
     <li><%= link_to "SetupConfiguration Info", :controller => "setup_configuration", :action => 'show' -%></li>
     <li><%= link_to 'Role Matrix', :controller => "administration", :action => 'role_matrix' -%></li>
     <%- if user_has_right?('group_admin') -%>

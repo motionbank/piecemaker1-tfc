@@ -1,4 +1,4 @@
 <h1>Editing <%= @user.name %></h1>
-<%- form_tag("/users/update/#{@user.id.to_s}",:method => 'put') do %>
+<%= form_tag("/users/update/#{@user.id.to_s}",:method => 'put') do %>
 <%= render :partial => 'form' %>
 <% end -%>

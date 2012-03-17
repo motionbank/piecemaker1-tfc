@@ -1,16 +1,14 @@
 require 'digest/sha1'
 
 class User < ActiveRecord::Base
-
-  has_many :logins
+  
   has_many :messages
-  has_one :performer
   has_and_belongs_to_many :events, :order => :happened_at, :include => [:sub_scenes,:tags,:notes,:video,:users]
   validates_presence_of     :login
   validates_length_of       :login,    :within => 3..40
   validates_uniqueness_of   :login,    :case_sensitive => false, :message => ' - There can\'t be two users with the same Username.'
 
-
+  scope :performers, where(:is_performer => true)
   #validates_presence_of     :email
   #validates_length_of       :email,    :within => 6..100 #r@a.wk
   #validates_uniqueness_of   :email,    :case_sensitive => false
@@ -21,8 +19,11 @@ class User < ActiveRecord::Base
   # HACK HACK HACK -- how to do attr_accessible from here?
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
-  attr_accessible :login, :email, :password, :password_confirmation, :performer, :role_name, :scratchpad
-
+  attr_accessible :login, :email, :password, :password_confirmation, :is_performer, :role_name, :scratchpad
+  def password=(ps)
+  end
+  def password
+  end
 
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   #
@@ -34,7 +35,6 @@ class User < ActiveRecord::Base
     u = find_by_login(login) # need to get the salt
     u && u.authenticated?(password) ? u : nil
   end
-  
   def store_from_params(params)
     self.refresh_pref = params[:refresh_rate] == 'Never' ? 0 : params[:refresh_rate].to_i
     self.notes_on = params[:noteshow] == 'on' ? true : false

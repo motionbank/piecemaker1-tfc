@@ -4,7 +4,7 @@ super_user:
   name: ""
   updated_at: 2008-06-28 14:45:17 Z
   crypted_password: e1069fa91cf994231ec158fc53861057bb03e0b3
-  performer: true
+  is_performer: true
   role_name: group_admin
   remember_token_expires_at: 
   id: 1

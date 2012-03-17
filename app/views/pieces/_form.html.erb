@@ -7,15 +7,8 @@
 <%= text_field 'piece', 'short_name'  %></p>
 
 <h4>Cast:</h4>
-<%- current = @performers.select{|x| x.is_current } -%>
-<%- alumni = @performers.select{|x| !x.is_current } -%>
 <br />
-<%= raw checklist('piece[performer_ids][]',current,['id','short_name'],@piece.performers,'id',false) %>
-<br />
-<%- if alumni.any? -%>
-<b>Inactive Performers</b><br />
-<%= checklist('piece[performer_ids][]',alumni,['id','short_name'],@piece.performers,'id') %>
-<%- end -%>
+<%= raw checklist('piece[performer_ids][]',@performers,['id','login'],@piece.performers,'id',false) %>
 <br /><br />
 <%- if user_has_right?('group_admin') -%>
 <b>Active Piece:</b><%= check_box_tag "piece[is_active]", 'true', @piece.is_active %> True or False

@@ -15,7 +15,7 @@ class CastingTest < ActiveSupport::TestCase
   Casting.send(:public, *Casting.protected_instance_methods)
   context 'a casting instance' do
     setup do
-      @c = Casting.create(:performer_id => 2,:piece_id => 21)
+      @c = Casting.create(:user_id => 2,:piece_id => 21)
     end
     should 'be true' do
       assert @c

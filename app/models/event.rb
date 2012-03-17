@@ -393,7 +393,7 @@ class Event < ActiveRecord::Base
     return false unless performers
     return true if performers[0] == 'Everyone'
     return false unless performers.length > 4
-    piece.performers.collect{|x| x.short_name.downcase}.sort == performers.collect{|x| x.downcase}.sort
+    piece.performers.collect{|x| x.login.downcase}.sort == performers.collect{|x| x.downcase}.sort
   end
   
   
@@ -486,7 +486,7 @@ class Event < ActiveRecord::Base
 
 
   def get_performers_from_description #tested
-    all_performers = self.piece.performers.map{|x| x.short_name}
+    all_performers = self.piece.performers.map{|x| x.login}
     all_performers = all_performers.reject{|x| [nil,''].include?(x)}
     low_desc =  self.description ? self.description.downcase : ''
     low_title = self.title ? self.title.downcase : ''

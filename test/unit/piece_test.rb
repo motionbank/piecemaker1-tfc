@@ -58,8 +58,8 @@ class PieceTest < ActiveSupport::TestCase
       @p1.events << @e4
       @p1.events << @e5
       @p1.events << @e6
-      @u1 = Factory.create(:performer,:short_name => 'sam')
-      @u2 = Factory.create(:performer,:short_name => 'roger')
+      @u1 = Factory.create(:performer,:login => 'sam')
+      @u2 = Factory.create(:performer,:login => 'roger')
       @p1.performers << @u1
     end
     

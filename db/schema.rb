@@ -1,18 +1,20 @@
-# This file is auto-generated from the current state of the database. Instead of editing this file, 
-# please use the migrations feature of Active Record to incrementally modify your database, and
-# then regenerate this schema definition.
+# encoding: UTF-8
+# This file is auto-generated from the current state of the database. Instead
+# of editing this file, please use the migrations feature of Active Record to
+# incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your database schema. If you need
-# to create the application database on another system, you should be using db:schema:load, not running
-# all the migrations from scratch. The latter is a flawed and unsustainable approach (the more migrations
+# Note that this schema.rb definition is the authoritative source for your
+# database schema. If you need to create the application database on another
+# system, you should be using db:schema:load, not running all the migrations
+# from scratch. The latter is a flawed and unsustainable approach (the more migrations
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110926162944) do
+ActiveRecord::Schema.define(:version => 20120317093830) do
 
   create_table "castings", :force => true do |t|
-    t.integer  "performer_id",                   :null => false
+    t.integer  "user_id",                   :null => false
     t.integer  "piece_id",                       :null => false
     t.boolean  "is_original",  :default => true
     t.integer  "cast_number",  :default => 1
@@ -20,7 +22,7 @@ ActiveRecord::Schema.define(:version => 20110926162944) do
   end
 
   add_index "castings", ["id"], :name => "index_castings_on_id"
-  add_index "castings", ["performer_id"], :name => "index_castings_on_performer_id"
+  add_index "castings", ["user_id"], :name => "index_castings_on_performer_id"
   add_index "castings", ["piece_id"], :name => "index_castings_on_piece_id"
 
   create_table "configurations", :force => true do |t|
@@ -144,19 +146,6 @@ ActiveRecord::Schema.define(:version => 20110926162944) do
   add_index "notes", ["event_id"], :name => "index_notes_on_event_id"
   add_index "notes", ["id"], :name => "index_notes_on_id"
 
-  create_table "performers", :force => true do |t|
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "short_name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "user_id"
-    t.boolean  "is_current", :default => true
-  end
-
-  add_index "performers", ["id"], :name => "index_performers_on_id"
-  add_index "performers", ["user_id"], :name => "index_performers_on_user_id"
-
   create_table "photos", :force => true do |t|
     t.string   "picture_file_name"
     t.string   "picture_content_type"
@@ -181,7 +170,6 @@ ActiveRecord::Schema.define(:version => 20110926162944) do
   end
 
   add_index "pieces", ["id"], :name => "index_pieces_on_id"
-
 
   create_table "sub_scenes", :force => true do |t|
     t.string   "title"
@@ -224,6 +212,9 @@ ActiveRecord::Schema.define(:version => 20110926162944) do
     t.integer  "last_assemblage_id"
     t.datetime "last_login"
     t.text     "scratchpad"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.boolean  "is_performer",                             :default => true
   end
 
   add_index "users", ["id"], :name => "index_users_on_id"

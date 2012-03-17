@@ -3,7 +3,7 @@
 # Table name: castings
 #
 #  id           :integer(4)      not null, primary key
-#  performer_id :integer(4)      not null
+#  user_id :integer(4)      not null
 #  piece_id     :integer(4)      not null
 #  is_original  :boolean(1)      default(TRUE)
 #  cast_number  :integer(4)      default(1)
@@ -13,9 +13,9 @@
 
 one:
   piece_id: 1
-  performer_id: 1
+  user_id: 1
 
 two:
   piece_id: 1
-  performer_id: 1
+  user_id: 1
 

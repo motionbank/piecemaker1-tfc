@@ -10,7 +10,3 @@ end
 Factory.define :user do |e|
   e.login 'ubi'
 end
-
-Factory.define :performer do |e|
-  e.short_name 'ubi'
-end

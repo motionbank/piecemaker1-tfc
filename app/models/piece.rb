@@ -13,7 +13,7 @@
 
 class Piece < ActiveRecord::Base
   has_many :castings, :dependent => :destroy
-  has_many :performers, :through => :castings, :source => :performer
+  has_many :performers, :through => :castings, :source => :user
   has_many :meta_infos, :dependent => :destroy
   has_many :documents, :dependent => :destroy
   has_many :events, :dependent => :destroy, :order => 'happened_at'
@@ -44,7 +44,7 @@ class Piece < ActiveRecord::Base
   end
   def word_statistics
     out_words = ['','the','of','and','or','at','not','it','is','was','in','to','a','an','with','be','as','but','that','this','you','i','what','if','for','have','are','we','he','she','br']
-    out_words += performers.map{|x| x.short_name.downcase}
+    out_words += performers.map{|x| x.login.downcase}
     word_frequencies = Hash.new(0)
     events.each do |event|
       title_array = []

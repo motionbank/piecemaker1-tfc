@@ -187,7 +187,7 @@ module ApplicationHelper
     text = "<div id = '#{model}'>"
     counter = 1
     if fields.length == 2
-      full_list = collection.collect {|x| {fields[0] => eval("x.#{fields[0]}") ||'',fields[1] => eval("x.#{fields[1]}")||''}}.sort_by {|x| x['short_name']}
+      full_list = collection.collect {|x| {fields[0] => eval("x.#{fields[0]}") ||'',fields[1] => eval("x.#{fields[1]}")||''}}.sort_by {|x| x['login']}
     else
       full_list = collection.collect{|x| eval("x.#{fields[0]}")}.sort
     end
@@ -649,7 +649,7 @@ module ApplicationHelper
     options += options_from_collection_for_select(current_piece.recordings, "id", "title")
   end
   def events_performers(event)
-    events_performers = event.performers[0] == 'Everyone' ? current_piece.performers.map{|x| x.short_name}.sort : event.performers
+    events_performers = event.performers[0] == 'Everyone' ? current_piece.performers.map{|x| x.login}.sort : event.performers
   end
 
 

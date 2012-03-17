@@ -36,6 +36,7 @@ GEM
       builder
       mime-types
       xml-simple
+    bcrypt-ruby (3.0.1)
     builder (3.0.0)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
@@ -163,6 +164,7 @@ DEPENDENCIES
   active_record_query_trace
   acts-as-list
   aws-s3
+  bcrypt-ruby (~> 3.0.0)
   coffee-rails (~> 3.2.1)
   delayed_job_active_record
   factory_girl_rails
@@ -175,7 +177,6 @@ DEPENDENCIES
   sass
   sass-rails (~> 3.2.3)
   shoulda
-  sqlite3
   taps
   timecop
   uglifier (>= 1.0.3)

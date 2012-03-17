@@ -28,19 +28,12 @@ class UsersController < ApplicationController
   
   def create
       #logout_keeping_session!
-      params[:performer] ||= false
+      params[:user][:performer] ||= false
       @user = User.new(params[:user])
       @user.role_name = params[:user][:role_name]
       success = @user && @user.save
       if success && @user.errors.empty?
-        if params[:performer]
-          p = Performer.create(
-          :short_name => params[:performer_short_name],
-          :first_name => params[:performer_first_name],
-          :last_name => params[:performer_last_name],
-          :user_id => @user.id)
-        end
-              # Protects against session fixation attacks, causes request forgery
+        # Protects against session fixation attacks, causes request forgery
         # protection if visitor resubmits an earlier form using back
         # button. Uncomment if you understand the tradeoffs.
         # reset session
@@ -79,31 +72,13 @@ class UsersController < ApplicationController
     order = params[:order] ? params[:order] : 'DESC'
     @order = order == 'ASC' ? 'DESC' : 'ASC'
     sorts = {'id' => 'id', 'login' => 'login', 'role' => 'role_name'}
-    @all_users = User.order(sorts[params[:sorter]]).includes(:performer)
+    @all_users = User.order(sorts[params[:sorter]])
   end
 
   def update
       @user = User.find(params[:id])
-      params[:performer] ||= false
+      params[:user][:is_performer] ||= false
       if @user.update_attributes(params[:user])
-        if params[:performer]
-          if @user.performer
-            @user.performer.short_name = params[:performer_short_name]
-            @user.performer.first_name = params[:performer_first_name]
-            @user.performer.last_name = params[:performer_last_name]
-            @user.performer.save
-          else
-            p = Performer.create(
-              :short_name => params[:performer_short_name],
-              :first_name => params[:performer_first_name],
-              :last_name => params[:performer_last_name],
-              :user_id => @user.id)
-          end
-        else
-          if @user.performer
-            @user.performer.destroy
-          end
-        end
         flash[:notice] = 'User was successfully updated.'
         redirect_to :action => 'index'
       else

@@ -43,11 +43,11 @@ class PiecesController < ApplicationController
   
   def new
     @piece = Piece.new
-    @performers = Performer.all
+    @performers = User.performers
   end
 
   def edit
-    @performers = Performer.all
+    @performers = User.performers
     respond_to do |wants|
       wants.html {  }
       wants.js { render :layout => false}

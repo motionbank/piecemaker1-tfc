@@ -36,7 +36,7 @@ Location: <%= put_location_select(@event.location) %>
 
 <% if @event.needs_performers_field? -%>
 <label for="event_performers">Performers</label><br />
-<%= raw checklist('performers[]',@event.piece.performers,['short_name'],events_performers(@event)) %> 
+<%= raw checklist('performers[]',@event.piece.performers,['login'],events_performers(@event)) %> 
 <% end %>
 
 

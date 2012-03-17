@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
 
 ##################
   def current_user
-    @cu ||= User.first
+    @cu ||= User.find(1)
   end
   
   def logged_in?
