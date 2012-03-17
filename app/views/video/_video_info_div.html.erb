@@ -2,9 +2,7 @@
   <p>
         Contains:
         <br />
-        <%- video.subjects.each do |subject| -%>
-        <%= subject.title + '<br />' %>
-        <%- end -%>
+        <%= video.piece.title -%>
 
   </p>
   <%- if user_has_right? 'group_admin' -%>

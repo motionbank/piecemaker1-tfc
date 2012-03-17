@@ -142,16 +142,6 @@ class EventsController < ApplicationController
     end
   end
 
-  def new_list
-    if params[:search_term].present?
-      @events = Video.find_all_by_piece_id(
-                params[:id],
-                :conditions => filter_from_universal_table_params(filt),
-                :order => sort_from_universal_table_params,
-                :include => [:video_recordings,:events,:subjects]
-                )
-    end
-  end
   def list
     redirect_non_admins('normal_actions',home_url) and return
     if params[:id]

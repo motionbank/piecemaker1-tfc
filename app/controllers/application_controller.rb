@@ -155,7 +155,7 @@ class ApplicationController < ActionController::Base
     end
 
     def current_video
-      videos = current_piece.short_recordings
+      videos = current_piece.videos
       return false unless videos.length > 0
       video = videos.last
       return video unless video.duration

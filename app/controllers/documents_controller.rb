@@ -26,7 +26,7 @@ class DocumentsController < ApplicationController
   def list_by_piece
     @piece = set_current_piece(params[:id])
     @documents = @piece.documents.sort_by{|x| x.doc_file_name}
-    @videos = @piece.recordings.select{|x| x.fn_s3}
+    @videos = @piece.videos.select{|x| x.fn_s3}
     @photos = @piece.photos
   end
 

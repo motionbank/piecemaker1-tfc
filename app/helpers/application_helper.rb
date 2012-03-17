@@ -641,12 +641,12 @@ module ApplicationHelper
 
   def videos_for_select
    videos = [['no media','']]
-   videos += current_piece.recordings.map{|x| [x.title,x.title]}
+   videos += current_piece.videos.map{|x| [x.title,x.title]}
   end
  
   def options_for_video_search
     options = "<option value='no_dvd'>No Video</option>"
-    options += options_from_collection_for_select(current_piece.recordings, "id", "title")
+    options += options_from_collection_for_select(current_piece.videos, "id", "title")
   end
   def events_performers(event)
     events_performers = event.performers[0] == 'Everyone' ? current_piece.performers.map{|x| x.login}.sort : event.performers

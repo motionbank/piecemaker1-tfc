@@ -16,9 +16,9 @@ class VideoTest < ActiveSupport::TestCase
       :title      => '201_hi.mp4')
       @video3     = Video.create(
       :title      => 'video_3')
-      @piece.recordings << @video1
-      @piece.recordings << @video2
-      @video3.subjects << @piece2
+      @piece.videos << @video1
+      @piece.videos << @video2
+      @video3.piece = @piece2
     end
     should 'remove default piece and give to piece' do
       @video3.give_to_piece(@piece2,@piece)

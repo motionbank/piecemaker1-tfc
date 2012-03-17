@@ -14,11 +14,6 @@ class AdministrationController < ApplicationController
     flash[:notice] = vid.destroy ? "Destroyed Video ID: #{params[:id]}" : "Couldn't destroy Video ID: #{params[:id]}"
     redirect_to :controller => 'video', :action => 'list'
   end
-  def delete_vid_rec
-    vid_rec = VideoRecording.find(params[:id])
-    flash[:notice] = vid_rec.destroy ? "Destroyed Video Recording ID: #{params[:id]}" : "Couldn't destroy Video Recording ID: #{params[:id]}"
-    redirect_to :controller => 'video', :action => 'list_video_recordings'
-  end
   
    def delete_s3
      @key = params[:id]

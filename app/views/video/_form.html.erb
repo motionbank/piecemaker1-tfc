@@ -27,14 +27,7 @@ Other<%= radio_button_tag 'video[vid_type]', 'other', @video.vid_type == 'other'
 <%= text_field "video","fn_s3",:size => 6 %>&nbsp;&nbsp;
 <%= "Local:" %>
 <%= text_field "video","fn_local",:size => 6 %><br />
-<b>Contains Pieces (uncheck to remove):</b><br />
-<ul style = 'list-style:none;'>
-<%- @video.video_recordings.each do |video_recording| -%>
-<li>
-  <%= check_box_tag 'subjects[]',video_recording.piece_id,true %> <%= video_recording.piece.title %>
-</li>
-<%- end -%>
-</ul>
-<h4>Add Content:</h4>
-<%= select_tag 'new_subject_id', options_for_select(piece_select_with_none,'') %>
+
+<h4>Piece:</h4>
+<%= select_tag 'piece_id', options_for_select(piece_select_with_none,@video.piece) %>
 <br /><br />

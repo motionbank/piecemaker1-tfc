@@ -3,28 +3,6 @@ module VideoHelper
     user_has_right?('group_admin') #&& @piece
   end
 
-  def video_form_stuff
-    stuff = ''
-    stuff << form_tag( :action => 'give_videos_to_piece',:order => @order, :page => params[:page], :sorter => params[:sorter])
-    stuff << hidden_field_tag('pid', params[:id])
-    stuff << submit_tag('Go')
-    arrayx = [
-      ['Performance','performance'],
-      ['Rehearsal','rehearsal'],
-      ['Other','other'],
-      ['Give to Piece','give']]
-    if ENV['APP_LOCATION'] != 'heroku' 
-      arrayx += [['Get Meta Data','data'],
-      ['Confirm Files','check'],
-      ['Archive to Local','dearchive'],
-      ['Local to Archive','archive'],
-      ['Local to S3', 'upload'],
-      ['Archive to Compress and Upload','move']]
-    end
-     stuff << select_tag('action_type', options_for_select(arrayx))
-     stuff << select_tag('piece', options_from_collection_for_select(@pieces.sort_by{|x| x.title}, 'id', 'title'))
-     stuff
-  end
   def flowplayer_provider_string(flow_type)
     case flow_type
     when 's3'

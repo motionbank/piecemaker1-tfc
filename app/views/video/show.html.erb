@@ -1,8 +1,7 @@
 <h3><%= @video.title %></h3>
 <h4>Content:</h4>
-<%- @video.video_recordings.each do |video_recording| -%>
-<%= video_recording.primary ? "Primary-" : ' ' %> <%= video_recording.piece.title %><br />
-<%- end -%>
+<%= @video.piece.title -%>
+
 <h4>Avalaible Versions</h4>
 <%= "Local: #{@video.fn_local}<br />" if @video.fn_local %>
 <%= "Archive: #{@video.fn_arch}<br />" if @video.fn_arch %>

@@ -68,9 +68,9 @@ class CaptureController < ApplicationController
   end
   
   def get_events(piece_id = session[:pieceid])
-    conditions = "(state = 'normal') "
-    conditions += user_has_right?('view_dev_notes') ? '' :  "AND (event_type != 'dev_notes') "
-    conditions += current_user.markers_on ? '' : "AND (event_type != 'marker')"
+    conditions = "(piece_id = #{piece_id}) AND (state = 'normal') "
+    conditions += "AND (event_type != 'dev_notes') " unless user_has_right?('view_dev_notes')
+    conditions += "AND (event_type != 'marker')" unless current_user.markers_on
     Event.where(conditions).order('happened_at').includes([{:video => :events},:sub_scenes,:tags,:notes,:users])
   end
 
@@ -157,7 +157,7 @@ class CaptureController < ApplicationController
       when 'tail'
         @events = Event.where("piece_id = ? AND (state = 'normal')",session[:pieceid]).order('happened_at DESC').includes([:video,:sub_scenes,:tags,:notes]).limit(100)
         vids = @events.map{|x| x.video}.uniq.compact
-        @videos = current_piece.clean_recordings.reject{|x| vids.include?(x) || x. recorded_at < @events.first.happened_at}
+        @videos = current_piece.videos.reject{|x| vids.include?(x) || x.recorded_at < @events.first.happened_at}
       when  'none'
         @events = get_events
         @refresh = 'Never' if (@total_event_number > 99 )
@@ -224,7 +224,7 @@ class CaptureController < ApplicationController
   end
 
  def update_vid_time
-    videos = Piece.find(session[:pieceid]).short_recordings
+    videos = Piece.find(session[:pieceid]).videos
     text = 'Video: '
    if videos.length > 0
      if videos.last.duration && videos.last.recorded_at + videos.last.duration < Time.now
@@ -599,7 +599,7 @@ class CaptureController < ApplicationController
       @video.recorded_at = Time.now
       @video.set_new_title(piece)
       @video.save
-      piece.recordings << @video
+      piece.videos << @video
       @player = Video.prepare_recording  if current_configuration.use_auto_video
       Video.start_recording if current_configuration.use_auto_video
       @flash_message << "Stopped Video: #{@video.title} and Started New Video"
@@ -653,7 +653,7 @@ class CaptureController < ApplicationController
     @video = Video.new(params[:video])
     @video.recorded_at = Time.now
     @video.save
-    current_piece.recordings << @video
+    current_piece.videos << @video
     @dvd_quick = 'out'
     @truncate = :less unless @truncate == :none
     respond_to do |format|

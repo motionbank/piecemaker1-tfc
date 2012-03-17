@@ -11,14 +11,6 @@ class VideoController < ApplicationController
                       :page => params[:page],
                       :order => sort_from_universal_table_params)
     end
-    def list_video_recordings
-      @video_recordings = VideoRecording.paginate(
-                      :per_page => 50,
-                      :page => params[:page],
-                      :order => sort_from_universal_table_params
-                      )
-    end
-
 
     def viewer
       @flow_type = false
@@ -59,25 +51,12 @@ class VideoController < ApplicationController
     end
 
     def prepare_params
-      params[:subjects] ||= []
       params[:video][:fn_local] = params[:video][:fn_local].present? ? params[:video][:fn_local] : nil
       params[:video][:fn_arch] = params[:video][:fn_arch].present? ? params[:video][:fn_arch] : nil
       params[:video][:fn_s3] = params[:video][:fn_s3].present? ? params[:video][:fn_s3] : nil
       params[:video][:meta_data] = params[:video][:meta_data].present? ? params[:video][:meta_data] : nil
     end
-    def update_subjects
-      @video.video_recordings.clear#????
-      params[:subjects].each do |sub_id|
-             @video.video_recordings.create(
-              :piece_id => sub_id
-            )
-      end
-      if params[:new_subject_id].present?
-        @video.video_recordings.create(
-            :piece_id => params[:new_subject_id]
-          )
-      end
-    end
+
     def edit_from_viewer
         @video = Video.find(params[:id])
         respond_to do |format|
@@ -89,7 +68,6 @@ class VideoController < ApplicationController
       prepare_params
       @video.attributes = params[:video]
       @video.save
-      update_subjects
       flash[:notice] = "Updated #{@video.title}"
       @flash_message = flash[:notice]
       respond_to do |format|
@@ -128,12 +106,12 @@ class VideoController < ApplicationController
       @perf = params[:perf] == 'perf' ? "vid_type = 'performance'" : "vid_type = 'rehearsal'"
       @perf = '' unless params[:perf]
       filt = @piece ? @perf : @perf + ' and piece_id is NULL'
-        @videos = @piece.recordings.paginate(
+        @videos = @piece.videos.paginate(
                   :limit => 50,
                   :conditions => filter_from_universal_table_params(filt),
                   :page => params[:page],
                   :order => sort_from_universal_table_params,
-                  :include => [:video_recordings,:events,:subjects]
+                  :include => [:events]
                   )
       
     end
@@ -218,46 +196,5 @@ class VideoController < ApplicationController
   def upload_one #needs a link to and view
     @video.delayed_dearchive_compress_and_upload
   end
-
-  def give_videos_to_piece
-    piece = Piece.find(params[:piece])
-    up = Piece.find(current_configuration.default_piece_id)
-    if params[:vids]
-      params[:vids].each do |vid|
-        video = Video.find(vid)
-        case params[:action_type]
-        when 'dearchive'
-          video.delayed_dearchive
-           flash[:notice] = "Queued #{params[:vids].length.to_s} for copy from archive."
-        when 'archive'
-          video.delayed_archive
-          flash[:notice] = "Queued #{params[:vids].length.to_s} for copy to archive."
-        when 'move' #move from archive to uncompressed compress and upload
-            video.delayed_dearchive_compress_and_upload
-            flash[:notice] = "Queued #{params[:vids].length.to_s} for upload."
-        when 'check' #check presence of files
-            result = video.confirm_presence(['uncompressed','archive','s3'])
-            flash[:notice] = "Checked presence of #{params[:vids].length.to_s} files."
-            flash[:error] = result[:error] if result[:error].present?
-        when 'data' #get quicktime metadata
-            video.get_annotations
-            flash[:notice] = "Got Meta Data for #{params[:vids].length.to_s} videos."
-        when 'upload'
-          video.delayed_compress_and_upload
-          flash[:notice] = "Queued #{params[:vids].length.to_s} for upload."
-        when 'give'
-            video.give_to_piece(up,piece) #add video to pieces recordings
-          flash[:notice] = "Added #{params[:vids].length.to_s} videos to #{piece.title}"
-        else #set type to performance rehearsal or other
-             video.vid_type = params[:action_type]
-             video.save
-        end
-      end
-    else
-      flash[:notice] = "Nothing Selected"
-    end
-    redirect_to :action => 'index',:id => params[:pid], :page => params[:page], :order => params[:order], :sorter => params[:sorter]
-  end
-
 
 end

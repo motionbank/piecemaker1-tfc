@@ -3,10 +3,8 @@ class Video < ActiveRecord::Base
   MOVIE_EXTENSIONS = %w[mov mp4 m4v flv]
   
   #belongs_to :event
+  belongs_to :piece
   has_many :events,:dependent => :nullify, :order => :happened_at,:conditions => "state = 'normal'"
-  has_many :video_recordings, :dependent => :destroy
-  has_many :subjects, :through => :video_recordings, :source => :piece, :uniq => true
-  
   scope :active, :conditions => "state = 'normal'"
 
 
@@ -80,12 +78,7 @@ class Video < ActiveRecord::Base
   def self.split_ext(file_name)
     file_name.split('.').last
   end
-  def give_to_piece(remove_piece,new_piece)
-    new_piece.recordings << self
-    subjects.delete(remove_piece)
-    subjects << new_piece
-  end
-  
+
   def base_name
     return false unless title
     title.split('.').first
@@ -124,7 +117,7 @@ class Video < ActiveRecord::Base
     end
   end
   def serial_number
-    (piece.recordings.index(self)+1).to_s
+    (piece.videos.index(self)+1).to_s
   end
   def comes_before(video2)
     return false unless date_prefix && video2.date_prefix
@@ -162,7 +155,7 @@ class Video < ActiveRecord::Base
   def set_new_title(piece)
     
     time = Time.now.strftime("%Y%m%d")
-      last_dvd = piece.recordings.last
+      last_dvd = piece.videos.last
       if last_dvd && last_dvd.title
         last_title = last_dvd.title.split('_')
         last_time = last_title[0]
@@ -192,15 +185,7 @@ class Video < ActiveRecord::Base
     string << "Local: #{fn_local}" if fn_local
     string
   end
-  def show_subjects
-    string = ''
-    self.video_recordings.each do |subject|
-      string << '*' if subject.primary
-      string << subject.piece.title
-      string << '<br />'
-    end
-    string
-  end
+
   def guess_piece_title
     name = title.split('.')
     name.pop

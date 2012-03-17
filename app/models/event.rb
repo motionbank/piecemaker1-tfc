@@ -36,26 +36,6 @@ class Event < ActiveRecord::Base
   delegate :recorded_at,:fn_arch,:fn_local,:fn_s3, :to => :video, :prefix => true
   delegate :tags, :to => :piece, :prefix => true
 
-  def self.get_events_from_videos
-    Video.all.each do |v|
-      v.subjects.each do |piece|
-        e = Event.create(
-        :title => v.title,
-        :happened_at => v.recorded_at,
-        :piece_id => piece.id,
-        :description => v.source_string,
-        :video_id => v.id,
-        :rating => v.rating,
-        :dur => v.duration,
-        :event_type => 'video',
-        :created_by => 'David',
-        :modified_by => 'David',
-        :created_at => v.created_at,
-        :updated_at => v.updated_at
-        )
-      end
-    end
-  end
   def self.event_types
     %w[dev_notes discussion headline light_cue performance_notes scene sound_cue marker video]
   end
@@ -370,7 +350,7 @@ class Event < ActiveRecord::Base
   end
 
   def set_video_time_info
-      video = piece.clean_recordings.select{|x| x.recorded_at < happened_at}.last
+      video = piece.videos.select{|x| x.recorded_at < happened_at}.last
       return nil unless video
       return nil if video.duration && video.recorded_at + video.duration < happened_at
       
@@ -468,7 +448,7 @@ class Event < ActiveRecord::Base
   end
   
   def in_which_video
-    videos = piece.recordings.sort_by{|x| x.recorded_at}
+    videos = piece.videos.sort_by{|x| x.recorded_at}
     before = videos.reject{|x| x.recorded_at > happened_at}.last
     return before if happened_at <= (before.recorded_at + before.duration)
     return nil

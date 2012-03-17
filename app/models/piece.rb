@@ -17,12 +17,12 @@ class Piece < ActiveRecord::Base
   has_many :meta_infos, :dependent => :destroy
   has_many :documents, :dependent => :destroy
   has_many :events, :dependent => :destroy, :order => 'happened_at'
-  has_many :video_recordings, :dependent => :destroy
-  has_many :recordings, :through => :video_recordings, :source => :video, :uniq => true, :order => :recorded_at, :include => {:events => [:sub_scenes,:tags,:notes,:video]}
-  has_many :small_recordings, :through => :video_recordings, :source => :video, :uniq => true, :order => :recorded_at, :include => {:events => [:sub_scenes,:tags,:notes,:video]}
-  has_many :ev_recordings, :through => :video_recordings, :source => :video, :uniq => true, :order => :recorded_at, :include => [:events]
-  has_many :clean_recordings, :through => :video_recordings, :source => :video, :uniq => true, :order => :recorded_at
-  has_many :short_recordings, :through => :video_recordings, :source => :video, :order => :recorded_at
+  has_many :videos, :dependent => :destroy, :order => 'recorded_at'
+ # has_many :recordings, :through => :video_recordings, :source => :video, :uniq => true, :order => :recorded_at, :include => {:events => [:sub_scenes,:tags,:notes,:video]}
+  #has_many :small_recordings, :through => :video_recordings, :source => :video, :uniq => true, :order => :recorded_at, :include => {:events => [:sub_scenes,:tags,:notes,:video]}
+ # has_many :ev_recordings, :through => :video_recordings, :source => :video, :uniq => true, :order => :recorded_at, :include => [:events]
+ # has_many :clean_recordings, :through => :video_recordings, :source => :video, :uniq => true, :order => :recorded_at
+ # has_many :short_recordings, :through => :video_recordings, :source => :video, :order => :recorded_at
   has_many :photos, :dependent => :destroy
   has_many :tags
 
@@ -34,7 +34,7 @@ class Piece < ActiveRecord::Base
     scenes.last
   end
   def empty_recordings
-    ev_recordings.select{|x| x.events.length == 0}
+    videos.select{|x| x.events.length == 0}
   end
   def event_types
     Event.event_types
@@ -74,7 +74,7 @@ class Piece < ActiveRecord::Base
     word_frequencies.reverse!
   end
   def todays_videos_ids
-    short_recordings.select{|x| x.recorded_at.at_midnight == Time.now.at_midnight}.map{|x| x.id}
+    videos.select{|x| x.recorded_at.at_midnight == Time.now.at_midnight}.map{|x| x.id}
   end
   def active_events
     self.events.reject{|x| ['deleted'].include? x.state}

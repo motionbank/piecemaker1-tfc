@@ -9,7 +9,7 @@
                 {'Title' => 'title',:sort => 'title'},
                 {'Loc' => 'local_show'},
                 {'S3' => 'S3_show'},
-                {'Content'=> 'show_subjects'},
+                {'Content'=> 'piece.id'},
                 {'Length' => 'duration'},
                 {'Data' => 'meta_data_present'},
                 {'Annot.' => 'events.length'},
@@ -24,10 +24,6 @@
   :admin => {'Destroy'=>'group_admin',
     'Data' => 'group_admin',
     'Destroy All' => 'group_admin'},
-  :form => {:show => show_form?,
-            'label_for_checkboxes' => 'vids[]',
-            'form' => video_form_stuff
-            },
   :search_field => 'title'
 }
 ) %>
