@@ -557,7 +557,7 @@ class Event < ActiveRecord::Base
 
   
   def compute_duration
-    next_event = Event.where("piece_id = ?"piece_id).order('happened_at')
+    next_event = Event.where("piece_id = ?",piece_id).order('happened_at')
     next_event = next_event.select{|x| x.happened_at > happened_at}.first
     if video
       if next_event && next_event.video == video
