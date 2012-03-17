@@ -14,7 +14,6 @@ super_user:
   refresh_pref: 0
   truncate: more
   inherit_cast: 0
-  last_assemblage_id: 1
   last_login: 2008-06-28 14:45:17 Z
   created_at: 2008-06-28 14:45:17 Z
 

@@ -187,22 +187,13 @@ class ApplicationController < ActionController::Base
 
   protected
   def access_denied
-    respond_to do |format|
-      format.html do
-        store_location
-        if flash[:notice]
-          flash[:notice] += ' Please Login'
-        else
-          flash[:notice] = 'Please Login'
-        end
-        redirect_to :controller => 'home', :action => 'welcome'
-      end
-      # format.any doesn't work in rails version < http://dev.rubyonrails.org/changeset/8987
-      # you may want to change format.any to e.g. format.any(:js, :xml)
-      format.any do
-        request_http_basic_authentication 'Web Password'
-      end
+    store_location
+    if flash[:notice]
+      flash[:notice] += ' Please Login'
+    else
+      flash[:notice] = 'Please Login'
     end
+    redirect_to :controller => 'home', :action => 'welcome'
   end
 
   private

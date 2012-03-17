@@ -102,12 +102,12 @@ class EventTest < ActiveSupport::TestCase
       @event = Event.create
       @piece.events << @event
       
-      @performer1 = Performer.create(:short_name => 'Alan')
-      @performer2 = Performer.create(:short_name => 'Bob')
-      @performer3 = Performer.create(:short_name => 'Chris',:first_name => '')
-      @performer4 = Performer.create(:short_name => 'Dan',:first_name => 'Daniel')
-      @performer5 = Performer.create(:short_name => 'Ed')
-      @performer6 = Performer.create(:short_name => 'Fred')
+      @performer1 = User.create(:login => 'Alan',:password => 'abcdefg',:password_confirmation => 'abcdefg')
+      @performer2 = User.create(:login => 'Bob',:password => 'abcdefg',:password_confirmation => 'abcdefg')
+      @performer3 = User.create(:login => 'Chris',:first_name => '',:password => 'abcdefg',:password_confirmation => 'abcdefg')
+      @performer4 = User.create(:login => 'Dan',:first_name => 'Daniel',:password => 'abcdefg',:password_confirmation => 'abcdefg')
+      @performer5 = User.create(:login => 'Edd',:password => 'abcdefg',:password_confirmation => 'abcdefg')
+      @performer6 = User.create(:login => 'Fred',:password => 'abcdefg',:password_confirmation => 'abcdefg')
 
       @piece.performers << @performer1
       @piece.performers << @performer2
@@ -173,7 +173,7 @@ class EventTest < ActiveSupport::TestCase
     should 'report has_everyone? true if cast is full and big' do
       @piece.performers << @performer5
       @piece.performers << @performer6
-      @event.performers = ['Alan','Bob','Chris','Dan','Ed','Fred']        
+      @event.performers = ['Alan','Bob','Chris','Dan','Edd','Fred']        
       assert @event.has_everyone?
     end
     
@@ -184,7 +184,7 @@ class EventTest < ActiveSupport::TestCase
     should 'change cast to Everyone if cast full' do
       @piece.performers << @performer5
       @piece.performers << @performer6
-      @event.performers = ['Alan','Bob','Chris','Dan','Ed','Fred']
+      @event.performers = ['Alan','Bob','Chris','Dan','Edd','Fred']
       @event.check_for_everyone
       assert @event.performers == ['Everyone']
     end
@@ -387,7 +387,7 @@ class EventTest < ActiveSupport::TestCase
       #hi
       @p = Factory.create(:piece)
       ['alalal','bobobo','carlcarl','dadada','ededed'].each do |n|
-        @p.performers << Factory.create(:performer,:short_name => n)
+        @p.performers << Factory.create(:user,:login => n,:password => 'abcdefg',:password_confirmation => 'abcdefg')
       end
       @ev1 = Factory.create(:event,:title => 'scene1',:event_type => 'scene',:happened_at => @t + 1)
       @p.events << @ev1

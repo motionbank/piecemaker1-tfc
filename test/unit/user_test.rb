@@ -22,7 +22,6 @@ end
 #  remember_token            :string(40)
 #  remember_token_expires_at :datetime
 #  role_id                   :integer(4)      default(1)
-#  performer                 :boolean(1)      default(FALSE)
 #  role_name                 :string(255)
 #  notes_on                  :boolean(1)      default(TRUE)
 #  markers_on                :boolean(1)      default(TRUE)
