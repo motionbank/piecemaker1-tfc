@@ -1,11 +1,11 @@
 
-<%= error_messages_for @user %>
+<%= raw  error_messages_for @user %>
 <p><label for="user_name">Name</label><br />
 <%= text_field 'user', 'login'  %></p>
 <p><label for="user_password">Password</label><br />
 <%= password_field 'user', 'password'  %></p>
 <p><label for="user_name">Confirm Password</label><br />
-<%#= password_field 'user', 'password_confirmation'  %></p>
+<%= password_field 'user', 'password_confirmation'  %></p>
 
 <p><label for="user_performer">User is also a Performer?</label><br />
   <%= check_box_tag 'user[is_performer]', 1, @user.is_performer %>Yes / No<br />

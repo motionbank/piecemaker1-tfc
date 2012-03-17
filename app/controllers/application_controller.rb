@@ -14,9 +14,9 @@ class ApplicationController < ActionController::Base
     helper_method :user_has_right?, :current_configuration, :duration_to_hash, :duration_hash_to_string, :video_in?, :yield_authenticity_token, :current_piece, :s3_bucket, :came_from_or
 
 ##################
-  def current_user
-    @cu ||= User.find(1)
-  end
+  # def current_user
+  #   @cu ||= User.find(1)
+  # end
   
   def logged_in?
     !!current_user
@@ -207,13 +207,18 @@ class ApplicationController < ActionController::Base
 
   private
 
-    def authorize
-      set_current_user
-      unless @current_user
-        flash[:notice] = "Please log in"
-        redirect_to(:controller => "home", :action => "welcome")
-      end
+
+    def current_user
+      @current_user ||= User.find(session[:user_id]) if session[:user_id]
     end
+    helper_method :current_user
+    # def authorize
+    #       set_current_user
+    #       unless @current_user
+    #         flash[:notice] = "Please log in"
+    #         redirect_to(:controller => "home", :action => "welcome")
+    #       end
+    #     end
 
 
 

@@ -11,19 +11,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120317093830) do
+ActiveRecord::Schema.define(:version => 20120317122619) do
 
   create_table "castings", :force => true do |t|
-    t.integer  "user_id",                   :null => false
-    t.integer  "piece_id",                       :null => false
-    t.boolean  "is_original",  :default => true
-    t.integer  "cast_number",  :default => 1
+    t.integer  "user_id",                       :null => false
+    t.integer  "piece_id",                      :null => false
+    t.boolean  "is_original", :default => true
+    t.integer  "cast_number", :default => 1
     t.datetime "updated_at"
   end
 
   add_index "castings", ["id"], :name => "index_castings_on_id"
-  add_index "castings", ["user_id"], :name => "index_castings_on_performer_id"
   add_index "castings", ["piece_id"], :name => "index_castings_on_piece_id"
+  add_index "castings", ["user_id"], :name => "index_castings_on_user_id"
 
   create_table "configurations", :force => true do |t|
     t.integer  "location_id"
@@ -202,19 +202,18 @@ ActiveRecord::Schema.define(:version => 20120317093830) do
     t.string   "remember_token",            :limit => 40
     t.datetime "remember_token_expires_at"
     t.integer  "role_id",                                  :default => 1
-    t.boolean  "performer",                                :default => false
     t.string   "role_name"
     t.boolean  "notes_on",                                 :default => true
     t.boolean  "markers_on",                               :default => true
     t.integer  "refresh_pref",                             :default => 0
     t.string   "truncate",                                 :default => "more"
     t.boolean  "inherit_cast",                             :default => false
-    t.integer  "last_assemblage_id"
     t.datetime "last_login"
     t.text     "scratchpad"
     t.string   "first_name"
     t.string   "last_name"
     t.boolean  "is_performer",                             :default => true
+    t.string   "password_digest"
   end
 
   add_index "users", ["id"], :name => "index_users_on_id"

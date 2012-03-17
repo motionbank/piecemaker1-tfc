@@ -28,7 +28,7 @@ class UsersController < ApplicationController
   
   def create
       #logout_keeping_session!
-      params[:user][:performer] ||= false
+      params[:user][:is_performer] ||= false
       @user = User.new(params[:user])
       @user.role_name = params[:user][:role_name]
       success = @user && @user.save

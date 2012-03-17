@@ -1,7 +1,7 @@
 require 'digest/sha1'
 
 class User < ActiveRecord::Base
-  
+  has_secure_password
   has_many :messages
   has_and_belongs_to_many :events, :order => :happened_at, :include => [:sub_scenes,:tags,:notes,:video,:users]
   validates_presence_of     :login
@@ -20,10 +20,7 @@ class User < ActiveRecord::Base
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
   attr_accessible :login, :email, :password, :password_confirmation, :is_performer, :role_name, :scratchpad
-  def password=(ps)
-  end
-  def password
-  end
+
 
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   #
