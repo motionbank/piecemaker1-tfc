@@ -232,6 +232,7 @@ ActiveRecord::Schema.define(:version => 20120317212252) do
   end
 
   add_index "videos", ["id"], :name => "index_videos_on_id"
+  add_index "videos", ["piece_id"], :name => "index_videos_on_piece_id"
   add_index "videos", ["title"], :name => "index_videos_on_title"
 
 end
