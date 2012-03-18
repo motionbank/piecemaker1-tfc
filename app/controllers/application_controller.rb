@@ -187,7 +187,7 @@ class ApplicationController < ActionController::Base
 
   protected
   def access_denied
-    store_location
+    #store_location
     if flash[:notice]
       flash[:notice] += ' Please Login'
     else
@@ -200,7 +200,7 @@ class ApplicationController < ActionController::Base
 
 
     def current_user
-      @current_user ||= User.find(session[:user_id]) if session[:user_id]
+      @current_user ||= User.find_by_remember_token( cookies[:remember_token]) if cookies[:remember_token]
     end
     helper_method :current_user
     # def authorize

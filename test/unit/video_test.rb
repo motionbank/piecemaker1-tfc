@@ -11,7 +11,7 @@ class VideoTest < ActiveSupport::TestCase
       :short_name => 'default',
       :id         => 5)
       @video1     = Video.create(
-      :title      => '20100201_001_NAME.mp4')
+      :title      => '2010-02-01_001_NAME.mp4')
       @video2     = Video.create(
       :title      => '201_hi.mp4')
       @video3     = Video.create(
@@ -25,7 +25,7 @@ class VideoTest < ActiveSupport::TestCase
       assert !@video2.date_prefix
     end
     should  'return prefix if prefix' do
-      assert_equal @video1.date_prefix, '20100201'
+      assert_equal @video1.date_prefix, '2010-02-01'
     end
     should  'return serial_no false if no serial_no' do
       assert !@video2.date_serial_number
@@ -51,7 +51,7 @@ class VideoTest < ActiveSupport::TestCase
       assert !@video1.comes_before(@video2)
     end
     should 'return true if comes before' do
-      @video2.title = '20100201_002_NAME.mp4'
+      @video2.title = '2010-02-01_002_NAME.mp4'
       assert @video1.comes_before(@video2)
     end
   end

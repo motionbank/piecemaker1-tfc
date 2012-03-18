@@ -5,12 +5,6 @@ class VideoController < ApplicationController
     def get_video_from_params
       @video = Video.find(params[:id])
     end
-    def list #used by admin menu
-      @videos = Video.paginate(
-                      :per_page => 50,
-                      :page => params[:page],
-                      :order => sort_from_universal_table_params)
-    end
 
     def viewer
       @flow_type = false
@@ -92,27 +86,33 @@ class VideoController < ApplicationController
     end
     
     
-    def index
-      if params[:id]
-        @piece = Piece.find(params[:id])
-      else
-        @piece = Piece.find(session[:pieceid])
-      end
+    def index #make this work without pieceid
+
       
       sorter = params[:sorter] ? params[:sorter] : 'id'
       order_by = params[:order] ? params[:order] : 'DESC'
       @order = order_by == 'ASC' ? 'DESC' : 'ASC'
-      sorts = {'title' => 'title','id' => 'id', 'piece' => 'piece_id'}
-      @perf = params[:perf] == 'perf' ? "vid_type = 'performance'" : "vid_type = 'rehearsal'"
-      @perf = '' unless params[:perf]
-      filt = @piece ? @perf : @perf + ' and piece_id is NULL'
+      sorts = {'title' => 'title','id' => 'id'}
+      if params[:id]
+        @piece = Piece.find(params[:id])
         @videos = @piece.videos.paginate(
                   :limit => 50,
-                  :conditions => filter_from_universal_table_params(filt),
+                  :conditions => filter_from_universal_table_params(),
                   :page => params[:page],
                   :order => sort_from_universal_table_params,
                   :include => [:events]
                   )
+      else
+        @videos = Video.paginate(
+                  :limit => 50,
+                  :conditions => filter_from_universal_table_params(),
+                  :page => params[:page],
+                  :order => sort_from_universal_table_params,
+                  :include => [:events]
+                  )
+      end
+       
+        
       
     end
 

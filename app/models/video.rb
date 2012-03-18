@@ -86,7 +86,7 @@ class Video < ActiveRecord::Base
   def date_prefix
     return false unless base_name
     split = base_name.split('_').first
-    return false unless split && split =~ /\d\d\d\d\d\d/
+    return false unless split && split =~ /\d\d\d\d-\d\d-\d\d/
     split
   end
   def date_serial_number
@@ -104,18 +104,7 @@ class Video < ActiveRecord::Base
   def uses_conventional_title?
     date_prefix && date_serial_number && title_string
   end
-  def give_date_from_title
-    if uses_conventional_title?
-      pref = date_prefix[0..3] + '-' + date_prefix[4..5] + '-' + date_prefix[6..7]
-      begin
-        date = Date.parse(pref)
-        date = date + 12.hours
-        date = date + date_serial_number.to_i.hours
-        self.recorded_at = date
-      rescue
-      end
-    end
-  end
+
   def serial_number
     (piece.videos.index(self)+1).to_s
   end
@@ -127,22 +116,15 @@ class Video < ActiveRecord::Base
     return false if video2.date_serial_number.to_i <= date_serial_number.to_i
     true
   end
-  def guess_recording_date
-    first_part = title.split('_').first
-    if first_part =~ /\d\d\d\d\d\d\d\d/
-      first_part
-    else
-      "???"
-    end
-  end
+
   def self.parse_date_from_title(title)
       base_title = title.split('.').first
       date_part = base_title.split('_').first
-      year = date_part[0..3]
-      month = date_part[4..5]
-      day = date_part[6..7]
-      mdy = month+'/'+day+'/'+year
-      mdy.to_date
+      if date_part =~ /\d\d\d\d-\d\d-\d\d/ 
+        date_part.to_date
+      else
+        nil
+      end
   end
   def times
     tims = events.map{|x| [x.video_start_time,x.duration,x.id]}
@@ -154,7 +136,7 @@ class Video < ActiveRecord::Base
   end
   def set_new_title(piece)
     
-    time = Time.now.strftime("%Y%m%d")
+    time = Time.now.strftime("%Y-%m-%d")
       last_dvd = piece.videos.last
       if last_dvd && last_dvd.title
         last_title = last_dvd.title.split('_')
@@ -170,21 +152,11 @@ class Video < ActiveRecord::Base
         new_number = 1
       end
       new_title = time + '_' + Event.pad_number(new_number)
-      new_title << '_' + piece.short_name
+      new_title << '_' + piece.short_name + '.mp4'
       self.title = new_title
     
   end
 
-
-  def show_existing_versions
-    string = ''
-    string << "Archive: #{fn_arch}" if fn_arch
-    string << ', ' if string.length > 0 && fn_s3
-    string << "S3: #{fn_s3}" if fn_s3
-    string << ', ' if string.length > 0 && fn_local
-    string << "Local: #{fn_local}" if fn_local
-    string
-  end
 
   def guess_piece_title
     name = title.split('.')
@@ -249,11 +221,7 @@ class Video < ActiveRecord::Base
      result
   end
   def viewable?
-    if SetupConfiguration.app_is_local?
-      fn_arch || fn_local || fn_s3
-    else
-      fn_s3
-    end
+    is_uploaded
   end
   def meta_data_present
     meta_data ? 'True' : 'False'

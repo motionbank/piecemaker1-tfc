@@ -367,7 +367,7 @@ class EventTest < ActiveSupport::TestCase
 
       end
       should 'report if uploaded' do
-        @video.fn_s3 = '.mp4'
+        @video.is_uploaded = true
         @video.save
         @vid_parent.video_id = @video.id
         @vid_parent.save

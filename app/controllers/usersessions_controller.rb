@@ -15,7 +15,12 @@ class UsersessionsController < ApplicationController
         # self.current_user = user
         #         new_cookie_flag = (params[:remember_me] == "1")
         #         handle_remember_cookie! new_cookie_flag
-        session[:user_id] = user.id
+        
+        if params[:remember_me]
+          cookies.permanent[:remember_token] = user.remember_token
+        else
+          cookies[:remember_token] = user.remember_token  
+        end
         redirect_to home_url
         #redirect_back_or_default('/')
         flash[:notice] = "Logged in successfully!"
@@ -31,7 +36,7 @@ class UsersessionsController < ApplicationController
 
   def destroy
     #create_logout
-    session[:user_id] = nil
+    cookies.delete(:remember_token)
     redirect_to root_url, notice: "Logged out!"
   end
 

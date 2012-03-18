@@ -223,7 +223,7 @@ class Event < ActiveRecord::Base
   
   def video_uploaded? #tested
     if self.video
-      self.video.fn_s3
+      self.video.is_uploaded
     else
       false
     end

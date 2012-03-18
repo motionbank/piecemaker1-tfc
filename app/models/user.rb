@@ -9,25 +9,10 @@ class User < ActiveRecord::Base
   validates_uniqueness_of   :login,    :case_sensitive => false, :message => ' - There can\'t be two users with the same Username.'
 
   scope :performers, where(:is_performer => true)
-  #validates_presence_of     :email
-  #validates_length_of       :email,    :within => 6..100 #r@a.wk
-  #validates_uniqueness_of   :email,    :case_sensitive => false
-  #validates_format_of       :email,    :with => RE_EMAIL_OK, :message => MSG_EMAIL_BAD
 
-  
-
-  # HACK HACK HACK -- how to do attr_accessible from here?
-  # prevents a user from submitting a crafted form that bypasses activation
-  # anything else you want your user to change should be added here.
   attr_accessible :login, :email, :password, :password_confirmation, :is_performer, :role_name, :scratchpad,:short_name, :first_name
 
-
-  # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
-  #
-  # uff.  this is really an authorization, not authentication routine.  
-  # We really need a Dispatch Chain here or something.
-  # This will also let us return a human error message.
-  #
+  before_create { generate_token(:remember_token) }
   def self.authenticate(login, password)
     u = find_by_login(login) # need to get the salt
     u && u.authenticated?(password) ? u : nil
@@ -40,6 +25,14 @@ class User < ActiveRecord::Base
     self.truncate = params[:truncate] == 'true' ? 'more': 'none'
     save
   end
+  
+  
+  def generate_token(column)
+    begin
+      self[column] = SecureRandom.urlsafe_base64
+    end while User.exists?(column => self[column])
+  end
+  
   protected
 
 

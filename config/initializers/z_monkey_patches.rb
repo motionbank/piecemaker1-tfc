@@ -48,7 +48,7 @@ module ActiveRecord
       return nil unless s3_prefix
       case self.class.name
         when 'Video'
-          s3_prefix + '/' + title.split('.').first + (fn_s3 == '.flv' ? '.flv' : '.mp4')
+          s3_prefix + '/' + title
         when 'Photo'
           s3_prefix + "/#{style}/" + (picture_file_name || '')
         when 'Document'

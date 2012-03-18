@@ -7,13 +7,11 @@
 {
   :columns => [ {'ID' => 'id',:sort => 'id'},
                 {'Title' => 'title',:sort => 'title'},
-                {'Loc' => 'local_show'},
-                {'S3' => 'S3_show'},
-                {'Content'=> 'piece.id'},
+                {'S3' => 'is_uploaded'},
+                {'Piece'=> 'piece.title'},
                 {'Length' => 'duration'},
                 {'Data' => 'meta_data_present'},
                 {'Annot.' => 'events.length'},
-                {'Type' => 'vid_type',:sort => 'vid_type'}
               ],
   :actions => [ {'Annotate' => "/video_viewer/#{params[:id]}"},
                 {'Details' => '/video/show'},
