@@ -20,7 +20,7 @@ gem 'pg'
 #gem 'rdoc'
 gem 'delayed_job_active_record'
 gem 'active_record_query_trace'
-
+gem 'thin'
 group :test do
 
 gem 'webrat'

@@ -16,7 +16,6 @@ Video Name:
 <%= @video.title %>
 <%- end -%>
 <%= hidden_field_tag('create', 'true') if @create -%>
-<%= hidden_field_tag('video[vid_type]','rehearsal') %>
 
 <br /><br />
 <%= submit_tag "#{@text} Video" %> <%= link_to 'Cancel',{:action => 'cancel_new_vid', :id => @video.id}, :class => 'cancel_mod' %>
