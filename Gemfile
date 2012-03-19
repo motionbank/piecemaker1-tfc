@@ -17,6 +17,7 @@ gem 'pg'
 gem 'active_record_query_trace'
 gem 'thin'
 gem 'acts_as_tenant'
+gem 'ancestry'
 group :development do
   gem 'taps'
 end
