@@ -1,10 +1,6 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.2'
-
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
-
 gem 'bcrypt-ruby', '~> 3.0.0'
 gem 'aws-s3', :require => 'aws/s3'
 gem 'acts-as-list', :require => 'acts_as_list'
@@ -13,29 +9,22 @@ gem 'haml'
 gem 'sass'
 #gem 'mysql'
 gem 'heroku'
-gem 'taps'
+#gem 'taps'
 gem 'pg'
-#gem "sqlite3", :require => "sqlite3"
 #gem 'rake', '0.9.2.2'
 #gem 'rdoc'
-gem 'delayed_job_active_record'
-gem 'active_record_query_trace'
+#gem 'delayed_job_active_record'
 gem 'thin'
 gem 'acts_as_tenant'
 group :test do
 
-gem 'webrat'
-gem 'shoulda'
-gem 'factory_girl_rails'
-gem 'mocha'
-gem 'timecop'
+  gem 'webrat'
+  gem 'shoulda'
+  gem 'factory_girl_rails'
+  gem 'mocha'
+  gem 'timecop'
 
 end
-
-
-
-
-
 
 # Gems used only for assets and not required
 # in production environments by default.
