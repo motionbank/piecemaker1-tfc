@@ -17,6 +17,9 @@ gem 'pg'
 gem 'active_record_query_trace'
 gem 'thin'
 gem 'acts_as_tenant'
+group :development do
+  gem 'taps'
+end
 group :test do
 
   gem 'webrat'
@@ -41,8 +44,6 @@ end
 
 gem 'jquery-rails'
 
-# To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
 
 # To use Jbuilder templates for JSON
 # gem 'jbuilder'
