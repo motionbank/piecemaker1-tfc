@@ -9,11 +9,6 @@
 4<%= radio_button_tag 'video[rating]', '4' , @video.rating == 4 %>
 5<%= radio_button_tag 'video[rating]', '5' , @video.rating == 5 %>
 <br />
-<b>Type:</b>
-Rehearsal<%= radio_button_tag 'video[vid_type]', 'rehearsal' , @video.vid_type == 'rehearsal'%>
-Performance<%= radio_button_tag 'video[vid_type]', 'performance', @video.vid_type == 'performance' %>
-Other<%= radio_button_tag 'video[vid_type]', 'other', @video.vid_type == 'other' %>
-<br />
 <b>Recording started at:</b><%= text_field_tag 'video[recorded_at]',@video.recorded_at, :size => 30 %><br />
 <b>Duration:</b><%= text_field_tag 'video[duration]',@video.duration, :size => 10 %> Seconds
 <span style = 'color:#c00'><br />Changing the recording starting time will affect all events times!</span>

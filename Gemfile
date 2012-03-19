@@ -21,6 +21,7 @@ gem 'pg'
 gem 'delayed_job_active_record'
 gem 'active_record_query_trace'
 gem 'thin'
+gem 'acts_as_tenant'
 group :test do
 
 gem 'webrat'
