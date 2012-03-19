@@ -14,6 +14,7 @@ gem 'pg'
 #gem 'rake', '0.9.2.2'
 #gem 'rdoc'
 #gem 'delayed_job_active_record'
+gem 'active_record_query_trace'
 gem 'thin'
 gem 'acts_as_tenant'
 group :test do
