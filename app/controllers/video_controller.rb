@@ -70,22 +70,6 @@ class VideoController < ApplicationController
       end
     end
 
-    
-    def index_delayed_jobs
-      @djs = DelayedJob.where(filter_from_universal_table_params).order(sort_from_universal_table_params)
-    end
-    def destroy_delayed_job
-      dj = DelayedJob.find(params[:id])
-      if dj.locked_at
-        flash[:notice] = "This job is busy. I don't think it's a good idea to destroy it now."
-      else
-        dj.destroy
-        flash[:notice] = "Destroyed Job"
-      end
-      redirect_to :action => 'index_delayed_jobs'
-    end
-    
-    
     def index #make this work without pieceid
 
       
@@ -139,13 +123,7 @@ class VideoController < ApplicationController
       redirect_to :action => 'index', :id => session[:pieceid]
     end
 
-    def upload_compressed_to_s3
-      #should get contents of compressed folder then intellegently decide which video it is and upload it to s3 giving it the correct path
-      # if there is no force param it only shows a list
-      @list_of_uploading_videos = Video.upload_compressed_folder(params[:force])
-    end
-
-    def delete_all #only used in mysterious _insert_videos partial
+    def delete_all
       if @video.destroy_all
         flash[:notice] = "destroyed video id: #{params[:id]} and its s3 files"
       else
@@ -164,37 +142,4 @@ class VideoController < ApplicationController
       flash[:notice] = 'created new archive video'
       redirect_to :action => 'index'
     end
-
-    def mark_as_uploaded #used by delayed job to send updated info to heroku
-      if video = Video.find_by_id(params[:id])
-        video.mark_in('s3')
-        render :text => "#{video.title} OK "
-      else
-        render :text => "Video #{params[:id].to_s} failed to mark as uploaded."
-      end
-    end
-    
-    def process_days_videos
-      piece = Piece.find(params[:id])
-      Video.send_later :update_heroku
-      sleep 2
-      @video_ids = piece.todays_videos_ids
-      Video.delayed_upload_videos(@video_ids)
-    end
-    
-    
-    ################ what are these ?
-    
-    
-  def compress_days_videos #try out needs link to and view
-    piece = Piece.find(params[:id])
-    @video_ids = piece.todays_videos_ids
-    Video.delayed_compress_videos(@video_ids)
-  end
-
-  
-  def upload_one #needs a link to and view
-    @video.delayed_dearchive_compress_and_upload
-  end
-
-end
+        

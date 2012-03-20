@@ -21,54 +21,7 @@ class Video < ActiveRecord::Base
     self.fn_s3 = '.' + params[:title].split('.').last
     save
   end
-  def source_string
-    sources = [] 
-    if fn_local
-      sources << fn_local
-    else
-      sources << ''
-    end
-    if fn_s3
-      sources << fn_s3
-    else
-      sources << ''
-    end
-    if fn_arch
-      sources << fn_arch
-    else
-      sources << ''
-    end
-    sources.join(',')
-  end
-  def mark_in(place)
-    logger.info '******* trying to mark'
-    marker = '.mp4'
-    case place
-    when 'local'
-      self.fn_local = marker
-      save
-    when 's3'
-      self.fn_s3    = marker
-      save
-    when 'archive'
-      self.fn_arch  = marker
-      save
-    end
-  end
-  def mark_not_in(place)
-    marker = nil
-    case place
-    when 'local'
-      self.fn_local = marker
-      save
-    when 's3'
-      self.fn_s3    = marker
-      save
-    when 'archive'
-      self.fn_arch  = marker
-      save
-    end
-  end
+  
   def full_s3_path
     x = self.s3_path.split('.')
     x[1] = x[1] == 'flv' ? 'flv' : 'mp4'
@@ -171,9 +124,6 @@ class Video < ActiveRecord::Base
   def true_string
     '<span style = "color:#0a0">T</span>'
   end
-  def local_show
-    fn_local ? true_string : false_string
-  end
   def S3_show
     fn_s3 ? true_string : false_string
   end
@@ -188,52 +138,14 @@ class Video < ActiveRecord::Base
     end
     @sl
   end
-  def confirm_presence(locats = ['uncompressed'])
-    result = {:message => '',:error => '' }
-    if locats.include? 'uncompressed'
-      if local_present?
-        self.fn_local = '.mp4'
-      else
-        self.fn_local = nil
-      end
-    end
-    if locats.include? 'archive'
-      case archive_present?
-      when 'true'
-        self.fn_arch = '.mp4'
-      when 'false'
-        self.fn_arch = nil
-      else
-        result[:error] << 'No Archive Access'
-      end
-    end
-    if locats.include? 's3'
-      case s3_present?
-      when 'true'
-        self.fn_s3 = '.mp4'
-      when 'false'
-        self.fn_s3 = nil
-      else
-        result[:error] << ' No S3 Access'
-      end
-    end
-     save
-     result
-  end
+
   def viewable?
     is_uploaded
   end
   def meta_data_present
     meta_data ? 'True' : 'False'
   end
-  def self.update_heroku
-    if SetupConfiguration.app_is_local?
-      Dir.chdir(Rails.root)
-      system "heroku db:push --app piecemaker-#{SetupConfiguration.s3_base_folder} --confirm piecemaker-#{SetupConfiguration.s3_base_folder}"
-    end
-  end
-  
-  
+    
   def self.fix_titles(from, to)
     vids = all.select{|x| x.title =~ /#{Regexp.escape(from)}/}
     puts "fixing #{vids.length} files"

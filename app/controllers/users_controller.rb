@@ -46,7 +46,7 @@ class UsersController < ApplicationController
       end
   end
   
-  def edit_user
+  def edit
       @user = User.find(params[:id])
   end
   
@@ -82,7 +82,7 @@ class UsersController < ApplicationController
         flash[:notice] = 'User was successfully updated.'
         redirect_to :action => 'index'
       else
-        render :action => 'edit_user'
+        render :action => 'edit'
       end
   end
 

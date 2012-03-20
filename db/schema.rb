@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120317212252) do
+ActiveRecord::Schema.define(:version => 20120320120256) do
 
   create_table "castings", :force => true do |t|
     t.integer  "user_id",                       :null => false
@@ -167,6 +167,7 @@ ActiveRecord::Schema.define(:version => 20120317212252) do
     t.string   "modified_by"
     t.string   "short_name"
     t.boolean  "is_active",   :default => true
+    t.integer  "account_id"
   end
 
   add_index "pieces", ["id"], :name => "index_pieces_on_id"

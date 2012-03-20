@@ -8,10 +8,9 @@ l = Location.create(
 p = Piece.create(
   :title => 'Default Piece',
   :short_name => 'DEFAULT'
-  )  
-SetupConfiguration.create(
-  :location_id => l.id,
-  :time_zone => 'Berlin',
-  :s3_sub_folder => '',
-  :file_locations => [])
-
+  )
+sc = SetupConfiguration.new
+sc.location_id = l.id
+sc.time_zone = 'Berlin'
+sc.s3_sub_folder = ''
+sc.save

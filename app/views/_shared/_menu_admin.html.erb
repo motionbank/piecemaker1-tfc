@@ -10,7 +10,6 @@
     <li><%= link_to 'Role Matrix', :controller => "administration", :action => 'role_matrix' -%></li>
     <%- if user_has_right?('group_admin') -%>
     <%= menu_second_level('Video Maintenance','Video Maintenance') do -%>
-      <li><%= link_to 'Upload Entire Compressed Folder', '/video/upload_compressed_to_s3' -%></li>
       <li><%= link_to 'List S3', :controller => "administration", :action => 'list_s3' -%></li>
       <li><%= link_to 'Delayed Jobs', :controller => "video", :action => 'index_delayed_jobs' -%></li>
     <% end %>

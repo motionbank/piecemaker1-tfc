@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
 
     # Pick a unique cookie name to distinguish our session data from others'
     #session :session_key => '_piecemaker_session_id'
-    before_filter :login_required, :except => [:login, :welcome, :demo, :documentation, :contact,:update_vid_time,:mark_as_uploaded,:mark_from_marker_list]
+    before_filter :login_required, :except => [:login, :welcome, :demo, :documentation, :contact,:update_vid_time,:mark_from_marker_list]
     before_filter :set_defaults, :except => [:authorize,:update_vid_time,:fill_video_menu,:fill_extra_menu,:quick_marker,:mark_from_marker_list]
     before_filter :catch_came_from
     helper_method :user_has_right?, :current_configuration, :duration_to_hash, :duration_hash_to_string, :video_in?, :yield_authenticity_token, :current_piece, :s3_bucket, :came_from_or
