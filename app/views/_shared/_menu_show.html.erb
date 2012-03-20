@@ -14,7 +14,6 @@
     <li><%= link_to 'Only Highlighted', :controller => "capture", :action => 'present', :id => session[:pieceid], :filter_type => 'highlighted' -%></li>
     <li><%= link_to "Highlighted by #{current_user.login}" , :controller => "capture", :action => 'present', :id => session[:pieceid], :filter_type => 'user_highlighted' -%></li>
     <li><%= link_to('Tag Search',{:controller => 'capture', :action => 'search_by_tag', :id => session[:pieceid]}, :class => "get") -%></li>
-        <li><%= link_to('Location Search',{:controller => 'capture', :action => 'search_by_location', :id => session[:pieceid]}, :class => "get") -%></li>
     <li><%= link_to('Video Search',{:controller => 'capture', :action => 'search_by_video', :id => session[:pieceid]}, :class => "get")-%></li>
     <%- menu_second_level('View by Rating',"Rating") do -%>
     <li><%= link_to('1 or Higher', :controller => 'capture', :action => 'present', :id => session[:pieceid], :filter_type => "rating",:rating => 0)-%></li>

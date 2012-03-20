@@ -48,13 +48,13 @@ class PieceTest < ActiveSupport::TestCase
   end
   
 
-  context 'piece video list, dates and locations' do
+  context 'piece video list, dates' do
     setup do
       @t = Time.now
       @p1 = Factory.create(:piece)
       @e4 = Factory.create(:event, :event_type => 'scene',:happened_at => (@t + 60*60*24))
-      @e5 = Factory.create(:event, :event_type => 'headline',:happened_at => (@t+ 400 + 60*60*24),:location => 'panama')
-      @e6 = Factory.create(:event, :event_type => 'headline',:happened_at => (@t+ 470 + 60*60*24),:location => 'san francisco')
+      @e5 = Factory.create(:event, :event_type => 'headline',:happened_at => (@t+ 400 + 60*60*24))
+      @e6 = Factory.create(:event, :event_type => 'headline',:happened_at => (@t+ 470 + 60*60*24))
       @p1.events << @e4
       @p1.events << @e5
       @p1.events << @e6
@@ -65,12 +65,6 @@ class PieceTest < ActiveSupport::TestCase
     
     should 'get date list' do
       assert_equal @p1.date_list.map{|x| x.to_i}, [(@t + 60*60*24).at_midnight.to_i]
-    end
-    should 'get location list' do
-      locations = @p1.location_list.map{|x| x[:location]}
-      assert_equal locations, ['panama','san francisco']
-      dates = @p1.location_list.map{|x| x[:date].to_i}
-      assert_equal dates, [(@t+ 400 + 60*60*24).to_i,(@t+ 470 + 60*60*24).to_i]
     end
     should 'get user list' do
       assert_equal @p1.performers, [@u1]

@@ -89,13 +89,6 @@ class EventTest < ActiveSupport::TestCase
     
   end #simple methods
   
-  context 'location functionality' do
-    setup do
-
-    end
-
-  end
-  
   context 'casting methods' do
     setup do
       @piece = Piece.create
@@ -458,7 +451,6 @@ end
 #  video_parent_id :integer(4)
 #  highlighted     :boolean(1)      default(FALSE)
 #  inherits_title  :boolean(1)      default(FALSE)
-#  location        :string(255)
 #  state           :string(255)     default("normal")
 #  rating          :integer(4)      default(0)
 #  is_definitive   :boolean(1)      default(FALSE)

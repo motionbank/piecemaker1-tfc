@@ -9,8 +9,8 @@
 #  title       :string(255)
 #  description :text
 #
-
 class MetaInfo < ActiveRecord::Base
   belongs_to :piece
   validates_presence_of :title
+  acts_as_tenant(:account)
 end

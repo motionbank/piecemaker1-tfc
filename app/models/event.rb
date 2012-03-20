@@ -25,7 +25,6 @@ class Event < ActiveRecord::Base
   scope :headlines, :conditions => "event_type = 'headline'"
   scope :in_piece, lambda{|piece_id| {:conditions => ['piece_id = ?', "#{piece_id}"]}}
   scope :in_video, lambda{|video_id| {:conditions => ['video_id = ?', "#{video_id}"]}}
-  scope :located_at, lambda{|locate| {:conditions => locate ? ['location = ?',"#{locate}"] : 'location is NULL'}}
   scope :within_date_range, lambda{|date1,date2| {:conditions => ["happened_at between '#{date1}' and '#{date2}'"]}}
   scope :created_today, :conditions => "happened_at >= '#{Time.zone.now.at_midnight}'"
   scope :deleted, :conditions => "state = 'deleted'"
@@ -80,7 +79,6 @@ class Event < ActiveRecord::Base
   end
 
   def do_event_changes(params,current_user,incremental = false)
-    params[:event][:location] = params[:location]
     params[:event][:inherits_title] ||= false
     self.process_tags(params[:tags]) unless incremental
     params[:event][:performers] = params[:performers] || [] if needs_performers_field?
@@ -589,7 +587,6 @@ end
 #  video_id        :integer(4)      default(0)
 #  highlighted     :boolean(1)      default(FALSE)
 #  inherits_title  :boolean(1)      default(FALSE)
-#  location        :string(255)
 #  state           :string(255)     default("normal")
 #  rating          :integer(4)      default(0)
 #  happened_at     :datetime

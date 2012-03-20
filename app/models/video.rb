@@ -7,7 +7,8 @@ class Video < ActiveRecord::Base
   has_many :events,:dependent => :nullify, :order => :happened_at,:conditions => "state = 'normal'"
   scope :active, :conditions => "state = 'normal'"
 
-
+  acts_as_tenant(:account)
+  
   after_save :rename_files_on_title_change###################
 
 

@@ -1,5 +1,6 @@
 class Message < ActiveRecord::Base
   belongs_to :user
+  acts_as_tenant(:account)
   def self.message_to(to,from,message)
     Message.create(
     :user_id => to,

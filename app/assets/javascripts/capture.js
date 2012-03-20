@@ -779,12 +779,6 @@ $(function(){
 	  	
 	  }
 	});
-
-	// location select
-	$('form#hoo select').live('mouseup', function(){
-		var theUrl = '/configuration/update_location/'+$(this).attr("value")
-		ajaxFunction($(this).parent(),theUrl)
-	});
 	
   // this is work in progress
 $('#form_div form').live('click', function(){

@@ -31,8 +31,7 @@ ActiveRecord::Schema.define(:version => 20120320154128) do
   add_index "castings", ["piece_id"], :name => "index_castings_on_piece_id"
   add_index "castings", ["user_id"], :name => "index_castings_on_user_id"
 
-  create_table "configurations", :force => true do |t|
-    t.integer  "location_id"
+  create_table "setup_configurations", :force => true do |t|
     t.string   "time_zone"
     t.boolean  "use_auto_video",    :default => false
     t.datetime "created_at"
@@ -94,7 +93,6 @@ ActiveRecord::Schema.define(:version => 20120320154128) do
     t.datetime "created_at"
     t.boolean  "highlighted",    :default => false
     t.boolean  "inherits_title", :default => false
-    t.string   "location"
     t.integer  "rating",         :default => 0
     t.integer  "parent_id"
     t.integer  "account_id"
@@ -118,11 +116,6 @@ ActiveRecord::Schema.define(:version => 20120320154128) do
 
   add_index "events_users", ["event_id"], :name => "index_events_users_on_event_id"
   add_index "events_users", ["user_id"], :name => "index_events_users_on_user_id"
-
-  create_table "locations", :force => true do |t|
-    t.string  "location"
-    t.integer "account_id"
-  end
 
   create_table "messages", :force => true do |t|
     t.integer  "user_id"
@@ -211,15 +204,11 @@ ActiveRecord::Schema.define(:version => 20120320154128) do
 
   create_table "users", :force => true do |t|
     t.string   "login",                     :limit => 40
-    t.string   "name",                      :limit => 100
     t.string   "email",                     :limit => 100
-    t.string   "crypted_password",          :limit => 40
-    t.string   "salt",                      :limit => 40
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "remember_token",            :limit => 40
     t.datetime "remember_token_expires_at"
-    t.integer  "role_id",                                  :default => 1
     t.string   "role_name"
     t.boolean  "notes_on",                                 :default => true
     t.boolean  "markers_on",                               :default => true
@@ -236,7 +225,7 @@ ActiveRecord::Schema.define(:version => 20120320154128) do
   end
 
   add_index "users", ["id"], :name => "index_users_on_id"
-  add_index "users", ["role_id"], :name => "index_users_on_role_id"
+  add_index "users", ["account_id"], :name => "index_users_on_account_id"
 
   create_table "videos", :force => true do |t|
     t.string   "title"

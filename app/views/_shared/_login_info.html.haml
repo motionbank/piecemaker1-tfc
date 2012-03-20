@@ -4,15 +4,7 @@
   &nbsp;
   %span.ugr Role:
   = current_user.role_name
-  &nbsp;
-  -if user_has_right?('group_admin')
-    <form id = 'hoo' action = '/configuration/change_location' method = 'post'>
-    = put_location_select
-    </form><br />
-  -else
-    %span.ugr Location:
-    = current_configuration.location.location
-  &nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;
   = link_to 'Logout', '/logout'
   %br/
 - else

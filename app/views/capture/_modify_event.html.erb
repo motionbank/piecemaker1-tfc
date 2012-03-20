@@ -19,7 +19,6 @@ viewer
 <%- if user_has_right?('group_admin') -%>
 Happened at: <input id="event_happened_at" name="event[happened_at]" size="30" type="text" value = "<%= @event.happened_at %>"/>
 <%- end -%>
-Location: <%= put_location_select(@event.location) %>
 <p>
 <label for="event_tags">Tags (separated by commas): </label>
 <input id="event_tags" name="tags" size="40" type="text" value = "<%= @event.tag_list %>"/>

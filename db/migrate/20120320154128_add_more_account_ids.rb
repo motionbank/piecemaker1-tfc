@@ -1,6 +1,5 @@
 class AddMoreAccountIds < ActiveRecord::Migration
   def change
-    add_column :locations,      :account_id, :integer
     add_column :configurations, :account_id, :integer
     add_column :delayed_jobs,   :account_id, :integer
     add_column :documents,      :account_id, :integer

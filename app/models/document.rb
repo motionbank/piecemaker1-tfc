@@ -14,7 +14,7 @@
 class Document < ActiveRecord::Base
 
   belongs_to :piece
-  
+  acts_as_tenant(:account)
   def update_from_params(params)
     self.doc_file_name = params[:doc_title]
     self.doc_file_size = params[:size]

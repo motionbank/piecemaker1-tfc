@@ -336,13 +336,6 @@ module ApplicationHelper
     start = [['None', '']]
     start += current_configuration.pieces.map{|x| [x.title,x.id]}
   end
-  def put_location_select(selected=nil)
-    selected ||= current_configuration.location.location
-    locations = [['none','none']]
-    locations += Location.all.map{|x| [x.location,x.location]}
-    locations_options = options_for_select(locations,selected)
-    select_tag('location',locations_options)
-  end
   
   def put_role_select(selected)
    roleids = Hash.new
@@ -942,9 +935,8 @@ module ApplicationHelper
     timestring
   end
   
-  def put_date(date,i,location = nil)
-    location ||=''
-    '<div id = "dat-'+i.to_s+'" style = "color:#d00;font-size:20px;margin-left:-25px">' + date.strftime("%A %d %b %Y")+'&nbsp;&nbsp;&nbsp;'+location +'</div>'
+  def put_date(date,i)
+    '<div id = "dat-'+i.to_s+'" style = "color:#d00;font-size:20px;margin-left:-25px">' + date.strftime("%A %d %b %Y")+'</div>'
   end
 
   def open_video_html(video)

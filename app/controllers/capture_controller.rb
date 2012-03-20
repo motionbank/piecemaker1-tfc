@@ -4,13 +4,7 @@ class CaptureController < ApplicationController
   # present makes the main page
   #
   before_filter :get_event_from_params, :only => [:rate, :delete_event, :undelete_event, :destroy_event, :move_event, :unlock, :tag_with_title, :more_description, :less_description, :do_move,:toggle_user_highlight]
-
-  def search_by_location
-    respond_to do |format|
-      format.html
-      format.js {render :action => 'search_by_location',:layout => false} 
-    end
-  end  
+ 
   def search_by_performer
     params[:performer_filter] = 'true'
     respond_to do |format|
@@ -142,11 +136,7 @@ class CaptureController < ApplicationController
           :page => params[:page],
           :include => [:sub_scenes,:tags,:notes,:video])
         @videos = []
-      when 'location'
-        flash.now[:searched_for] = "Events with Location: #{params[:location]}"
-        locate = params[:location] == 'none' ? nil : params[:location]
-        @events = current_piece.events.normal.located_at(locate)
-        @videos = []
+
       when 'trash'
         hide_trash = false
         @events = current_piece.events.select{|x| x.is_deleted?}
@@ -350,8 +340,7 @@ class CaptureController < ApplicationController
       :event_type => 'marker',
       :piece_id => params[:id],
       :state => 'normal',
-      :title => 'marker',
-      :location => current_configuration.location.location
+      :title => 'marker'
       )
       event.set_video_time_info
       event.save
@@ -380,8 +369,7 @@ class CaptureController < ApplicationController
       :event_type => 'marker',
       :piece_id => params[:id],
       :state => 'normal',
-      :title => 'marker',
-      :location => 'unset'
+      :title => 'marker'
     )
     @event.save
     #end
@@ -400,7 +388,6 @@ class CaptureController < ApplicationController
   def new_marker
     @create = true
     @event = Event.new
-    @event.location = current_configuration.location.location
     @after_event = @event.set_attributes_from_params(params,current_user,current_piece)
     @event.event_type = 'marker'
     @event.title = 'marker'
@@ -416,7 +403,6 @@ class CaptureController < ApplicationController
     #@events = Event.find_all_by_piece_id(session[:pieceid], :order => 'position')
     @create = true
     @event = Event.new
-    @event.location = current_configuration.location.location
     @after_event = @event.set_attributes_from_params(params,current_user,current_piece)
     respond_to do |format|
       format.html {render :action => 'modify_event'}
@@ -527,7 +513,6 @@ class CaptureController < ApplicationController
     @viewer = params[:viewer] && params[:viewer] == 'true.js' ? true : false
     @create = false
     @original_event = Event.find(params[:id]) 
-    @original_event.location = 'none' unless @original_event.location
     if(@original_event.locked_by)
       partial_name = 'locked'
     else
@@ -823,12 +808,6 @@ class CaptureController < ApplicationController
     end
 
 
-    def update_locations
-      piece = Piece.find(params[:id])
-      piece.set_locations
-      flash[:notice] = "Updated Location Info."
-      redirect_to request.referrer
-    end
     def get_event_from_params
       @event = Event.find(params[:id])
     end

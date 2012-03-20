@@ -99,20 +99,6 @@ class Piece < ActiveRecord::Base
   def recurring_titles
     
   end
-  def set_locations
-    #do this
-  end
-  
-  def location_list #tested
-    locations = []
-    headlines = Event.where("piece_id = ? AND event_type = ?", self.id, 'headline')
-    headlines.each do |event|
-      if event.location && (! locations.first || event.location != locations.last[:location])
-        locations << {:location => event.location,:date => event.happened_at} 
-      end
-    end
-    locations.uniq
-  end
 
 end
 

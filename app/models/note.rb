@@ -14,5 +14,6 @@
 
 class Note < ActiveRecord::Base
   belongs_to :events
+  acts_as_tenant(:account)
 end
 

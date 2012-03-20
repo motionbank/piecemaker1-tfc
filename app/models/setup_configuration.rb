@@ -1,7 +1,6 @@
 class SetupConfiguration < ActiveRecord::Base
-belongs_to :location
 serialize :file_locations
-self.table_name = 'configurations'
+acts_as_tenant(:account)
   def self.s3_base_folder
     @@s3b ||= first.s3_sub_folder
   end
@@ -36,19 +35,14 @@ self.table_name = 'configurations'
   def self.app_is_local?
     false # ENV['APP_LOCATION'] != 'heroku' #'server' heroku
   end
-  
-  def locations
-    Location.all
-  end
+
   def users
     User.all
   end
   def pieces
     Piece.all
   end
-  def id
-    1
-  end
+
   def self.no_video_string
     '<span style="color:#f00">No Video</span>'
   end
@@ -85,7 +79,6 @@ end
 # Table name: configurations
 #
 #  id               :integer(4)      not null, primary key
-#  location_id      :integer(4)
 #  time_zone        :string(255)
 #  use_auto_video   :boolean(1)      default(FALSE)
 #  created_at       :datetime

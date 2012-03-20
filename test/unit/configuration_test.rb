@@ -12,7 +12,6 @@ end
 # Table name: configurations
 #
 #  id               :integer(4)      not null, primary key
-#  location_id      :integer(4)
 #  time_zone        :string(255)
 #  use_auto_video   :boolean(1)      default(FALSE)
 #  created_at       :datetime

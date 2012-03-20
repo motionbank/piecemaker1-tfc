@@ -2,6 +2,7 @@
 class Photo < ActiveRecord::Base
   
   belongs_to :piece
+  acts_as_tenant(:account)
   def new_name
     false
   end
