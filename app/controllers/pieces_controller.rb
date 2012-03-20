@@ -3,6 +3,7 @@ class PiecesController < ApplicationController
   layout  "standard", :except => :printme
   before_filter :set_defaults
   before_filter :get_piece_from_params, :only => [:edit, :list_tags, :destroy, :update, :destroy_drafts]
+
   
   def get_piece_from_params
     @piece = Piece.find(params[:id])

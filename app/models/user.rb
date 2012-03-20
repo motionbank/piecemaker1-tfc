@@ -3,7 +3,12 @@ require 'digest/sha1'
 class User < ActiveRecord::Base
   has_secure_password
   has_many :messages
+  
+  acts_as_tenant(:account)
+  
   has_and_belongs_to_many :events, :order => :happened_at, :include => [:sub_scenes,:tags,:notes,:video,:users]
+  
+  
   validates_presence_of     :login
   validates_length_of       :login,    :within => 3..40
   validates_uniqueness_of   :login,    :case_sensitive => false, :message => ' - There can\'t be two users with the same Username.'

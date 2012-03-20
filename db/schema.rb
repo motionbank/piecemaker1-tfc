@@ -11,7 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120320120256) do
+ActiveRecord::Schema.define(:version => 20120320122108) do
+
+  create_table "accounts", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "castings", :force => true do |t|
     t.integer  "user_id",                       :null => false
@@ -88,6 +94,7 @@ ActiveRecord::Schema.define(:version => 20120320120256) do
     t.string   "location"
     t.integer  "rating",         :default => 0
     t.integer  "parent_id"
+    t.integer  "account_id"
   end
 
   add_index "events", ["id"], :name => "index_events_on_id"
@@ -179,6 +186,7 @@ ActiveRecord::Schema.define(:version => 20120320120256) do
     t.integer  "event_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "account_id"
   end
 
   add_index "sub_scenes", ["event_id"], :name => "index_sub_scenes_on_event_id"
@@ -215,6 +223,7 @@ ActiveRecord::Schema.define(:version => 20120320120256) do
     t.string   "last_name"
     t.boolean  "is_performer",                             :default => true
     t.string   "password_digest"
+    t.integer  "account_id"
   end
 
   add_index "users", ["id"], :name => "index_users_on_id"
@@ -230,6 +239,7 @@ ActiveRecord::Schema.define(:version => 20120320120256) do
     t.datetime "updated_at"
     t.integer  "piece_id"
     t.boolean  "is_uploaded", :default => false
+    t.integer  "account_id"
   end
 
   add_index "videos", ["id"], :name => "index_videos_on_id"

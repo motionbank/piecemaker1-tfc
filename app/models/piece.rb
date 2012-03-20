@@ -25,7 +25,7 @@ class Piece < ActiveRecord::Base
  # has_many :short_recordings, :through => :video_recordings, :source => :video, :order => :recorded_at
   has_many :photos, :dependent => :destroy
   has_many :tags
-
+    acts_as_tenant(:account)
 
   def latest_scene(pos = nil) #tested
     scenes = self.events.sort_by{|x| x.happened_at}.select{|x| x.event_type == 'scene'}
