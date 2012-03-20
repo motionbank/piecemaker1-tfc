@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120320122108) do
+ActiveRecord::Schema.define(:version => 20120320154128) do
 
   create_table "accounts", :force => true do |t|
     t.string   "name"
@@ -47,6 +47,7 @@ ActiveRecord::Schema.define(:version => 20120320122108) do
     t.integer  "max_entrances"
     t.integer  "min_entrance_time"
     t.integer  "max_entrance_time"
+    t.integer  "account_id"
   end
 
   create_table "delayed_jobs", :force => true do |t|
@@ -60,6 +61,7 @@ ActiveRecord::Schema.define(:version => 20120320122108) do
     t.string   "locked_by"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "account_id"
   end
 
   create_table "documents", :force => true do |t|
@@ -69,6 +71,7 @@ ActiveRecord::Schema.define(:version => 20120320122108) do
     t.integer  "piece_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "account_id"
   end
 
   add_index "documents", ["id"], :name => "index_documents_on_id"
@@ -117,7 +120,8 @@ ActiveRecord::Schema.define(:version => 20120320122108) do
   add_index "events_users", ["user_id"], :name => "index_events_users_on_user_id"
 
   create_table "locations", :force => true do |t|
-    t.string "location"
+    t.string  "location"
+    t.integer "account_id"
   end
 
   create_table "messages", :force => true do |t|
@@ -126,6 +130,7 @@ ActiveRecord::Schema.define(:version => 20120320122108) do
     t.integer  "from_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "account_id"
   end
 
   add_index "messages", ["from_id"], :name => "index_messages_on_from_id"
@@ -137,6 +142,7 @@ ActiveRecord::Schema.define(:version => 20120320122108) do
     t.integer  "piece_id"
     t.string   "title"
     t.text     "description"
+    t.integer  "account_id"
   end
 
   create_table "notes", :force => true do |t|
@@ -147,6 +153,7 @@ ActiveRecord::Schema.define(:version => 20120320122108) do
     t.string   "img"
     t.datetime "updated_at"
     t.string   "private_note"
+    t.integer  "account_id"
   end
 
   add_index "notes", ["event_id"], :name => "event_id"
@@ -162,6 +169,7 @@ ActiveRecord::Schema.define(:version => 20120320122108) do
     t.integer  "piece_id"
     t.string   "path"
     t.boolean  "has_thumb",            :default => false
+    t.integer  "account_id"
   end
 
   add_index "photos", ["id"], :name => "index_photos_on_id"
@@ -194,7 +202,8 @@ ActiveRecord::Schema.define(:version => 20120320122108) do
   create_table "tags", :force => true do |t|
     t.string  "name"
     t.integer "piece_id"
-    t.string  "tag_type", :default => "normal"
+    t.string  "tag_type",   :default => "normal"
+    t.integer "account_id"
   end
 
   add_index "tags", ["id"], :name => "index_tags_on_id"
