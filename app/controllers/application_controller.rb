@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
   # end
   
   def current_account
-    @curracc ||= Account.find(2)
+    @curracc ||= Account.find(1)
   end
   
   #current_account = Account.find(2)
