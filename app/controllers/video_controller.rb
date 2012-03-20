@@ -142,4 +142,5 @@ class VideoController < ApplicationController
       flash[:notice] = 'created new archive video'
       redirect_to :action => 'index'
     end
+end
         
