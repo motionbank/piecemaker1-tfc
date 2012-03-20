@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   has_secure_password
   has_many :messages
   
-  acts_as_tenant(:account)
+  #acts_as_tenant(:account)
   
   has_and_belongs_to_many :events, :order => :happened_at, :include => [:sub_scenes,:tags,:notes,:video,:users]
   
