@@ -9,7 +9,6 @@
 #  event_id     :integer(4)
 #  img          :string(255)
 #  updated_at   :datetime
-#  private_note :string(255)
 #
 
 class Note < ActiveRecord::Base

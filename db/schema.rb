@@ -23,7 +23,6 @@ ActiveRecord::Schema.define(:version => 20120320154128) do
     t.integer  "user_id",                       :null => false
     t.integer  "piece_id",                      :null => false
     t.boolean  "is_original", :default => true
-    t.integer  "cast_number", :default => 1
     t.datetime "updated_at"
   end
 
@@ -49,6 +48,8 @@ ActiveRecord::Schema.define(:version => 20120320154128) do
     t.integer  "account_id"
   end
 
+  add_index "setup_configurations", ["account_id"], :name => "index_setup_configurations_on_account_id"
+    
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
     t.integer  "attempts",   :default => 0
@@ -79,7 +80,7 @@ ActiveRecord::Schema.define(:version => 20120320154128) do
   create_table "events", :force => true do |t|
     t.string   "title"
     t.datetime "happened_at"
-    t.integer  "dur"
+    t.integer  "duration"
     t.string   "event_type"
     t.integer  "video_id"
     t.integer  "piece_id"
@@ -101,6 +102,8 @@ ActiveRecord::Schema.define(:version => 20120320154128) do
   add_index "events", ["id"], :name => "index_events_on_id"
   add_index "events", ["piece_id"], :name => "index_events_on_piece_id"
   add_index "events", ["video_id"], :name => "index_events_on_video_id"
+  add_index "events", ["account_id"], :name => "index_events_on_account_id"
+  
 
   create_table "events_tags", :id => false, :force => true do |t|
     t.integer "event_id"
@@ -128,7 +131,8 @@ ActiveRecord::Schema.define(:version => 20120320154128) do
 
   add_index "messages", ["from_id"], :name => "index_messages_on_from_id"
   add_index "messages", ["user_id"], :name => "index_messages_on_user_id"
-
+  add_index "messages", ["account_id"], :name => "index_messages_on_account_id"
+  
   create_table "meta_infos", :force => true do |t|
     t.datetime "created_at"
     t.string   "created_by"
@@ -137,7 +141,8 @@ ActiveRecord::Schema.define(:version => 20120320154128) do
     t.text     "description"
     t.integer  "account_id"
   end
-
+  add_index "meta_infos", ["account_id"], :name => "index_meta_infos_on_account_id"
+  
   create_table "notes", :force => true do |t|
     t.datetime "created_at"
     t.string   "created_by"
@@ -145,13 +150,12 @@ ActiveRecord::Schema.define(:version => 20120320154128) do
     t.integer  "event_id"
     t.string   "img"
     t.datetime "updated_at"
-    t.string   "private_note"
     t.integer  "account_id"
   end
 
-  add_index "notes", ["event_id"], :name => "event_id"
   add_index "notes", ["event_id"], :name => "index_notes_on_event_id"
   add_index "notes", ["id"], :name => "index_notes_on_id"
+  add_index "notes", ["account_id"], :name => "index_notes_on_account_id"
 
   create_table "photos", :force => true do |t|
     t.string   "picture_file_name"
@@ -167,6 +171,7 @@ ActiveRecord::Schema.define(:version => 20120320154128) do
 
   add_index "photos", ["id"], :name => "index_photos_on_id"
   add_index "photos", ["piece_id"], :name => "index_photos_on_piece_id"
+  add_index "photos", ["account_id"], :name => "index_photos_on_account_id"
 
   create_table "pieces", :force => true do |t|
     t.datetime "created_at"
@@ -179,6 +184,7 @@ ActiveRecord::Schema.define(:version => 20120320154128) do
   end
 
   add_index "pieces", ["id"], :name => "index_pieces_on_id"
+  add_index "pieces", ["account_id"], :name => "index_pieces_on_account_id"
 
   create_table "sub_scenes", :force => true do |t|
     t.string   "title"
@@ -191,6 +197,7 @@ ActiveRecord::Schema.define(:version => 20120320154128) do
   end
 
   add_index "sub_scenes", ["event_id"], :name => "index_sub_scenes_on_event_id"
+  add_index "sub_scenes", ["account_id"], :name => "indesub_sceness_ub_sceneson_account_id"
 
   create_table "tags", :force => true do |t|
     t.string  "name"
@@ -201,10 +208,15 @@ ActiveRecord::Schema.define(:version => 20120320154128) do
 
   add_index "tags", ["id"], :name => "index_tags_on_id"
   add_index "tags", ["piece_id"], :name => "index_tags_on_piece_id"
+  add_index "tags", ["account_id"], :name => "index_tags_on_account_id"
 
   create_table "users", :force => true do |t|
     t.string   "login",                     :limit => 40
     t.string   "email",                     :limit => 100
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "password_digest"
+    t.integer  "account_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "remember_token",            :limit => 40
@@ -217,11 +229,7 @@ ActiveRecord::Schema.define(:version => 20120320154128) do
     t.boolean  "inherit_cast",                             :default => false
     t.datetime "last_login"
     t.text     "scratchpad"
-    t.string   "first_name"
-    t.string   "last_name"
     t.boolean  "is_performer",                             :default => true
-    t.string   "password_digest"
-    t.integer  "account_id"
   end
 
   add_index "users", ["id"], :name => "index_users_on_id"
@@ -243,5 +251,6 @@ ActiveRecord::Schema.define(:version => 20120320154128) do
   add_index "videos", ["id"], :name => "index_videos_on_id"
   add_index "videos", ["piece_id"], :name => "index_videos_on_piece_id"
   add_index "videos", ["title"], :name => "index_videos_on_title"
+  add_index "videos", ["account_id"], :name => "index_videos_on_account_id"
 
 end

@@ -6,7 +6,6 @@
 #  performer_id :integer(4)      not null
 #  piece_id     :integer(4)      not null
 #  is_original  :boolean(1)      default(TRUE)
-#  cast_number  :integer(4)      default(1)
 #
 
 require 'test_helper'
