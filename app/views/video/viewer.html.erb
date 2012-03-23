@@ -1,14 +1,14 @@
 <%- content_for :present_header do -%>
 <div  id = 'info_strip'>
 <span id = 'info_title'><%= @piece.title if @piece %></span>&nbsp;&nbsp;&nbsp;
-<%= content_tag :span, @event.title if @event %>
-<%= content_tag :span, "Video: #{@video.title}" %>
+<%= raw content_tag :span, @event.title if @event %>
+<%= raw content_tag :span, "Video: #{@video.title}" %>
 &nbsp;&nbsp;
-<%= content_tag :span, "Time: #{@event.video_start_time.to_time_string}" if @event  %>
-<%= content_tag :span, "&nbsp;&nbsp;&nbsp;#{@flow_type} D: #{@ur}" %>
+<%= raw content_tag :span, "Time: #{@event.video_start_time.to_time_string}" if @event  %> &nbsp;&nbsp;&nbsp;
+<%= raw content_tag :span, "#{@flow_type} D: #{@ur}" %>
 </div>
 <% end -%>
-<script type="text/javascript" src="/javascripts/flowplayer-3.2.6.min.js"></script>
+<script type="text/javascript" src="/assets/flowplayer-3.2.6.min.js"></script>
 
 <%#- if @flow_type == 's3' -%>
 <%#- @log_string = "log:{level:'warn',filter:'org.flowplayer.rtmp.*'}" -%>

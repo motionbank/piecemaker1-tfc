@@ -7,16 +7,13 @@ class S3Config
     ENV['S3_SECRET_ACCESS_KEY']
   end
   def self.bucket            
-    ENV['S3_BUCKET']
+    'piecemakerlite-taylor'
   end
   def self.max_file_size     
     ENV['S3_SWF_MAX_FILE_SIZE'] || 535544320
   end
   def self.acl               
     ENV['S3_SWF_UPLOAD_ACL'] || 'public-read'
-  end
-  def self.imagemagick_path  
-    ENV['APP_LOCATION'] == 'local' ? '/usr/local/homebrew/bin' : '/usr/local/bin'
   end
   def self.cloudfront_address
     's3bulcu47zau6v.cloudfront.net/cfx/st'
@@ -69,6 +66,28 @@ class S3Config
       acc
     else
       false
+    end
+  end
+  def self.connect_and_create_bucket(bucket_name)
+    xml_file_location = Rails.root + 'lib/tasks/crossdomain.xml'
+    puts "Your bucket name is #{bucket_name}"
+    if S3Config.connect_to_s3
+      if AWS::S3::Bucket.list.map{|x| x.name}.include? bucket_name
+        puts "Bucket #{bucket_name} exists already!"
+      else
+        puts "Creating Bucket #{bucket_name}"
+        if AWS::S3::Bucket.create(bucket_name)
+          puts 'Bucket created. Adding crossdomain.xml file.'
+          if File.exists?(xml_file_location)
+            AWS::S3::S3Object.store('crossdomain.xml', open(xml_file_location), bucket_name)
+            puts 'Crossdomain.xml file added.'     
+          else
+            puts "I couldn't find crossdomain.xml file. It should be in lib/tasks."
+          end
+        else
+          puts "I couldn't create #{bucket_name}"
+        end
+      end
     end
   end
 end

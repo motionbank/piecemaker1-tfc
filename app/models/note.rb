@@ -12,7 +12,7 @@
 #
 
 class Note < ActiveRecord::Base
-  belongs_to :events
+  belongs_to :event
   acts_as_tenant(:account)
 end
 

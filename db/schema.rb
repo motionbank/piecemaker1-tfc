@@ -32,19 +32,10 @@ ActiveRecord::Schema.define(:version => 20120320154128) do
 
   create_table "setup_configurations", :force => true do |t|
     t.string   "time_zone"
-    t.boolean  "use_auto_video",    :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "read_only",         :default => false
     t.boolean  "use_heroku",        :default => false
     t.string   "s3_sub_folder"
-    t.integer  "default_piece_id"
-    t.text     "file_locations"
-    t.integer  "desired_on_time"
-    t.integer  "min_entrances"
-    t.integer  "max_entrances"
-    t.integer  "min_entrance_time"
-    t.integer  "max_entrance_time"
     t.integer  "account_id"
   end
 

@@ -2,6 +2,7 @@
 <form id = 's3form' action = '/capture/create_video/<%= @video.id %>' method = 'POST'>
   <%= hidden_field_tag :title, nil, :id => 'title_field' %>
   <%= hidden_field_tag :size, nil, :id => 'size_field' %>
+  <%= hidden_field_tag :piece_id, @piece.id, :id => 'piece_id_field' %>
   <%= hidden_field_tag :contenttype, nil, :id => 'content_type_field' %>
 <%= raw s3_swf_upload_tag(:success => "document.getElementById('s3form').submit();",
                       :selected => 'vv = filename;ss = size;ct = contenttype;

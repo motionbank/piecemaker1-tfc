@@ -18,8 +18,8 @@ class Video < ActiveRecord::Base
    end
   end
   def update_from_params(params)
-    #self.title = params[:title].split('.').first
-    self.fn_s3 = '.' + params[:title].split('.').last
+    self.title = params[:title]
+    self.is_uploaded = true
     save
   end
   

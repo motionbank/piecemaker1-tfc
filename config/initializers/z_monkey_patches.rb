@@ -24,12 +24,10 @@ end
 module ActiveRecord
   class Base
     def s3_prefix(new_way=false)
-      return nil unless SetupConfiguration.s3_base_folder
       string = ''
-      string << SetupConfiguration.s3_base_folder
       case self.class.name
         when 'Video'
-          string << "/video"
+          string << "video"
         when 'Photo'
           return nil unless piece_id
           string << "/p-#{piece_id}/photo/ph-#{id}"

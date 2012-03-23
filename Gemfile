@@ -1,22 +1,20 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.2'
+gem 'rails', '~> 3.2.2'
 gem 'bcrypt-ruby', '~> 3.0.0'
 gem 'aws-s3', :require => 'aws/s3'
 gem 'acts-as-list', :require => 'acts_as_list'
-gem 'will_paginate', '>=3.0.pre' 
+gem "will_paginate", "~> 3.0.3" 
 gem 'haml'
 gem 'sass'
-#gem 'mysql'
-gem 'heroku'
-#gem 'taps'
-gem 'pg'
+gem "heroku", "~> 2.21.3"
+gem "pg", "~> 0.13.2"
 #gem 'rake', '0.9.2.2'
 #gem 'rdoc'
 #gem 'delayed_job_active_record'
 gem 'active_record_query_trace'
 gem 'thin'
-gem 'acts_as_tenant'
+gem "acts_as_tenant", "~> 0.2.6"
 gem 'ancestry'
 group :development do
   gem 'taps'
@@ -24,7 +22,7 @@ end
 group :test do
 
   gem 'webrat'
-  gem 'shoulda'
+  gem "shoulda", "~> 3.0.1"
   gem 'factory_girl_rails'
   gem 'mocha'
   gem 'timecop'

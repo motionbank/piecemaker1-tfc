@@ -236,7 +236,7 @@ class CaptureController < ApplicationController
    if video.viewable?
      text << "<li class = 'removable'><a class = 'ignore' href = '/video_viewer/#{params[:pieceid]}/#{params[:id]}'>Watch in Viewer</a></li>"
    else
-     text << "<li class = 'removable'>Video not viewable.</li>"
+     text << "<li style = 'color:#ccc' class = 'removable'>Video Not Viewable.</li>"
    end
    text << "<li class = 'removable'><a class = 'ignore' href = '/video_upload/#{params[:id]}/#{params[:pieceid]}'>Upload</a></li>"
      render :text => text
@@ -732,7 +732,7 @@ class CaptureController < ApplicationController
    if @video = Video.find(params[:id])
      @video.update_from_params(params)
    end
-   redirect_to  :action => 'present', :id => session[:piece_id]
+   redirect_to  :action => 'present', :id => params[:piece_id]
  end
 
     def search_type

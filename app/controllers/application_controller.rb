@@ -11,21 +11,18 @@ class ApplicationController < ActionController::Base
     before_filter :login_required, :except => [:login, :welcome, :demo, :documentation, :contact,:update_vid_time,:mark_from_marker_list]
     before_filter :set_defaults, :except => [:authorize,:update_vid_time,:fill_video_menu,:fill_extra_menu,:quick_marker,:mark_from_marker_list]
     before_filter :catch_came_from
-    before_filter :current_account
-    helper_method :user_has_right?, :current_configuration, :duration_to_hash, :duration_hash_to_string, :video_in?, :yield_authenticity_token, :current_piece, :current_account, :s3_bucket, :came_from_or
+    helper_method :user_has_right?, :current_configuration, :duration_to_hash, :duration_hash_to_string, :video_in?, :yield_authenticity_token, :current_piece, :s3_bucket, :came_from_or
 
 ##################
   # def current_user
   #   @cu ||= User.find(1)
   # end
   
-  def current_account
-    @curracc ||= Account.find(1)
-  end
+
   
-  #current_account = Account.find(2)
+  current_account = Account.find(4)
   #set_current_tenant_by_subdomain(:account,:subdomain)
-  set_current_tenant_to(@current_account)
+  set_current_tenant_to(current_account)
   
   
   def logged_in?

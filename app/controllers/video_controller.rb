@@ -8,31 +8,11 @@ class VideoController < ApplicationController
 
     def viewer
       @flow_type = false
-      @video = Video.find(params[:id]).includes([{:events => :sub_scenes}])
+      @video = Video.find(params[:id])
       @event = Event.find(params[:event_id]) if params[:event_id]
       @piece = Piece.find(params[:piece_id]) if params[:piece_id]
       @ur = request.host
-      if !SetupConfiguration.app_is_local? && @video.fn_s3
-        @flow_type = 's3'
-      else
-        begin
-          File.open(@video.full_uncompressed_path)
-          line = true
-        rescue
-          line = false
-        end
-        if @video.fn_local && line
-            @flow_type = SetupConfiguration.pseudostreaming_type
-        elsif  @video.fn_arch  && Video.archive_dir_online?
-            @flow_type = 'arch'
-        elsif @video.fn_s3
-          if SetupConfiguration.cdn?
-            @flow_type = 's3'
-          else
-            @flow_type = 's3_plain'
-          end
-        end
-      end
+      @flow_type = 's3'
       #@flow_type = @video.fn_s3 ? 'rtmp' : 'file'
       if @flow_type
         respond_to do |format|

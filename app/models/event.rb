@@ -551,12 +551,7 @@ class Event < ActiveRecord::Base
       end
     end
   end
-  def duration
-    dur || compute_duration
-  end
-  def duration=(d)
-    self.dur = d
-  end
+
   protected
 
   def check_for_everyone #tested
