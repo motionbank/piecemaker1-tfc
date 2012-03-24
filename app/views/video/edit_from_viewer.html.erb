@@ -1,5 +1,5 @@
 <b>Edit Video</b><br /><br />
-<%- form_tag({:action => 'update',:id => @video},:class => 'ajax',:id => @video.id) do -%>
+<%= form_tag({:action => 'update',:id => @video},:class => 'ajax',:id => @video.id) do -%>
 
 <%= render :partial => 'form' %>
 

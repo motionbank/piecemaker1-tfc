@@ -16,13 +16,10 @@
 <b>Meta Data</b><br />
 <%= text_area 'video', 'meta_data',:size => '50x5' %>
 <b>File Extensions:</b><br />
-<%= "Archive:" %>
-<%= text_field "video","fn_arch",:size => 6 %>&nbsp;&nbsp;
-<%= "S3:" %>
-<%= text_field "video","fn_s3",:size => 6 %>&nbsp;&nbsp;
-<%= "Local:" %>
-<%= text_field "video","fn_local",:size => 6 %><br />
+<%= "Uploaded:" %>
+<%= check_box_tag 'video[is_uploaded]', 'true', @video.is_uploaded %>
+
 
 <h4>Piece:</h4>
-<%= select_tag 'piece_id', options_for_select(piece_select_with_none,@video.piece) %>
+<%= select_tag 'piece_id', options_for_select(piece_select_with_none,@video.piece_id) %>
 <br /><br />

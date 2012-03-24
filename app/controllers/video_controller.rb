@@ -25,9 +25,8 @@ class VideoController < ApplicationController
     end
 
     def prepare_params
-      params[:video][:fn_local] = params[:video][:fn_local].present? ? params[:video][:fn_local] : nil
-      params[:video][:fn_arch] = params[:video][:fn_arch].present? ? params[:video][:fn_arch] : nil
-      params[:video][:fn_s3] = params[:video][:fn_s3].present? ? params[:video][:fn_s3] : nil
+      params[:video][:piece_id] = params[:piece_id].present? ? params[:piece_id] : nil
+      params[:video][:is_uploaded] = params[:video][:is_uploaded].present? ? params[:video][:is_uploaded] : nil
       params[:video][:meta_data] = params[:video][:meta_data].present? ? params[:video][:meta_data] : nil
     end
 
