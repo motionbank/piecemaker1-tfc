@@ -4,27 +4,7 @@ acts_as_tenant(:account)
   def self.s3_base_folder
     @@s3b ||= first.s3_sub_folder
   end
-  def self.desired_on_time
-    @@dot ||= first.desired_on_time
-  end
-  def self.min_entrances
-    @@mae ||= first.min_entrances
-  end
-  def self.max_entrances
-    @@mie ||= first.max_entrances
-  end
-  def self.max_entrance_time
-    @@maet ||= first.max_entrance_time
-  end
-  def self.min_entrance_time
-    @@miet ||= first.min_entrance_time
-  end
-  def self.video_base_path
-    Rails.root + '/public/video/'
-  end
-  def self.arch_type
-    ENV['ARCH_TYPE'] || 32
-  end
+
   def self.cdn?
     true
   end

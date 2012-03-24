@@ -23,7 +23,7 @@ class Account < ActiveRecord::Base
     puts "creating setup configuration for #{name}"
     SetupConfiguration.create(
       :time_zone => 'Berlin',
-      :s3_sub_folder => '',
+      :s3_sub_folder => name,
       :file_locations => []
     )
     puts "created setup_configuration for #{name}"
@@ -32,8 +32,6 @@ class Account < ActiveRecord::Base
     :title => 'New Piece',
     :short_name => 'New')
     puts "created piece for #{name}"
-    
-    puts "creating bucket #{account.bucket_name}"
-    S3Config.connect_and_create_bucket(account.bucket_name)
+
   end
 end

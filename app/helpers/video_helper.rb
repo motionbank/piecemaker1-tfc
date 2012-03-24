@@ -30,7 +30,7 @@ module VideoHelper
   def flowplayer_clip_url(flow_type,video,base_url)
     case flow_type
       when 's3'
-        video.full_s3_path
+        "http://s3.amazonaws.com/#{S3Config.bucket}/#{video.s3_path}"#video.full_s3_path
       when 's3_plain'
         "http://s3.amazonaws.com/#{S3Config.bucket}/#{video.s3_path}"
       when 'local'

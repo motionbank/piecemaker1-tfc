@@ -12,7 +12,7 @@ class VideoController < ApplicationController
       @event = Event.find(params[:event_id]) if params[:event_id]
       @piece = Piece.find(params[:piece_id]) if params[:piece_id]
       @ur = request.host
-      @flow_type = 's3'
+      @flow_type = 's3_plain'
       #@flow_type = @video.fn_s3 ? 'rtmp' : 'file'
       if @flow_type
         respond_to do |format|
