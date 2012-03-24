@@ -1,5 +1,7 @@
 
 class Photo < ActiveRecord::Base
+  require 's3_paths'
+  include S3Paths
   
   belongs_to :piece
   acts_as_tenant(:account)

@@ -2,6 +2,11 @@ class Video < ActiveRecord::Base
   
   MOVIE_EXTENSIONS = %w[mov mp4 m4v flv]
   
+  
+  require 's3_paths'
+  include S3Paths
+  
+  
   #belongs_to :event
   belongs_to :piece
   has_many :events,:dependent => :nullify, :order => :happened_at,:conditions => "state = 'normal'"
