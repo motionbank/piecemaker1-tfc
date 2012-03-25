@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
   
 
   
-  current_account = Account.find(4)
+  current_account = Account.find(1)
   #set_current_tenant_by_subdomain(:account,:subdomain)
   set_current_tenant_to(current_account)
   

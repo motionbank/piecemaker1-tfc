@@ -1,9 +1,9 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  id: MyString
-  integer: MyString
+  id: 1
+  name: 'cunningham'
 
 two:
-  id: MyString
-  integer: MyString
+  id: 2
+  name: 'graham'
