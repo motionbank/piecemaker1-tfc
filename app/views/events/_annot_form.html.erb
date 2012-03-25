@@ -26,7 +26,7 @@ New Annotation for: <%= @video.title %>
 
  <% if @event.needs_performers_field? -%>
  <label for="event_performers">Performers</label><br />
- <%= checklist('performers[]',current_piece.performers,['login'],events_performers(@event),nil,true,6) %> 
+ <%= raw checklist('performers[]',current_piece.performers,['login'],events_performers(@event),nil,true,6) %> 
  <% end %>
 
 
