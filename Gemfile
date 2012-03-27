@@ -19,15 +19,24 @@ gem 'ancestry'
 group :development do
   gem 'taps'
 end
+
+gem 'rspec-rails', '~> 2.9.0',  :group => [:test, :development] 
+
 group :test do
-
-  gem 'webrat'
-  gem "shoulda", "~> 3.0.1"
+  gem 'capybara'           # better than webrat
   gem 'factory_girl_rails'
-  gem 'mocha'
-  gem 'timecop'
-
+  gem 'guard-rspec'
+  
 end
+# group :cucumber do
+#   gem 'capybara'           # better than webrat
+#   gem 'database_cleaner'   # clean database between tests
+#   gem 'cucumber-rails'
+#   gem 'cucumber'
+#   gem 'rspec-rails', '~> 2.9.0'
+#   #gem 'spork'
+#   gem 'factory_girl_rails'
+# end
 
 # Gems used only for assets and not required
 # in production environments by default.
