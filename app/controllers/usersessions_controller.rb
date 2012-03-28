@@ -11,7 +11,7 @@ class UsersessionsController < ApplicationController
     user = User.find_by_login(params[:login])
     
     
-    if user && user.authenticate(params[:password])
+    if @current && user && user.authenticate(params[:password])
         # self.current_user = user
         #         new_cookie_flag = (params[:remember_me] == "1")
         #         handle_remember_cookie! new_cookie_flag

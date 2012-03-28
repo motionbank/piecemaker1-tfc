@@ -8,23 +8,34 @@ class ApplicationController < ActionController::Base
 
     # Pick a unique cookie name to distinguish our session data from others'
     #session :session_key => '_piecemaker_session_id'
-    before_filter :login_required, :except => [:login, :welcome, :demo, :documentation, :contact,:update_vid_time,:mark_from_marker_list]
+    before_filter :login_required, :except => [:login, :welcome, :documentation, :contact,:update_vid_time,:mark_from_marker_list]
     before_filter :set_defaults, :except => [:authorize,:update_vid_time,:fill_video_menu,:fill_extra_menu,:quick_marker,:mark_from_marker_list]
     before_filter :catch_came_from
-    helper_method :user_has_right?, :current_configuration, :duration_to_hash, :duration_hash_to_string, :video_in?, :yield_authenticity_token, :current_piece, :s3_bucket, :came_from_or
+    helper_method :user_has_right?, :current_configuration, :duration_to_hash, :duration_hash_to_string, :video_in?, :yield_authenticity_token, :current_piece, :s3_bucket, :came_from_or, :show_tennant
 
 ##################
   # def current_user
   #   @cu ||= User.find(1)
   # end
-  
+  set_current_tenant_through_filter
+  before_filter :your_method_that_finds_the_current_tenant
 
+    def your_method_that_finds_the_current_tenant
+      current_account = Account.find_by_name(request.subdomain)
+      if current_account
+        set_current_tenant(current_account)
+      end
+      @current = current_account
+    end
+
+  # 
+  # current_account = Account.find(1)
+  # #set_current_tenant_by_subdomain(:account,:subdomain)
+  # set_current_tenant_to(current_account)
   
-  #current_account = Account.find(1)
-  #set_current_tenant_by_subdomain(:account,:subdomain)
-  #set_current_tenant_to(current_account)
-  
-  
+  def show_tennant
+    @current ? @current.name : ''
+  end
   def logged_in?
     !!current_user
   end
@@ -112,12 +123,9 @@ class ApplicationController < ActionController::Base
     def set_time_zone
       Time.zone = 'Berlin'#current_configuration.timezone
     end
-    def read_only?
-      !SetupConfiguration.app_is_local? && current_configuration && current_configuration.read_only?
-    end
+
     def user_has_right?(right)
       return false unless current_user
-      return false if read_only?
       result = SetupConfiguration.rights[right].include? current_user.role_name
     end
 

@@ -1,10 +1,13 @@
 <div id="banner">
   <div id='logo'>
-    PIECEMAKER
+    PIECEMAKERLITE <%= show_tennant %>
   </div>
+<%- if @current -%>
   <div id = 'login_div'>
     <%= render(:partial => '_shared/login_info') -%>
   </div>
+<%- end -%>
+
 </div>
 <div id='menu_strip' class='menu'>
   <%= render(:partial => '_shared/app_menu') %>

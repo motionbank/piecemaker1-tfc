@@ -14,29 +14,25 @@ gem "pg", "~> 0.13.2"
 #gem 'delayed_job_active_record'
 gem 'active_record_query_trace'
 gem 'thin'
-gem "acts_as_tenant", "~> 0.2.6"
+gem "acts_as_tenant", "~> 0.2.7"
 gem 'ancestry'
 group :development do
   gem 'taps'
 end
 
-gem 'rspec-rails', '~> 2.9.0',  :group => [:test, :development] 
+gem 'rspec-rails', '~> 2.9.0',  :group => [:test, :development, :cucumber] 
+gem 'factory_girl_rails', '~> 3.0.0' ,:group => [:test, :cucumber]
 
 group :test do
   gem 'capybara'           # better than webrat
-  gem 'factory_girl_rails'
-  gem 'guard-rspec'
-  
+  gem 'guard-rspec' 
 end
-# group :cucumber do
-#   gem 'capybara'           # better than webrat
-#   gem 'database_cleaner'   # clean database between tests
-#   gem 'cucumber-rails'
-#   gem 'cucumber'
-#   gem 'rspec-rails', '~> 2.9.0'
-#   #gem 'spork'
-#   gem 'factory_girl_rails'
-# end
+group :cucumber do
+  gem 'capybara'           # better than webrat
+  gem 'database_cleaner'   # clean database between tests
+  gem 'cucumber-rails'
+  gem 'cucumber'
+end
 
 # Gems used only for assets and not required
 # in production environments by default.
