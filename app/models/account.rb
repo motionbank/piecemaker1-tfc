@@ -10,7 +10,7 @@ class Account < ActiveRecord::Base
     puts "account #{name} created"
     ActsAsTenant.current_tenant = account
     puts "creating new admin user in #{name}"
-    uname = "#{name}admin"
+    uname = "#{name}-admin"
     admin = User.create(
     :login => uname,
     :password => uname,
