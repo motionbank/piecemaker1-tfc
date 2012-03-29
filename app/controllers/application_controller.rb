@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
   before_filter :your_method_that_finds_the_current_tenant
 
     def your_method_that_finds_the_current_tenant
-      current_account = Account.find_by_name(request.subdomain)
+      current_account = Account.find_by_name(request.subdomain.downcase)
       if current_account
         set_current_tenant(current_account)
       end

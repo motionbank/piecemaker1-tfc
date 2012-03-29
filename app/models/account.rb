@@ -3,6 +3,7 @@ class Account < ActiveRecord::Base
     "piecemakerlite-#{name}"
   end
   def self.setup_new(name)
+    name = name.downcase
     puts "creating account #{name}"
     account = Account.create(
     :name => name
