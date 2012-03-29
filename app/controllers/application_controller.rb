@@ -34,7 +34,7 @@ class ApplicationController < ActionController::Base
   # set_current_tenant_to(current_account)
   
   def show_tennant
-    @current ? @current.name : ''
+    @current ? @current.name : nil
   end
   def logged_in?
     !!current_user
