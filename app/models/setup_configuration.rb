@@ -8,10 +8,7 @@ acts_as_tenant(:account)
   def self.cdn?
     true
   end
-  def self.pseudostreaming_type
-    ENV['PSEUDOSTREAM_TYPE'] || 'local_plain'
-  end
-  
+
   def self.app_is_local?
     false # ENV['APP_LOCATION'] != 'heroku' #'server' heroku
   end
