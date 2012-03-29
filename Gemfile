@@ -13,11 +13,11 @@ gem "pg", "~> 0.13.2"
 #gem 'rdoc'
 #gem 'delayed_job_active_record'
 gem 'active_record_query_trace'
-gem 'thin'
 gem "acts_as_tenant", "~> 0.2.7"
 gem 'ancestry'
 group :development do
   gem 'taps'
+  gem 'thin'
 end
 
 gem 'rspec-rails', '~> 2.9.0',  :group => [:test, :development, :cucumber] 
