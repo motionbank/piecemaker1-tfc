@@ -15,9 +15,9 @@ gem "pg", "~> 0.13.2"
 gem 'active_record_query_trace'
 gem "acts_as_tenant", "~> 0.2.7"
 gem 'ancestry'
+gem 'thin'
 group :development do
   gem 'taps'
-  gem 'thin'
 end
 
 gem 'rspec-rails', '~> 2.9.0',  :group => [:test, :development, :cucumber] 
