@@ -11,7 +11,6 @@
     <%- if user_has_right?('group_admin') -%>
     <%= menu_second_level('Video Maintenance','Video Maintenance') do -%>
       <li><%= link_to 'List S3', :controller => "administration", :action => 'list_s3' -%></li>
-      <li><%= link_to 'Delayed Jobs', :controller => "video", :action => 'index_delayed_jobs' -%></li>
     <% end %>
     
     <%= menu_second_level('Last 50','Last 50') do -%>

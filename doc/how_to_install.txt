@@ -262,4 +262,4 @@ create heroku account & environment variables
     heroku rake db:schema:load
     heroku rake db:seed
 
-	heroku config:add S3_SECRET_ACCESS_KEY=8S/YjcyW44IvG4oTXpI8fTCPzBS9CwH1Oo0uAL7i S3_ACCESS_KEY_ID=1CJMB5SJQFWXFP6AM1G2  S3_BUCKET=piecemaker-desw --app piecemaker-desw
+  S3_BUCKET=piecemaker-desw --app piecemaker-desw
