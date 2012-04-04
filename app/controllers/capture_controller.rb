@@ -833,6 +833,12 @@ class CaptureController < ApplicationController
       @new_event = ss.promote_to_scene
       @event = Event.find(oldid)
     end
+    def quick_piece
+      piece = Piece.find(params[:id])
+      render :text => piece.title.to_s, :layout => false
+    end
+    def pieces_for_account
+    end
     def convert_to_sub_scene
       event = Event.find(params[:id])
       ss = event.demote_to_sub_scene

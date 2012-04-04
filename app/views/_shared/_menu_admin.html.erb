@@ -3,6 +3,9 @@
     <li><%= link_to "#{current_user.messages.length} Messages", :controller => "message",:action => 'index', :id => current_user.id -%></li>
     <li><%= link_to 'Settings', '/pref' , :class => 'get' -%></li>
 <%- end -%>
+<%- if @current.name == 'seed' -%>
+<li><%= link_to "Accounts", :controller => "administration", :action => 'list-accounts' -%></li>
+<% end %>
 <%- if user_has_right?('group_admin') -%>
 
     <li><%= link_to "Users", :controller => "users" -%></li>

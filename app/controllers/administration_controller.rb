@@ -3,7 +3,15 @@ class AdministrationController < ApplicationController
    before_filter :redirect_if_not_admin, :except => :role_matrix
    def index
    end
-
+   
+   def list_accounts
+     if @current.name == 'seed'
+       @accounts = Accounts.all
+     else
+       redirect_to '/'
+     end
+   end
+   
   def delete_ev
     event = Event.find(params[:id])
     flash[:notice] = event.destroy ? "Destroyed Event ID: #{params[:id]}" : "Couldn't destroy Event ID: #{params[:id]}"
