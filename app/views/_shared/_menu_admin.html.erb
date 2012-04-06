@@ -12,11 +12,8 @@
     <li><%= link_to "Users", :controller => "users" -%></li>
     <li><%= link_to "SetupConfiguration Info", :controller => "setup_configuration", :action => 'show' -%></li>
     <li><%= link_to 'Role Matrix', :controller => "administration", :action => 'role_matrix' -%></li>
-    <%- if user_has_right?('group_admin') -%>
-    <%= menu_second_level('Video Maintenance','Video Maintenance') do -%>
-      <li><%= link_to 'List S3', :controller => "administration", :action => 'list_s3' -%></li>
-    <% end %>
-    
+    <li><%= link_to 'List S3', :controller => "administration", :action => 'list_s3' -%></li>
+
     <%= menu_second_level('Last 50','Last 50') do -%>
     
       <li><%= link_to 'Events', :controller => "events", :action => 'list',:id => nil -%></li>
@@ -26,8 +23,7 @@
       <li><%= link_to 'Photos', :controller => "photos", :action => 'index',:id => nil -%></li>
       <li><%= link_to 'Notes', :controller => "notes", :action => 'list' -%></li>
       <li><%= link_to 'Documents', :controller => "documents", :action => 'list' -%></li>
-      <li><%= link_to 'Messages', :controller => "message", :action => 'list_all' -%></li>
-    <%- end -%>  
+      <li><%= link_to 'Messages', :controller => "message", :action => 'list_all' -%></li> 
     <%- end -%>
     <% end %>
 <%- end -%>

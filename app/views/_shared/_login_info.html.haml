@@ -4,7 +4,10 @@
   &nbsp;
   %span.ugr Role:
   = current_user.role_name
-  &nbsp;&nbsp;&nbsp;
+  &nbsp;
+  %span.ugr Zone:
+  = current_configuration.time_zone
+  &nbsp;&nbsp;
   = link_to 'Logout', '/logout'
   %br/
 - else
