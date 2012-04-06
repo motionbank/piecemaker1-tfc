@@ -5,6 +5,7 @@
 <%- end -%>
 <%- if @current.name == 'seed' -%>
 <li><%= link_to "Accounts", :controller => "administration", :action => 'list_accounts' -%></li>
+<li><%= link_to 'Main Admin', :controller => "administration", :action => 'main' -%></li>  
 <% end %>
 <%- if user_has_right?('group_admin') -%>
 
@@ -26,9 +27,7 @@
       <li><%= link_to 'Notes', :controller => "notes", :action => 'list' -%></li>
       <li><%= link_to 'Documents', :controller => "documents", :action => 'list' -%></li>
       <li><%= link_to 'Messages', :controller => "message", :action => 'list_all' -%></li>
-    <%- end -%>
-    <li><%= link_to 'Main Admin', :controller => "administration", :action => 'main' -%></li>    
-  
+    <%- end -%>  
     <%- end -%>
     <% end %>
 <%- end -%>
