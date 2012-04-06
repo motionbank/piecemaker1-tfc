@@ -22,3 +22,4 @@
 //= require jquery-periodical
 //= require old-application
 //= require capture
+//= require s3_upload

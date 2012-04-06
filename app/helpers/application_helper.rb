@@ -565,7 +565,7 @@ module ApplicationHelper
     out = ""
 
     if !@include_s3_upload
-      out << '<script type="text/javascript" src="/assets/s3_upload.js"></script>' 
+      #out << '<script type="text/javascript" src="/assets/s3_upload.js"></script>' 
       @include_s3_upload = true
     end
 
