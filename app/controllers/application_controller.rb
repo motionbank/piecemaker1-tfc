@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
   before_filter :your_method_that_finds_the_current_tenant
 
     def your_method_that_finds_the_current_tenant
-      if SetupConfiguration.app_is_local?
+      if SetupConfiguration.app_is_local? 
         current_account = Account.find(1)
       else
         current_account = Account.find_by_name(request.subdomain.downcase)
@@ -126,7 +126,7 @@ class ApplicationController < ActionController::Base
       end
 
     def set_time_zone
-      Time.zone = 'Berlin'#current_configuration.timezone
+      Time.zone = current_configuration.time_zone
     end
 
     def user_has_right?(right)
