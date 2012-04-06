@@ -1,13 +1,13 @@
 <h2>SetupConfiguration</h2
 
 <p>
-  <b>Default Piece: </b> <%#= h @configuration.default_piece.title %>
-</p>
-<p>
   <b>Time Zone: </b> <%= h @configuration.time_zone %>
 </p>
 <p>
   <b>Use Auto Video:</b> <%= h @configuration.use_auto_video.to_s %>
+</p>
+<p>
+  <b>S3 Sub Folder:</b> <%= h @configuration.s3_sub_folder.to_s %>
 </p>
 <br />
 <br />
