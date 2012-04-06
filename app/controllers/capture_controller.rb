@@ -838,6 +838,7 @@ class CaptureController < ApplicationController
       render :text => piece.title.to_s, :layout => false
     end
     def pieces_for_account
+      render :text => 'piece1,piece2,piece3,piece4', :layout => false
     end
     def convert_to_sub_scene
       event = Event.find(params[:id])

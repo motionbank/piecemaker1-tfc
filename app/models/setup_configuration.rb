@@ -10,7 +10,7 @@ acts_as_tenant(:account)
   end
 
   def self.app_is_local?
-    false # ENV['APP_LOCATION'] != 'heroku' #'server' heroku
+    ENV['APP_LOCATION'] != 'heroku' #'server' heroku
   end
 
   def users
