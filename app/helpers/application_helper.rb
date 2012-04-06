@@ -569,6 +569,7 @@ module ApplicationHelper
       @include_s3_upload = true
     end
 
+
     out << %(<br />
           <script type="text/javascript">
           var s3_swf#{@count} = s3_swf_init('s3_swf#{@count}', {
