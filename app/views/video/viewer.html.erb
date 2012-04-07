@@ -8,7 +8,7 @@
 <%= raw content_tag :span, "#{@flow_type} D: #{@ur}" %>
 </div>
 <% end -%>
-<script type="text/javascript" src="/assets/flowplayer-3.2.6.min.js"></script>
+<%= javascript_include_tag "flowplayer-3.2.6.min" %>
 
 <%#- if @flow_type == 's3' -%>
 <%#- @log_string = "log:{level:'warn',filter:'org.flowplayer.rtmp.*'}" -%>
