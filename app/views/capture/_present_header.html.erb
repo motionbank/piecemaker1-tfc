@@ -5,9 +5,7 @@
 <%- if @events.last -%>
 Last Modified by: <%= @events.last.created_by -%> at <%= @events.last.created_at.strftime("%d.%m - %H:%M:%S %Z") -%>
 <%- end -%>
- auto video: <%= current_configuration.use_auto_video %>
 &nbsp;&nbsp;&nbsp;&nbsp;<span id = 'vitime'>Click to Show Current Video Time</span>
-
 
 <%- if (@filter_type == 'trash') -%>
  &nbsp;&nbsp;&nbsp;<span style = "color:#f00"><b>Showing Deleted Events</b></span>
