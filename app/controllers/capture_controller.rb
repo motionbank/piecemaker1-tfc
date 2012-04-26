@@ -4,7 +4,8 @@ class CaptureController < ApplicationController
   # present makes the main page
   #
   before_filter :get_event_from_params, :only => [:rate, :delete_event, :undelete_event, :destroy_event, :move_event, :unlock, :tag_with_title, :more_description, :less_description, :do_move,:toggle_user_highlight]
- 
+
+
   def search_by_performer
     params[:performer_filter] = 'true'
     respond_to do |format|
