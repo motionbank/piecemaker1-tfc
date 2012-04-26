@@ -69,7 +69,7 @@
 <%- if @videos.length > 0 %>
 <h4>(click to download)</h4>
 <%- @videos.each do |video| -%>
-<%= link_to "#{video.fn_s3 ? video.title  : 'no_title'}", "http://s3.amazonaws.com/#{s3_bucket}/#{video.s3_path}" %>
+<%= link_to "#{video.is_uploaded ? video.title  : 'no_title'}", "http://s3.amazonaws.com/#{s3_bucket}/#{video.s3_path}" %>
 <%- end -%>
 
 <%- else -%>
