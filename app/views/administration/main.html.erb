@@ -5,7 +5,6 @@
 <h2>Environment: <%= ENV[Rails.env] %></h2>
 <h2>Database Adapter: <%= Rails.configuration.database_configuration[Rails.env]['adapter'] %> </h2>
 <h2>Database: <%= Rails.configuration.database_configuration[Rails.env]['database'] %> </h2>
-<h2>App Location: <%= @env %></h2>
 <h2>Client IP: <%= @ip %></h2>
 <h2>Bucket: <%= ENV['S3_BUCKET'] %></h2>
-<h2>S3 Base folder: <%= SetupConfiguration.s3_base_folder %></h2>
+<h2>S3 Base folder: <%= show_tennant %></h2>

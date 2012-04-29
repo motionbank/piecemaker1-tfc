@@ -1,9 +1,6 @@
 class SetupConfiguration < ActiveRecord::Base
 serialize :file_locations
 acts_as_tenant(:account)
-  def self.s3_base_folder
-    @@s3b ||= first.s3_sub_folder
-  end
 
   def self.cdn?
     true

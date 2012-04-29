@@ -32,7 +32,6 @@ class AdministrationController < ApplicationController
   
   def main
     @ur = request.host
-    @env = SetupConfiguration.app_is_local? ? 'local' : 'heroku'
     @ip = request.remote_ip
   end
 
