@@ -11,13 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120429114245) do
+ActiveRecord::Schema.define(:version => 20120429123344) do
 
   create_table "accounts", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.string   "time_zone", :default => 'Berlin'
+    t.string   "time_zone"
   end
 
   create_table "castings", :force => true do |t|
@@ -166,26 +166,6 @@ ActiveRecord::Schema.define(:version => 20120429114245) do
 
   add_index "pieces", ["account_id"], :name => "index_pieces_on_account_id"
   add_index "pieces", ["id"], :name => "index_pieces_on_id"
-
-  create_table "setup_configurations", :force => true do |t|
-    t.string   "time_zone"
-    t.boolean  "use_auto_video",    :default => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "read_only",         :default => false
-    t.boolean  "use_heroku",        :default => false
-    t.string   "s3_sub_folder"
-    t.integer  "default_piece_id"
-    t.text     "file_locations"
-    t.integer  "desired_on_time"
-    t.integer  "min_entrances"
-    t.integer  "max_entrances"
-    t.integer  "min_entrance_time"
-    t.integer  "max_entrance_time"
-    t.integer  "account_id"
-  end
-
-  add_index "setup_configurations", ["account_id"], :name => "index_setup_configurations_on_account_id"
 
   create_table "sub_scenes", :force => true do |t|
     t.string   "title"

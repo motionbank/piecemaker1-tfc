@@ -6,7 +6,8 @@ class Account < ActiveRecord::Base
     name = name.downcase
     puts "creating account #{name}"
     account = Account.create(
-    :name => name
+    :name => name,
+    :time_zone => 'Berlin'
     )
     puts "account #{name} created"
     ActsAsTenant.current_tenant = account
@@ -21,13 +22,6 @@ class Account < ActiveRecord::Base
     puts "admin user created for #{name}"
     puts "username: #{uname}"
     puts "password: #{uname}"
-    puts "creating setup configuration for #{name}"
-    SetupConfiguration.create(
-      :time_zone => 'Berlin',
-      :s3_sub_folder => name,
-      :file_locations => []
-    )
-    puts "created setup_configuration for #{name}"
     puts "creating piece for #{name}"
     Piece.create(
     :title => 'New Piece',

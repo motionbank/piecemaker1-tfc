@@ -8,7 +8,11 @@ class ApplicationController < ActionController::Base
 
     # Pick a unique cookie name to distinguish our session data from others'
     #session :session_key => '_piecemaker_session_id'
+    
     before_filter :login_required, :except => [:login, :welcome, :documentation, :contact,:update_vid_time,:mark_from_marker_list,:quick_piece,:pieces_for_account]
+    set_current_tenant_through_filter
+    before_filter :your_method_that_finds_the_current_tenant
+    
     before_filter :set_defaults, :except => [:authorize,:update_vid_time,:fill_video_menu,:fill_extra_menu,:quick_marker,:mark_from_marker_list]
     before_filter :catch_came_from
     helper_method :user_has_right?, :current_configuration, :duration_to_hash, :duration_hash_to_string, :video_in?, :yield_authenticity_token, :current_piece, :s3_bucket, :came_from_or, :show_tennant
@@ -17,12 +21,11 @@ class ApplicationController < ActionController::Base
   # def current_user
   #   @cu ||= User.find(1)
   # end
-  set_current_tenant_through_filter
-  before_filter :your_method_that_finds_the_current_tenant
+
 
     def your_method_that_finds_the_current_tenant
       if SetupConfiguration.app_is_local? 
-        current_account = Account.find(2)
+        current_account = Account.find(1)
       else
         current_account = Account.find_by_name(request.subdomain.downcase)
       end
@@ -126,7 +129,7 @@ class ApplicationController < ActionController::Base
       end
 
     def set_time_zone
-      Time.zone = current_configuration.time_zone
+      Time.zone = @current.time_zone
     end
 
     def user_has_right?(right)
