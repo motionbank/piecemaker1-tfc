@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
     
     before_filter :set_defaults, :except => [:authorize,:update_vid_time,:fill_video_menu,:fill_extra_menu,:quick_marker,:mark_from_marker_list]
     before_filter :catch_came_from
-    helper_method :user_has_right?, :current_configuration, :duration_to_hash, :duration_hash_to_string, :video_in?, :yield_authenticity_token, :current_piece, :s3_bucket, :came_from_or, :show_tennant
+    helper_method :user_has_right?, :duration_to_hash, :duration_hash_to_string, :video_in?, :yield_authenticity_token, :current_piece, :s3_bucket, :came_from_or, :show_tennant, :current_tennant
 
 ##################
   # def current_user
@@ -47,7 +47,9 @@ class ApplicationController < ActionController::Base
     !!current_user
   end
 
-
+  def current_tennant
+    @current
+  end
   def authorized?(action=nil, resource=nil, *args)
     logged_in?
   end
@@ -186,11 +188,6 @@ class ApplicationController < ActionController::Base
       false
     end
 
-    def current_configuration
-      if current_user
-       @cn ||= SetupConfiguration.first
-      end
-    end
 
     def params_to_duration(prefix = :duration)
       params[prefix][:hour].to_i*60*60 + params[prefix][:minute].to_i*60 + params[prefix][:second].to_i

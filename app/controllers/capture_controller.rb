@@ -563,39 +563,7 @@ class CaptureController < ApplicationController
     end
   end
 
-  def reload_video
-    unless video_in?
-      respond_to do |format|
-        format.html {redirect_to :action => 'present', :id => session[:pieceid]}
-        format.js {render :partial => 'warn_out', :layout => false} 
-      end
-    else
-      @flash_message = ''
-      piece = Piece.find(session[:pieceid])
-      @video = Video.find(params[:id])
-      @video.duration = Time.now - @video.recorded_at
-      @video.fn_local = '.mp4' if current_configuration.use_auto_video
-      @video.save
-      result = Video.stop_recording if current_configuration.use_auto_video
-      if result && result != 'error'
-        @video.rename_quicktime_and_queue_processing(result)
-        @flash_message << "#{result} stored as #{@video.title} "
-      end
-      @video = Video.new()
-      @video.recorded_at = Time.now
-      @video.set_new_title(piece)
-      @video.save
-      piece.videos << @video
-      @player = Video.prepare_recording  if current_configuration.use_auto_video
-      Video.start_recording if current_configuration.use_auto_video
-      @flash_message << "Stopped Video: #{@video.title} and Started New Video"
-      @truncate = :less unless @truncate == :none
-      respond_to do |format|
-        format.html {redirect_to :action => 'present', :id => piece.id }
-        format.js {render :action => 'confirm_video_io', :layout => false}
-      end
-    end
-  end
+
   def new_auto_video_in
     @text = "Start"
     @player = true
@@ -616,23 +584,7 @@ class CaptureController < ApplicationController
       end
     end
   end
-  def new_auto_video_out
-    @player = true
-    @dvd_quick = 'insert'
-    @text = "Stop"
-    unless video_in?
-      respond_to do |format|
-        format.html {redirect_to :action => 'present', :id => session[:pieceid]}
-        format.js {render :partial => 'warn_out', :layout => false} 
-      end
-    else
-     @video = video_in?
-      respond_to do |format|
-        format.html
-        format.js {render :partial => 'new_auto_video', :layout => false} 
-      end
-    end
-  end
+
   def confirm_video_in
     @after_id = params[:aid] #needed to tell jquery where to insert event
     @create = true if params[:create] == 'true'

@@ -334,7 +334,7 @@ module ApplicationHelper
   
   def piece_select_with_none
     start = [['None', '']]
-    start += current_configuration.pieces.map{|x| [x.title,x.id]}
+    start += current_tennant.pieces.map{|x| [x.title,x.id]}
   end
   
   def put_role_select(selected)

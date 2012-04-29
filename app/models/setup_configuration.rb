@@ -1,6 +1,4 @@
-class SetupConfiguration < ActiveRecord::Base
-serialize :file_locations
-acts_as_tenant(:account)
+class SetupConfiguration
 
   def self.cdn?
     true
@@ -9,7 +7,7 @@ acts_as_tenant(:account)
   def self.app_is_local?
     ENV['APP_LOCATION'] != 'heroku' #'server' heroku
   end
-  def use_auto_video
+  def self.use_auto_video
     app_is_local?
   end
 

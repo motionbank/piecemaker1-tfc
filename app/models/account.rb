@@ -2,6 +2,12 @@ class Account < ActiveRecord::Base
   def bucket_name
     "piecemakerlite-#{name}"
   end
+  def s3_sub_folder
+    name
+  end
+  def use_auto_video
+    SetupConfiguration.use_auto_video
+  end
   def self.setup_new(name)
     name = name.downcase
     puts "creating account #{name}"
