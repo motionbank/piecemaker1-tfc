@@ -32,7 +32,7 @@ class ApplicationController < ActionController::Base
       if current_account
         set_current_tenant(current_account)
       end
-      @current = current_account
+      @current_account = current_account
     end
 
   # 
@@ -41,14 +41,14 @@ class ApplicationController < ActionController::Base
   # set_current_tenant_to(current_account)
   
   def show_tennant
-    @current ? @current.name : nil
+    @current_account ? @current_account.name : nil
   end
   def logged_in?
     !!current_user
   end
 
   def current_tennant
-    @current
+    @current_account
   end
   def authorized?(action=nil, resource=nil, *args)
     logged_in?
@@ -131,7 +131,7 @@ class ApplicationController < ActionController::Base
       end
 
     def set_time_zone
-      Time.zone = @current.time_zone
+      Time.zone = @current_account.time_zone
     end
 
     def user_has_right?(right)

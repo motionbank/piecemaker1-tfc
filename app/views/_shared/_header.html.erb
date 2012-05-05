@@ -2,7 +2,7 @@
   <div id='logo'>
     PIECEMAKERLITE <%= " // " + show_tennant if show_tennant %>
   </div>
-<%- if @current -%>
+<%- if @current_account -%>
   <div id = 'login_div'>
     <%= render(:partial => '_shared/login_info') -%>
   </div>

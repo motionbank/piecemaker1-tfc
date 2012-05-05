@@ -5,7 +5,7 @@ class AdministrationController < ApplicationController
    end
    
    def list_accounts
-     if @current.name == 'seed'
+     if @current_account.name == 'seed'
        @accounts = Account.all
      else
        redirect_to '/'

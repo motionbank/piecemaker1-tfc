@@ -3,7 +3,7 @@
     <li><%= link_to "#{current_user.messages.length} Messages", :controller => "message",:action => 'index', :id => current_user.id -%></li>
     <li><%= link_to 'Settings', '/pref' , :class => 'get' -%></li>
 <%- end -%>
-<%- if @current.name == 'seed' -%>
+<%- if @current_account.name == 'seed' -%>
 <li><%= link_to "Accounts", :controller => "administration", :action => 'list_accounts' -%></li>
 <li><%= link_to 'Main Admin', :controller => "administration", :action => 'main' -%></li>  
 <% end %>
