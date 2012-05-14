@@ -5,8 +5,8 @@ class Account < ActiveRecord::Base
   def s3_sub_folder
     name
   end
-  def use_auto_video
-    SetupConfiguration.use_auto_video
+  def use_auto_video?
+    SetupConfiguration.use_auto_video?
   end
   def self.setup_new(name)
     name = name.downcase

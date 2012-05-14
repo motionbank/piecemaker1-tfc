@@ -1,33 +1,39 @@
 class Video < ActiveRecord::Base
-  
+
   MOVIE_EXTENSIONS = %w[mov mp4 m4v flv]
-  
-  
+
+
   require 's3_paths'
   include S3Paths
-  
-  
+
+
   #belongs_to :event
   belongs_to :piece
   has_many :events,:dependent => :nullify, :order => :happened_at,:conditions => "state = 'normal'"
   scope :active, :conditions => "state = 'normal'"
 
   acts_as_tenant(:account)
-  
+
   after_save :rename_files_on_title_change###################
 
+  def self.uncompressed_dir
+    '/users/davidkern/Desktop'
+  end
+  def self.backup_dir
+    '/users/davidkern/Desktop'
+  end
 
   def rename_files_on_title_change###################
     if self.title_changed?
-     logger.info '******* title changed moving files'
-   end
+      logger.info '******* title changed moving files'
+    end
   end
   def update_from_params(params)
     self.title = params[:title]
     self.is_uploaded = true
     save
   end
-  
+
   def full_s3_path
     x = self.s3_path.split('.')
     x[1] = x[1] == 'flv' ? 'flv' : 'mp4'
@@ -46,13 +52,13 @@ class Video < ActiveRecord::Base
     return false unless base_name
     split = base_name.split('_').first
     return false unless split && split =~ /\d\d\d\d-\d\d-\d\d/
-    split
+      split
   end
   def date_serial_number
     return false unless base_name
     split = base_name.split('_').second
     return false unless split && split =~ /\d\d\d/
-    split
+      split
   end
   def title_string
     return false unless base_name
@@ -77,13 +83,13 @@ class Video < ActiveRecord::Base
   end
 
   def self.parse_date_from_title(title)
-      base_title = title.split('.').first
-      date_part = base_title.split('_').first
-      if date_part =~ /\d\d\d\d-\d\d-\d\d/ 
-        date_part.to_date
-      else
-        nil
-      end
+    base_title = title.split('.').first
+    date_part = base_title.split('_').first
+    if date_part =~ /\d\d\d\d-\d\d-\d\d/ 
+      date_part.to_date
+    else
+      nil
+    end
   end
   def times
     tims = events.map{|x| [x.video_start_time,x.duration,x.id]}
@@ -94,26 +100,26 @@ class Video < ActiveRecord::Base
     events.select{|x| x.happened_at - recorded_at < time}.last
   end
   def set_new_title(piece)
-    
+
     time = Time.now.strftime("%Y-%m-%d")
-      last_dvd = piece.videos.last
-      if last_dvd && last_dvd.title
-        last_title = last_dvd.title.split('_')
-        last_time = last_title[0]
-        last_number = last_title[1].to_i
-        if last_time == time #same day #increment serial number
-          new_number = last_number + 1
-        else #new day number = 1
-          new_number = 1
-        end
-        
-      else #no dvd make a new title
+    last_dvd = piece.videos.last
+    if last_dvd && last_dvd.title
+      last_title = last_dvd.title.split('_')
+      last_time = last_title[0]
+      last_number = last_title[1].to_i
+      if last_time == time #same day #increment serial number
+        new_number = last_number + 1
+      else #new day number = 1
         new_number = 1
       end
-      new_title = time + '_' + Event.pad_number(new_number)
-      new_title << '_' + piece.short_name + '.mp4'
-      self.title = new_title
-    
+
+    else #no dvd make a new title
+      new_number = 1
+    end
+    new_title = time + '_' + Event.pad_number(new_number)
+    new_title << '_' + piece.short_name + '.mp4'
+    self.title = new_title
+
   end
 
 
@@ -151,10 +157,10 @@ class Video < ActiveRecord::Base
   def meta_data_present
     meta_data ? 'True' : 'False'
   end
-    
+
   def self.fix_titles(from, to)
     vids = all.select{|x| x.title =~ /#{Regexp.escape(from)}/}
-    puts "fixing #{vids.length} files"
+      puts "fixing #{vids.length} files"
     vids.each do |vid| 
       new_title = vid.title.gsub(from,to)
       puts "renaming #{vid.title}"
@@ -168,8 +174,80 @@ class Video < ActiveRecord::Base
     delete_s3
     destroy
   end
+
+
+  def self.prepare_recording
+    prep = <<ENDOT
+do shell script "defaults write com.apple.QuickTimePlayerX NSNavLastRootDirectory ~/Desktop"
+
+tell application "QuickTime Player"
+close every document
+new movie recording
+end tell
+ENDOT
+    system "osascript -e '#{prep}'"
+  end
+
+
+  def self.start_recording
+    start = <<ENDOT
+tell application "QuickTime Player"
+start every document
+activate
+end tell
+ENDOT
+    system "osascript -e '#{start}'"
+  end
+
+
+  def self.stop_recording(new_file_name = nil)
+stop = <<ENDOT
+tell application "QuickTime Player"
+try
+  stop every document
+  set y to file of first document
+  y
+on error
+  return "error"
+end try
+end tell
+ENDOT
+    orig_file_path = `osascript -e '#{stop}'`.chomp
+    if orig_file_path != 'error'
+      file_path = orig_file_path.gsub(' ', '\ ').split(':')
+      file_path.slice!(0) #take off first part of path, I will put in a / later
+      qt_file_name = file_path.pop #original name given by quicktime
+      file_path = '/' + file_path.join('/')
+      full_qt_file_name = file_path + '/' + qt_file_name
+      new_file_name ||= qt_file_name
+      new_name = Video.uncompressed_dir + new_file_name
+      backup_name = Video.backup_dir + new_file_name
+      if true# system "which qt-fast"
+        system "/usr/local/bin/qt-fast #{full_qt_file_name} #{new_name}" # move output to temp and rename
+        system "mv #{full_qt_file_name} #{backup_name}"
+      else
+        system "cp #{full_qt_file_name} #{backup_name}"
+        system "mv #{full_qt_file_name} #{new_name}" # move output to temp and rename
+      end
+      qt_file_name
+    else
+      'error'
+    end
 end
 
+
+  #def rename_quicktime_and_queue_processing(qt_title)
+    #qtplayer_output = Video.uncompressed_dir + '/' + qt_title
+    #system "mv #{qtplayer_output} #{full_uncompressed_path}" # move output to temp and rename
+    #Video.send_later(:do_moov_atom,id,full_uncompressed_path,full_temp_path)
+    ##Video.send_later(:backup_and_compress, id, full_backup_path, full_compressed_path,full_uncompressed_path,full_archive_path,full_temp_path)
+  #end
+
+
+
+
+
+end
 
 # == Schema Information
 #

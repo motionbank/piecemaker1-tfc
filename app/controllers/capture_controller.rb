@@ -578,6 +578,7 @@ class CaptureController < ApplicationController
       @create = true
       @video = Video.new  
       @video.set_new_title(piece)
+      Video.prepare_recording if true
       respond_to do |format|
         format.html
         format.js {render :partial => 'new_auto_video', :layout => false} 
@@ -594,6 +595,8 @@ class CaptureController < ApplicationController
     current_piece.videos << @video
     @dvd_quick = 'out'
     @truncate = :less unless @truncate == :none
+    result = Video.start_recording if current_tennant.use_auto_video?
+
     respond_to do |format|
       format.html {redirect_to :action => 'present', :id => session[:pieceid] }
       format.js {render :action => 'confirm_video_in', :layout => false}
@@ -607,6 +610,14 @@ class CaptureController < ApplicationController
     @video.duration = Time.now - @video.recorded_at
     @video.save
     @truncate = :less unless @truncate == :none
+    result = Video.stop_recording(@video.title) if current_tennant.use_auto_video?
+      if result && result != 'error'
+        #@video.rename_quicktime_and_queue_processing(result)
+        @flash_message = "#{result} stored as #{@video.title}"
+      else
+        @flash_message = "Couldn't store #{result}"
+      end
+
     respond_to do |format|
       format.html {redirect_to :action => 'present', :id => session[:pieceid] }
       format.js {render :action => 'confirm_video_out', :layout => false}

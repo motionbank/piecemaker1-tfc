@@ -7,7 +7,7 @@ class SetupConfiguration
   def self.app_is_local?
     ENV['APP_LOCATION'] != 'heroku' #'server' heroku
   end
-  def self.use_auto_video
+  def self.use_auto_video?
     app_is_local?
   end
 

@@ -25,14 +25,14 @@ class ApplicationController < ActionController::Base
 
     def your_method_that_finds_the_current_tenant
       if SetupConfiguration.app_is_local? 
-        current_account = Account.find(1)
+        account = Account.find(1)
       else
-        current_account = Account.find_by_name(request.subdomain.downcase)
+        account = Account.find_by_name(request.subdomain.downcase)
       end
-      if current_account
-        set_current_tenant(current_account)
+      if account
+        set_current_tenant(account)
       end
-      @current_account = current_account
+      @current_account = account
     end
 
   # 
