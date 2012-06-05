@@ -22,18 +22,19 @@
 #   encoding: utf8
 #   socket: /tmp/mysql.sock
 
-development:
-  adapter: postgresql
-  database: piecemaker
-  username: davidkern
-  host: localhost
-  password: swordfis
-  encoding: utf8
-  socket: /var/pgsql_socket/.s.PGSQL.5432
 # development:
-#   adapter: sqlite3
-#   database: db/databases/piecemaker_starter
+#   adapter: postgresql
+#   database: piecemaker
+#   username: davidkern
+#   host: localhost
+#   password: swordfis
 #   encoding: utf8
+#   socket: /var/pgsql_socket/.s.PGSQL.5432
+development:
+  adapter: sqlite3
+  database: db/databases/piecemaker_prod
+  encoding: utf8
+
 # production:
 #   adapter: sqlite3
 #   database: db/databases/piecemaker_starter
