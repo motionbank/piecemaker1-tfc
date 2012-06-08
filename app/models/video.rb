@@ -41,6 +41,9 @@ class Video < ActiveRecord::Base
   def self.backup_dir
     Rails.root.to_s + '/public/video'
   end
+  def full_local_alias
+    '/video/' + title
+  end
 
   def rename_files_on_title_change###################
     if self.title_changed?
@@ -171,7 +174,7 @@ class Video < ActiveRecord::Base
   end
 
   def viewable?
-    is_uploaded
+    true#is_uploaded
   end
   def meta_data_present
     meta_data ? 'True' : 'False'
@@ -239,7 +242,7 @@ ENDOT
       file_path = '/' + file_path.join('/')
       full_qt_file_name = file_path + '/' + qt_file_name
       new_file_name ||= qt_file_name
-      new_name = Video.uncompressed_dir + '/'+new_file_name
+      new_name = Video.uncompressed_dir + '/' + new_file_name
       backup_name = Video.backup_dir + new_file_name
       if false#true# system "which qt-fast"
         system "/usr/local/bin/qt-fast #{full_qt_file_name} #{new_name}" # move output to temp and rename
