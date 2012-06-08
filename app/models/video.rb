@@ -239,7 +239,7 @@ ENDOT
       file_path = '/' + file_path.join('/')
       full_qt_file_name = file_path + '/' + qt_file_name
       new_file_name ||= qt_file_name
-      new_name = Video.uncompressed_dir + new_file_name
+      new_name = Video.uncompressed_dir + '/'+new_file_name
       backup_name = Video.backup_dir + new_file_name
       if false#true# system "which qt-fast"
         system "/usr/local/bin/qt-fast #{full_qt_file_name} #{new_name}" # move output to temp and rename
