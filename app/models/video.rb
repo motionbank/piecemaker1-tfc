@@ -36,10 +36,10 @@ class Video < ActiveRecord::Base
 
 
   def self.uncompressed_dir
-    '/users/davidkern/Desktop'
+    Rails.root + '/public/videos'
   end
   def self.backup_dir
-    '/users/davidkern/Desktop'
+    Rails.root + '/public/videos'
   end
 
   def rename_files_on_title_change###################
