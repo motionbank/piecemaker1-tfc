@@ -36,10 +36,10 @@ class Video < ActiveRecord::Base
 
 
   def self.uncompressed_dir
-    Rails.root + '/public/videos'
+    Rails.root.to_s + '/public/video'
   end
   def self.backup_dir
-    Rails.root + '/public/videos'
+    Rails.root.to_s + '/public/video'
   end
 
   def rename_files_on_title_change###################
@@ -241,11 +241,11 @@ ENDOT
       new_file_name ||= qt_file_name
       new_name = Video.uncompressed_dir + new_file_name
       backup_name = Video.backup_dir + new_file_name
-      if true# system "which qt-fast"
+      if falsetrue# system "which qt-fast"
         system "/usr/local/bin/qt-fast #{full_qt_file_name} #{new_name}" # move output to temp and rename
         system "mv #{full_qt_file_name} #{backup_name}"
       else
-        system "cp #{full_qt_file_name} #{backup_name}"
+        #system "cp #{full_qt_file_name} #{backup_name}"
         system "mv #{full_qt_file_name} #{new_name}" # move output to temp and rename
       end
       qt_file_name
