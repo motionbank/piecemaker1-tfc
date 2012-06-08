@@ -241,7 +241,7 @@ ENDOT
       new_file_name ||= qt_file_name
       new_name = Video.uncompressed_dir + new_file_name
       backup_name = Video.backup_dir + new_file_name
-      if falsetrue# system "which qt-fast"
+      if false#true# system "which qt-fast"
         system "/usr/local/bin/qt-fast #{full_qt_file_name} #{new_name}" # move output to temp and rename
         system "mv #{full_qt_file_name} #{backup_name}"
       else
