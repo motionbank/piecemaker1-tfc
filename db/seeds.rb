@@ -1,1 +1,1 @@
-Account.setup_new('seed_account')
+Account.setup_new('seed')

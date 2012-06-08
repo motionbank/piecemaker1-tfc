@@ -533,7 +533,9 @@ class Event < ActiveRecord::Base
     end
   end
 
-  
+  def duration
+    compute_duration
+  end
   def compute_duration
     next_event = Event.where("piece_id = ?",piece_id).order('happened_at')
     next_event = next_event.select{|x| x.happened_at > happened_at}.first
@@ -541,13 +543,13 @@ class Event < ActiveRecord::Base
       if next_event && next_event.video == video
         d = next_event.happened_at - happened_at
       else
-        d = video.recorded_at + video.duration - happened_at
+        d = (video.recorded_at + video.duration - happened_at).to_i
       end
     else
       if next_event
         d = next_event.happened_at - happened_at
       else
-        d = happened_at.at_midnight + 1.day - happened_at
+        d = (happened_at.at_midnight + 1.day - happened_at).to_i
       end
     end
   end

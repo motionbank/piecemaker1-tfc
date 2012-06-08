@@ -122,7 +122,7 @@ ActiveRecord::Schema.define(:version => 20120429114245) do
   add_index "blocks", ["track_id"], :name => "index_blocks_on_track_id"
 
   create_table "castings", :force => true do |t|
-    t.integer   "performer_id",                   :null => false
+    t.integer   "user_id",                   :null => false
     t.integer   "piece_id",                       :null => false
     t.boolean   "is_original",  :default => true
     t.integer   "cast_number",  :default => 1
@@ -130,7 +130,7 @@ ActiveRecord::Schema.define(:version => 20120429114245) do
   end
 
   add_index "castings", ["id"], :name => "index_castings_on_id"
-  add_index "castings", ["performer_id"], :name => "index_castings_on_performer_id"
+  add_index "castings", ["user_id"], :name => "index_castings_on_user_id"
   add_index "castings", ["piece_id"], :name => "index_castings_on_piece_id"
 
   create_table "configurations", :force => true do |t|

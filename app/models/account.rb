@@ -30,7 +30,7 @@ class Account < ActiveRecord::Base
     puts "password: #{uname}"
     puts "creating piece for #{name}"
     Piece.create(
-    :title => 'New Piece',
+    :title => 'First Piece',
     :short_name => 'New')
     puts "created piece for #{name}"
 
