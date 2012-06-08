@@ -9,12 +9,31 @@ class Video < ActiveRecord::Base
 
   #belongs_to :event
   belongs_to :piece
+
+  has_many :video_recordings
   has_many :events,:dependent => :nullify, :order => :happened_at,:conditions => "state = 'normal'"
   scope :active, :conditions => "state = 'normal'"
 
   acts_as_tenant(:account)
 
   after_save :rename_files_on_title_change###################
+
+  def self.fix_recordings
+    all.each do |vid|
+      if vid.video_recordings.length == 1
+        #vid.piece_id = vid.video_recordings.first.piece_id
+        #vid.save
+        vid.video_recordings.first.destroy
+      end
+    end
+  end
+  def self.fix_uploaded
+    all.each do |vid|
+      vid.is_uploaded = true if vid.fn_s3 == '.mp4'
+      vid.save
+    end
+  end
+
 
   def self.uncompressed_dir
     '/users/davidkern/Desktop'

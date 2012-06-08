@@ -12,13 +12,17 @@
 #
 
 class Piece < ActiveRecord::Base
+  has_many :video_recordings
+
   has_many :castings, :dependent => :destroy
   has_many :performers, :through => :castings, :source => :user
   has_many :meta_infos, :dependent => :destroy
   has_many :documents, :dependent => :destroy
   has_many :events, :dependent => :destroy, :order => 'happened_at'
   has_many :videos, :dependent => :destroy, :order => 'recorded_at'
- # has_many :recordings, :through => :video_recordings, :source => :video, :uniq => true, :order => :recorded_at, :include => {:events => [:sub_scenes,:tags,:notes,:video]}
+ 
+  has_many :recordings, :through => :video_recordings, :source => :video, :uniq => true
+  
   #has_many :small_recordings, :through => :video_recordings, :source => :video, :uniq => true, :order => :recorded_at, :include => {:events => [:sub_scenes,:tags,:notes,:video]}
  # has_many :ev_recordings, :through => :video_recordings, :source => :video, :uniq => true, :order => :recorded_at, :include => [:events]
  # has_many :clean_recordings, :through => :video_recordings, :source => :video, :uniq => true, :order => :recorded_at
@@ -26,6 +30,8 @@ class Piece < ActiveRecord::Base
   has_many :photos, :dependent => :destroy
   has_many :tags
   acts_as_tenant(:account)
+
+
 
   def latest_scene(pos = nil) #tested
     scenes = self.events.sort_by{|x| x.happened_at}.select{|x| x.event_type == 'scene'}
