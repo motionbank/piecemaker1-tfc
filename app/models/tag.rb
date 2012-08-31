@@ -11,5 +11,5 @@
 class Tag < ActiveRecord::Base
    has_and_belongs_to_many :events
    belongs_to :piece
-   #acts_as_tenant(:account)
+   acts_as_tenant(:account)
 end

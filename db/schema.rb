@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120429114245) do
+ActiveRecord::Schema.define(:version => 20120829104407) do
 
   create_table "accounts", :force => true do |t|
     t.string   "name"
@@ -20,109 +20,8 @@ ActiveRecord::Schema.define(:version => 20120429114245) do
     t.string   "time_zone",  :default => "Berlin"
   end
 
-  create_table "archive_snapshots", :force => true do |t|
-    t.text      "snapshot"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-  end
-
-  create_table "assemblages", :force => true do |t|
-    t.integer   "piece_id"
-    t.timestamp "created_at"
-    t.string    "created_by"
-    t.text      "block_list"
-    t.string    "title"
-    t.integer   "piece_duration", :default => 3600
-    t.integer   "pre_roll",       :default => 0
-    t.integer   "start_time",     :default => 0
-    t.integer   "post_roll",      :default => 0
-    t.boolean   "grid",           :default => true
-    t.boolean   "overlap_check",  :default => false
-    t.boolean   "constrained",    :default => false
-    t.boolean   "warning",        :default => false
-    t.boolean   "track_cues",     :default => true
-    t.boolean   "track_undos",    :default => true
-    t.timestamp "updated_at"
-  end
-
-  create_table "block_redos", :force => true do |t|
-    t.text      "blocks"
-    t.integer   "position"
-    t.integer   "assemblage_id"
-    t.string    "edit_type"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-  end
-
-  add_index "block_redos", ["assemblage_id"], :name => "index_block_redos_on_assemblage_id"
-
-  create_table "block_undos", :force => true do |t|
-    t.text      "blocks"
-    t.integer   "position"
-    t.integer   "assemblage_id"
-    t.string    "edit_type"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-    t.text      "clone_data"
-  end
-
-  add_index "block_undos", ["assemblage_id"], :name => "index_block_undos_on_assemblage_id"
-
-  create_table "blocklists", :force => true do |t|
-    t.timestamp "created_at"
-    t.string    "created_by"
-    t.string    "event_id"
-    t.string    "title"
-    t.integer   "duration",   :default => 120
-    t.string    "div_class",  :default => "e9f"
-    t.integer   "left",       :default => 400
-    t.integer   "used",       :default => 0
-    t.integer   "piece_id"
-    t.text      "cast"
-    t.boolean   "dependent",  :default => false
-    t.string    "event_type", :default => "dance"
-    t.timestamp "updated_at"
-  end
-
-  add_index "blocklists", ["id"], :name => "index_blocklists_on_id"
-  add_index "blocklists", ["piece_id"], :name => "index_blocklists_on_piece_id"
-
-  create_table "blocks", :force => true do |t|
-    t.timestamp "created_at"
-    t.string    "created_by"
-    t.integer   "event_id"
-    t.string    "title"
-    t.string    "parent_id"
-    t.timestamp "updated_at"
-    t.integer   "start_time"
-    t.integer   "duration"
-    t.integer   "left"
-    t.string    "div_class",     :default => "e9f"
-    t.string    "description"
-    t.string    "modified_by"
-    t.integer   "grouped",       :default => 0
-    t.integer   "blocklist_id"
-    t.integer   "assemblage_id"
-    t.integer   "track_id"
-    t.text      "cast"
-    t.integer   "z_index",       :default => 100
-    t.integer   "cued_by_id"
-    t.boolean   "is_clone",      :default => false
-    t.boolean   "dependent",     :default => false
-    t.string    "block_type"
-    t.integer   "scene_id"
-  end
-
-  add_index "blocks", ["assemblage_id"], :name => "index_blocks_on_assemblage_id"
-  add_index "blocks", ["blocklist_id"], :name => "index_blocks_on_blocklist_id"
-  add_index "blocks", ["cued_by_id"], :name => "index_blocks_on_cued_by_id"
-  add_index "blocks", ["event_id"], :name => "index_blocks_on_event_id"
-  add_index "blocks", ["id"], :name => "index_blocks_on_id"
-  add_index "blocks", ["scene_id"], :name => "index_blocks_on_scene_id"
-  add_index "blocks", ["track_id"], :name => "index_blocks_on_track_id"
-
   create_table "castings", :force => true do |t|
-    t.integer   "user_id",                   :null => false
+    t.integer   "performer_id",                   :null => false
     t.integer   "piece_id",                       :null => false
     t.boolean   "is_original",  :default => true
     t.integer   "cast_number",  :default => 1
@@ -130,7 +29,7 @@ ActiveRecord::Schema.define(:version => 20120429114245) do
   end
 
   add_index "castings", ["id"], :name => "index_castings_on_id"
-  add_index "castings", ["user_id"], :name => "index_castings_on_user_id"
+  add_index "castings", ["performer_id"], :name => "index_castings_on_performer_id"
   add_index "castings", ["piece_id"], :name => "index_castings_on_piece_id"
 
   create_table "configurations", :force => true do |t|
@@ -151,17 +50,6 @@ ActiveRecord::Schema.define(:version => 20120429114245) do
     t.integer   "max_entrance_time"
     t.integer   "account_id"
   end
-
-  create_table "cueings", :force => true do |t|
-    t.integer   "cuer_id"
-    t.integer   "cuee_id"
-    t.string    "trigger"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-  end
-
-  add_index "cueings", ["cuee_id"], :name => "index_cueings_on_cuee_id"
-  add_index "cueings", ["cuer_id"], :name => "index_cueings_on_cuer_id"
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer   "priority",   :default => 0
@@ -272,29 +160,6 @@ ActiveRecord::Schema.define(:version => 20120429114245) do
   add_index "notes", ["event_id"], :name => "index_notes_on_event_id"
   add_index "notes", ["id"], :name => "index_notes_on_id"
 
-  create_table "performances", :force => true do |t|
-    t.integer   "location_id"
-    t.timestamp "performance_date"
-    t.string    "title"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-  end
-
-  add_index "performances", ["location_id"], :name => "index_performances_on_location_id"
-
-  create_table "performers", :force => true do |t|
-    t.string    "first_name"
-    t.string    "last_name"
-    t.string    "short_name"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-    t.integer   "user_id"
-    t.boolean   "is_current", :default => true
-  end
-
-  add_index "performers", ["id"], :name => "index_performers_on_id"
-  add_index "performers", ["user_id"], :name => "index_performers_on_user_id"
-
   create_table "photos", :force => true do |t|
     t.string    "picture_file_name"
     t.string    "picture_content_type"
@@ -322,24 +187,6 @@ ActiveRecord::Schema.define(:version => 20120429114245) do
 
   add_index "pieces", ["id"], :name => "index_pieces_on_id"
 
-  create_table "scenes", :force => true do |t|
-    t.string    "title"
-    t.integer   "assemblage_id"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-  end
-
-  add_index "scenes", ["assemblage_id"], :name => "index_scenes_on_assemblage_id"
-  add_index "scenes", ["id"], :name => "index_scenes_on_id"
-
-  create_table "showings", :force => true do |t|
-    t.integer "piece_id"
-    t.integer "performance_id"
-  end
-
-  add_index "showings", ["performance_id"], :name => "index_showings_on_performance_id"
-  add_index "showings", ["piece_id"], :name => "index_showings_on_piece_id"
-
   create_table "sub_scenes", :force => true do |t|
     t.string    "title"
     t.text      "description"
@@ -362,19 +209,6 @@ ActiveRecord::Schema.define(:version => 20120429114245) do
   add_index "tags", ["id"], :name => "index_tags_on_id"
   add_index "tags", ["piece_id"], :name => "index_tags_on_piece_id"
 
-  create_table "tracks", :force => true do |t|
-    t.string    "title"
-    t.integer   "assemblage_id"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-    t.string    "color",         :default => "99c"
-    t.integer   "position"
-    t.string    "track_type"
-  end
-
-  add_index "tracks", ["assemblage_id"], :name => "index_tracks_on_assemblage_id"
-  add_index "tracks", ["id"], :name => "index_tracks_on_id"
-
   create_table "users", :force => true do |t|
     t.string   "login",                     :limit => 40
     t.string   "name",                      :limit => 100
@@ -386,7 +220,6 @@ ActiveRecord::Schema.define(:version => 20120429114245) do
     t.string   "remember_token",            :limit => 40
     t.datetime "remember_token_expires_at"
     t.integer  "role_id",                                  :default => 1
-    t.boolean  "is_performer",                             :default => false
     t.string   "role_name"
     t.boolean  "notes_on",                                 :default => true
     t.boolean  "markers_on",                               :default => true
@@ -397,23 +230,13 @@ ActiveRecord::Schema.define(:version => 20120429114245) do
     t.text     "scratchpad"
     t.string   "first_name"
     t.string   "last_name"
+    t.boolean  "is_performer",                             :default => true
     t.string   "password_digest"
     t.integer  "account_id"
   end
 
   add_index "users", ["id"], :name => "index_users_on_id"
   add_index "users", ["role_id"], :name => "index_users_on_role_id"
-
-  create_table "video_recordings", :force => true do |t|
-    t.integer   "piece_id"
-    t.integer   "video_id"
-    t.boolean   "primary",    :default => false
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-  end
-
-  add_index "video_recordings", ["piece_id"], :name => "index_video_recordings_on_piece_id"
-  add_index "video_recordings", ["video_id"], :name => "index_video_recordings_on_video_id"
 
   create_table "videos", :force => true do |t|
     t.string   "title"

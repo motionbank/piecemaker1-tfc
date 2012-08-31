@@ -490,7 +490,8 @@ a.bolda{
 	left:4px;
 	width:110px;
 	height:220px;
-	overflow:scroll
+      overflow:scroll;
+	overflow-y:scroll;
 }
 #dates a{
 	font-family:courier;

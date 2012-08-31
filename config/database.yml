@@ -32,13 +32,13 @@
 #   socket: /var/pgsql_socket/.s.PGSQL.5432
 development:
   adapter: sqlite3
-  database: db/databases/piecemaker_palucca
+  database: db/databases/piecemaker-tfc
   encoding: utf8
 
-production:
-  adapter: sqlite3
-  database: db/databases/piecemaker_palucca
-  encoding: utf8
+# production:
+#   adapter: sqlite3
+#   database: db/databases/piecemaker_prod
+#   encoding: utf8
 
 # production:
 #   adapter: sqlite3

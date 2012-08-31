@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
 
 
     def your_method_that_finds_the_current_tenant
-      if SetupConfiguration.app_is_local? 
+      if SetupConfiguration.app_is_local?  || Account.all.length == 1
         account = Account.find(1)
       else
         account = Account.find_by_name(request.subdomain.downcase)

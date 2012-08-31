@@ -9,13 +9,37 @@ class User < ActiveRecord::Base
   
   validates_presence_of     :login
   validates_length_of       :login,    :within => 3..40
-  validates_uniqueness_of   :login,    :case_sensitive => false, :message => ' - There can\'t be two users with the same Username.'
+  #validates_uniqueness_of   :login,    :case_sensitive => false, :message => ' - There can\'t be two users with the same Username.'
 
   scope :performers, where(:is_performer => true)
 
-  attr_accessible :login, :email, :password, :password_confirmation, :is_performer, :role_name, :scratchpad,:short_name, :first_name
+  #attr_accessible :login, :email, :password, :password_confirmation, :is_performer, :role_name, :scratchpad,:short_name, :first_name
 
   before_create { generate_token(:remember_token) }
+  
+  def self.set_performer
+    all.each do |u|
+      u.is_performer = u.performer
+      u.save
+    end
+  end
+
+
+
+  def self.create_new_ones
+    User.all.each do |x|
+      pass = x.login.length >=4 ? x.login : x.login+x.login
+      User.create(
+        :login => x.login,
+        :password => pass,
+        :password_confirmation => pass,
+        :role_name => x.role_name,
+        :is_performer => x.is_performer,
+        :account_id => 1
+        )
+    end
+  end
+
   def self.authenticate(login, password)
     u = find_by_login(login) # need to get the salt
     u && u.authenticated?(password) ? u : nil

@@ -18,11 +18,14 @@ class Video < ActiveRecord::Base
 
   after_save :rename_files_on_title_change###################
 
+## this is to help migrations
+
+
   def self.fix_recordings
     all.each do |vid|
       if vid.video_recordings.length == 1
-        #vid.piece_id = vid.video_recordings.first.piece_id
-        #vid.save
+        vid.piece_id = vid.video_recordings.first.piece_id
+        vid.save
         vid.video_recordings.first.destroy
       end
     end
@@ -33,6 +36,10 @@ class Video < ActiveRecord::Base
       vid.save
     end
   end
+
+
+## end of migration stuff
+
 
 
   def self.uncompressed_dir

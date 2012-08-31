@@ -35,4 +35,54 @@ class Account < ActiveRecord::Base
     puts "created piece for #{name}"
 
   end
+  def self.accountize
+    User.all.each do |x|
+      x.account_id = 1
+      x.save
+    end
+    Event.all.each do |x|
+      x.account_id = 1
+      x.save
+    end
+    Video.all.each do |x|
+      x.account_id = 1
+      x.save
+    end
+    SubScene.all.each do |x|
+      x.account_id = 1
+      x.save
+    end 
+    Piece.all.each do |x|
+      x.account_id = 1
+      x.save
+    end
+    DelayedJob.all.each do |x|
+      x.account_id = 1
+      x.save
+    end
+    Document.all.each do |x|
+      x.account_id = 1
+      x.save
+    end  
+    Message.all.each do |x|
+      x.account_id = 1
+      x.save
+    end    
+    MetaInfo.all.each do |x|
+      x.account_id = 1
+      x.save
+    end    
+    Note.all.each do |x|
+      x.account_id = 1
+      x.save
+    end
+    Photo.all.each do |x|
+      x.account_id = 1
+      x.save
+    end
+    Tag.all.each do |x|
+      x.account_id = 1
+      x.save
+    end
+  end
 end
