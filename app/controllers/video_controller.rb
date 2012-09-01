@@ -7,13 +7,15 @@ class VideoController < ApplicationController
     end
 
     def viewer
+      # flow type = app is local => and file present local_plain
+      # else is uploaded -> s3
+      #else false
       @flow_type = false
       @video = Video.find(params[:id])
       @event = Event.find(params[:event_id]) if params[:event_id]
       @piece = Piece.find(params[:piece_id]) if params[:piece_id]
       @ur = request.host
-      @flow_type = 'local_plain'
-      #@flow_type = @video.fn_s3 ? 'rtmp' : 'file'
+      @flow_type = @video.is_uploaded ? 's3' : 'local_plain'
       if @flow_type
         respond_to do |format|
           format.html

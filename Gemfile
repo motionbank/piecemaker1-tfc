@@ -7,7 +7,7 @@ gem 'acts-as-list', :require => 'acts_as_list'
 gem "will_paginate", "~> 3.0.3" 
 gem 'haml'
 gem 'sass'
-gem "heroku", "~> 2.21.3"
+#gem "heroku", "~> 2.21.3"
 gem "pg", "~> 0.13.2"
 #gem 'rake', '0.9.2.2'
 #gem 'rdoc'

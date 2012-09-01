@@ -20,7 +20,14 @@ class Video < ActiveRecord::Base
 
 ## this is to help migrations
 
-
+  def self.add_suffixes
+    all.each do |x|
+      if x.title && x.title.split('.') != 'mp4'
+        x.title = x.title + '.mp4'
+        x.save
+      end
+    end
+  end
   def self.fix_recordings
     all.each do |vid|
       if vid.video_recordings.length == 1
