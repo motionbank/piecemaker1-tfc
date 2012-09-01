@@ -32,25 +32,6 @@ ActiveRecord::Schema.define(:version => 20120829104407) do
   add_index "castings", ["performer_id"], :name => "index_castings_on_performer_id"
   add_index "castings", ["piece_id"], :name => "index_castings_on_piece_id"
 
-  create_table "configurations", :force => true do |t|
-    t.integer   "location_id"
-    t.string    "time_zone"
-    t.boolean   "use_auto_video",    :default => false
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-    t.boolean   "read_only",         :default => false
-    t.boolean   "use_heroku",        :default => false
-    t.string    "s3_sub_folder"
-    t.integer   "default_piece_id"
-    t.text      "file_locations"
-    t.integer   "desired_on_time"
-    t.integer   "min_entrances"
-    t.integer   "max_entrances"
-    t.integer   "min_entrance_time"
-    t.integer   "max_entrance_time"
-    t.integer   "account_id"
-  end
-
   create_table "delayed_jobs", :force => true do |t|
     t.integer   "priority",   :default => 0
     t.integer   "attempts",   :default => 0
@@ -186,6 +167,25 @@ ActiveRecord::Schema.define(:version => 20120829104407) do
   end
 
   add_index "pieces", ["id"], :name => "index_pieces_on_id"
+
+  create_table "setup_configurations", :force => true do |t|
+    t.integer   "location_id"
+    t.string    "time_zone"
+    t.boolean   "use_auto_video",    :default => false
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
+    t.boolean   "read_only",         :default => false
+    t.boolean   "use_heroku",        :default => false
+    t.string    "s3_sub_folder"
+    t.integer   "default_piece_id"
+    t.text      "file_locations"
+    t.integer   "desired_on_time"
+    t.integer   "min_entrances"
+    t.integer   "max_entrances"
+    t.integer   "min_entrance_time"
+    t.integer   "max_entrance_time"
+    t.integer   "account_id"
+  end
 
   create_table "sub_scenes", :force => true do |t|
     t.string    "title"

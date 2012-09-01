@@ -11,12 +11,14 @@ class ApplicationController < ActionController::Base
     
     before_filter :login_required, :except => [:login, :welcome, :documentation, :contact,:update_vid_time,:mark_from_marker_list,:quick_piece,:pieces_for_account]
     set_current_tenant_through_filter
-    before_filter :your_method_that_finds_the_current_tenant
     
+    before_filter :your_method_that_finds_the_current_tenant
     before_filter :set_defaults, :except => [:authorize,:update_vid_time,:fill_video_menu,:fill_extra_menu,:quick_marker,:mark_from_marker_list]
     before_filter :catch_came_from
-    helper_method :user_has_right?, :duration_to_hash, :duration_hash_to_string, :video_in?, :yield_authenticity_token, :current_piece, :s3_bucket, :came_from_or, :show_tennant, :current_tennant
 
+    helper_method :user_has_right?, :duration_to_hash, :duration_hash_to_string, :video_in?
+    helper_method :yield_authenticity_token, :current_piece, :s3_bucket, :came_from_or
+    helper_method :show_tennant, :current_tennant
 ##################
   # def current_user
   #   @cu ||= User.find(1)
