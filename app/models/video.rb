@@ -10,7 +10,7 @@ class Video < ActiveRecord::Base
   #belongs_to :event
   belongs_to :piece
 
-  has_many :video_recordings
+  #has_many :video_recordings
   has_many :events,:dependent => :nullify, :order => :happened_at,:conditions => "state = 'normal'"
   scope :active, :conditions => "state = 'normal'"
 
@@ -50,13 +50,13 @@ class Video < ActiveRecord::Base
 
 
   def self.uncompressed_dir
-    Rails.root.to_s + '/public/video'
+    Rails.root.to_s + '/public/video/full'
   end
   def self.backup_dir
-    Rails.root.to_s + '/public/video'
+    Rails.root.to_s + '/public/video/back'
   end
   def full_local_alias
-    '/video/' + title
+    '/video/full/' + title
   end
 
   def rename_files_on_title_change###################

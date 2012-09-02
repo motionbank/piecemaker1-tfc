@@ -33,7 +33,7 @@ module S3Paths
           logger.warn('found it')
           AWS::S3::S3Object.delete(s3_path(style), bucket)
         else
-          logger.warn("******** cant find #{s3_path(style)}")
+          logger.warn("******** cant find #{s3_path(style)} on s3")
           message = "Deleted item id: #{id} but i couldn't find the s3 object #{s3_path(style)}"
           Message.create(
           :user_id => 1,
