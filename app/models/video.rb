@@ -22,7 +22,7 @@ class Video < ActiveRecord::Base
 
   def self.add_suffixes
     all.each do |x|
-      if x.title && x.title.split('.') != 'mp4'
+      if x.title
         x.title = x.title + '.mp4'
         x.save
       end
