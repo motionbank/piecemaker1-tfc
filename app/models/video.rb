@@ -22,7 +22,7 @@ class Video < ActiveRecord::Base
 
   def self.add_suffixes
     all.each do |x|
-      if x.title
+      if x.title && x.title.split('.') != 'mp4'
         x.title = x.title + '.mp4'
         x.save
       end
@@ -59,6 +59,10 @@ class Video < ActiveRecord::Base
     '/video/full/' + title
   end
 
+  def online?
+    file_path = Rails.root.to_s + '/public' + full_local_alias
+    File.exists? file_path
+  end
   def rename_files_on_title_change###################
     if self.title_changed?
       logger.info '******* title changed moving files'

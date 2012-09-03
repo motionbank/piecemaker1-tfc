@@ -26,9 +26,9 @@ class S3Config
       :access_key_id     => S3Config.access_key_id,
       :secret_access_key => S3Config.secret_access_key
         )
-      logger.warn('****** connected to s3')
+      puts('****** connected to s3')
     rescue
-      logger.warn('****** failed to connected to s3')
+      puts('****** failed to connected to s3')
       return false
     end
   end
@@ -37,9 +37,9 @@ class S3Config
     begin
       S3Config.connect_to_s3
       connection_bucket = AWS::S3::Bucket.find(S3Config.bucket)
-      logger.warn("****** found #{S3Config.bucket} on s3")
+      puts("****** found #{S3Config.bucket} on s3")
     rescue
-      logger.warn("****** failed to find #{S3Config.bucket} on s3")
+      puts("****** failed to find #{S3Config.bucket} on s3")
       return false
     end
   end
