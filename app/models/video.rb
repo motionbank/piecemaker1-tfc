@@ -47,10 +47,15 @@ class Video < ActiveRecord::Base
 
 ## end of migration stuff
 
-
+  def self.days_back_to_compress
+    40
+  end
 
   def self.uncompressed_dir
     Rails.root.to_s + '/public/video/full'
+  end
+  def self.compressed_dir
+    Rails.root.to_s + '/public/video/compressed'
   end
   def self.backup_dir
     Rails.root.to_s + '/public/video/back'
@@ -127,6 +132,12 @@ class Video < ActiveRecord::Base
     date_part = base_title.split('_').first
     if date_part =~ /\d\d\d\d-\d\d-\d\d/ 
       date_part.to_date
+    elsif date_part =~ /\d\d\d\d\d\d\d\d/ 
+      year = date_part[0..3]
+      month = date_part[4..5]
+      day = date_part[6..7]
+      mdy = day+'/'+month+'/'+year
+      mdy.to_date
     else
       nil
     end
@@ -274,7 +285,48 @@ ENDOT
       'error'
     end
 end
+  def self.get_files_from_directory(dir_name)
+    Dir.chdir(dir_name)
+    Dir.glob('*').select{|x| ['mp4','mov'].include?(x.split('.').last)}
+  end
 
+ def self.compressable_files(days_back = nil)
+    days_back ||= Video.days_back_to_compress
+    full = Video.uncompressed_dir
+    comp = Video.compressed_dir
+    cf = Video.get_files_from_directory(full) - Video.get_files_from_directory(comp)
+    #cf.reject!{|x| video_uploaded(x)}
+    cf = cf.select{|x| Video.parse_date_from_title(x) && (Video.parse_date_from_title(x) >= Date.today - days_back.days)}
+  end
+  def self.compress_compressable(days_back = nil)
+    files = Video.compressable_files(days_back)
+    puts "#{files.length.to_s} files to compress."
+    files.each do |x|
+      puts "Compressing #{x}"
+      Video.compress_file(Video.uncompressed_dir + '/' + x, Video.compressed_dir + '/' + x) 
+    end
+  end
+  def self.compress_file(from,to,force = false)
+    puts "******** Starting to compress #{from}."
+    if File.exists?(from)
+      if File.exists?(to) && !force
+        puts "******** File #{to} exists already. Skipping"
+      else
+        system compression_command(from,to)
+        puts "******** Finished compressing #{to}."
+      end
+    else
+      puts "******** File #{from} doesn't exist. Can't compress"
+    end
+  end
+
+  def self.compression_command(from,to,type = 'handbrake')
+    if type == 'ffmpeg'
+      "/vendor/bin/#{Configuration.arch_type}/HEAD/bin/ffmpeg -i #{from} -acodec libfaac -ab 96k -vcodec libx264 -vpre medium -crf 20 -threads 0 -y -s 480x360 #{to}"
+    else
+      "/usr/local/bin/HandBrakeCLI --encoder x264 -q 22 --maxWidth 480 --optimize -i #{from} -o #{to}"
+    end
+  end
 
   #def rename_quicktime_and_queue_processing(qt_title)
     #qtplayer_output = Video.uncompressed_dir + '/' + qt_title

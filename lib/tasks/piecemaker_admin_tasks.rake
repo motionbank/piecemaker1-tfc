@@ -1,10 +1,10 @@
 namespace :piecemaker do
- # require Rails.root + '/config/environment'
+  require RAILS_ROOT + '/config/environment'
   def video_base_folder
     'video'
   end
   def days_back_to_compress
-    4
+    40
   end
   def upload_speed
     94000
@@ -22,13 +22,22 @@ namespace :piecemaker do
     Dir.chdir(dir_name)
     Dir.glob('*').select{|x| ['mp4','mov'].include?(x.split('.').last)}
   end
-
+  def video_uploaded(filename)
+    vid = Video.find_by_title(filename.gsub('.mp4',''))
+    if vid
+      puts vid.fn_s3
+      vid.fn_s3 == '.mp4'
+    else
+      false
+    end
+  end
   def compressable_files(full = nil, comp = nil)
     full ||= uncompressed_folder
     comp ||= compressed_folder
     @full_files ||= get_files_from_directory(full)
     @compressed_files ||= get_files_from_directory(comp)
     cf = @full_files - @compressed_files
+    #cf.reject!{|x| video_uploaded(x)}
     @cf ||= cf.select{|x| Video.parse_date_from_title(x) >= Date.today - days_back_to_compress.days}
   end
   def archivable_files(full = nil, arch = nil)
@@ -39,11 +48,11 @@ namespace :piecemaker do
     @af = @full_files - @archived_files
   end
   def uploadable_files
-    @uploadable ||= uploadable_file_listing
+    @uploadable ||= uploadable_file_listing#[0..0]
   end
   def uploadable_file_listing
     puts "Fetching S3 List"
-    bucket_list = S3Config.connect_and_get_list.select{|x| y = x.split('/'); y.first == SetupConfiguration.s3_base_folder && y[1] == 'video'}.map{|x| x.split('/').last}
+    bucket_list = S3Config.connect_and_get_list.select{|x| y = x.split('/'); y.first == Configuration.s3_base_folder && y[1] == 'video'}.map{|x| x.split('/').last}
     compressed_list = get_files_from_directory(compressed_folder).select{|x| !bucket_list.include?(x)}
   end
   def calculate_time(size)
@@ -100,14 +109,14 @@ namespace :piecemaker do
   
   desc 'Creating Video Folders'
   task :create_video_folders do
-    Dir.chdir(Rails.root + '/public')
+    Dir.chdir(RAILS_ROOT + '/public')
     if !File.exists? video_base_folder
       puts "Creating #{video_base_folder}."
       Dir.mkdir(video_base_folder,0777)
     else
       puts "Directory #{video_base_folder} exists already. Skipping."
     end
-    Dir.chdir(Rails.root + '/public/' + video_base_folder)
+    Dir.chdir(RAILS_ROOT + '/public/' + video_base_folder)
     %w[full compressed temp backup].each do |fold|
       if !File.exists? fold
         puts "Creating #{fold}."
@@ -122,6 +131,7 @@ namespace :piecemaker do
     if uploadable_files.any?
       total_size = uploadable_files.inject(0){|sum, x| sum + File.size(compressed_folder + '/' + x)}
       puts "#{uploadable_files.length} videos to upload."
+      puts "This will take at least #{time_estimate_string(total_size)}"
       puts "#{total_size} bytes."
       uploadable_files.each do |one_file|
         puts one_file
@@ -140,12 +150,18 @@ namespace :piecemaker do
       puts "Starting #{start_time.strftime("%H:%M:%S")}" 
       uploadable_files.each do |filename|
         full_file_path = compressed_folder + '/' + filename
-        full_s3_path = SetupConfiguration.s3_base_folder + '/video/' + filename
+        full_s3_path = Configuration.s3_base_folder + '/video/' + filename
         if file = File.open(full_file_path)
           size = File.size(full_file_path)
           puts "#{Time.now.strftime('%H:%M:%S')} Uploading #{filename}  #{time_estimate_string(size)}"
           begin
             AWS::S3::S3Object.store(full_s3_path, file, S3Config.bucket, :access => 'public_read')
+            video = Video.find_by_title(filename.gsub('.mp4',''))
+            if video
+              video.fn_s3 = '.mp4'
+              video.save
+              puts "Updated database for #{filename}"
+            end
           rescue Exception => e
             
             puts "#{Time.now.strftime('%H:%M:%S')} AWS S#3 Error: #{e.inspect}"
@@ -178,8 +194,8 @@ namespace :piecemaker do
             if AWS::S3::Bucket.create(bucket_name)
               puts 'Bucket created.'
               puts 'Adding crossdomain.xml file.'
-              if File.exists?(Rails.root + '/lib/tasks/crossdomain.xml')
-                AWS::S3::S3Object.store('crossdomain.xml', open(Rails.root + '/lib/tasks/crossdomain.xml'), bucket_name)
+              if File.exists?(RAILS_ROOT + '/lib/tasks/crossdomain.xml')
+                AWS::S3::S3Object.store('crossdomain.xml', open(RAILS_ROOT + '/lib/tasks/crossdomain.xml'), bucket_name)
                 
               else
                 puts "I couldn't find crossdomain.xml file. It should be in lib/tasks."
