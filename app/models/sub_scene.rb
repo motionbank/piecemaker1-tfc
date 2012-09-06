@@ -2,6 +2,21 @@ class SubScene < ActiveRecord::Base
   belongs_to :event
   scope :contains, lambda{|quer| {:conditions => ['title LIKE ? OR description LIKE ?', "%#{quer}%","%#{quer}%"]}}
   acts_as_tenant(:account)
+  def self.convert_to_scenes
+    SubScene.all.each do |sub|
+      ee = Event.create(
+        :parent_id => sub.event_id,
+        :description => sub.description,
+        :event_type => 'sub_scene',
+        :title => sub.title,
+        :happened_at => sub.happened_at,
+        :created_at => sub.created_at,
+        :updated_at => sub.updated_at,
+        :account_id => sub.account_id
+      )
+    end
+  end
+
   def parse_performers_and_give_to_parent
     old_performers = event.performers
     all_performers = self.event.piece.performers.map{|x| x.login}

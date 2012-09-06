@@ -19,7 +19,28 @@ class Video < ActiveRecord::Base
   after_save :rename_files_on_title_change###################
 
 ## this is to help migrations
+ def self.create_events
+    Video.all.each do |video|
+      ee = Event.create(
+        :title => video.title,
+        :piece_id => video.piece_id,
+        :rating => video.rating,
+        :state => video.is_uploaded ? 'uploaded' : 'normal',
+        :happened_at => video.recorded_at,
+        :dur => video.duration,
+        :created_at => video.created_at,
+        :updated_at => video.updated_at,
+        :account_id => video.account_id,
+        :description => video.meta_data,
+        :event_type => 'video'
 
+        )
+      video.events.each do |ev|
+        ev.video_id = ee.id
+        ev.save
+      end
+    end
+  end
   def self.add_suffixes
     all.each do |x|
       if x.title && x.title.split('.') != 'mp4'

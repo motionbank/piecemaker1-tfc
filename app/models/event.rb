@@ -6,8 +6,8 @@
 
 class Event < ActiveRecord::Base
   #acts_as_audited
-  before_create :check_for_everyone
-  before_update :check_for_everyone, :except => 'unlock'              
+  #before_create :check_for_everyone
+  #before_update :check_for_everyone, :except => 'unlock'              
   has_many :sub_scenes, :dependent => :destroy, :order => 'happened_at'
   has_many :sub_events, :class_name => "Event", :foreign_key => 'parent_id'
   belongs_to :parent, :class_name => "Event"

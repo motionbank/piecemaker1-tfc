@@ -66,7 +66,7 @@ class CaptureController < ApplicationController
     conditions = "(piece_id = #{piece_id}) AND (state = 'normal') "
     conditions += "AND (event_type != 'dev_notes') " unless user_has_right?('view_dev_notes')
     conditions += "AND (event_type != 'marker')" unless current_user.markers_on
-    Event.where(conditions).order('happened_at').includes([{:video => :events},:sub_scenes,:tags,:notes,:users])
+    Event.where(conditions).order('happened_at')#.includes([{:video => :events},:sub_scenes,:tags,:notes,:users])
   end
 
   def do_present
@@ -154,21 +154,23 @@ class CaptureController < ApplicationController
         @refresh = 'Never' if (@total_event_number > 99 )
         #vids = @events.map{|x| x.video}.uniq.compact
         #@videos = current_piece.clean_recordings.reject{|x| vids.include?(x)}
-        @videos = current_piece.empty_recordings
+        
+        #only change for global test
+        #@videos = current_piece.empty_recordings
     end
     
-     unless @videos
-       @videos = @events.map{|x| x.video if x.video}.reject{|x| !x}
-           if @videos.length > 0
-             @videos = @videos.uniq.sort_by{|x| x.recorded_at}
-          else
-            @videos = []
-          end
-        @events.reject!{|x| x.video_id}
-      #@videos = []
-     end
+       # unless @videos
+       #   @videos = @events.map{|x| x.video if x.video}.reject{|x| !x}
+       #       if @videos.length > 0
+       #         @videos = @videos.uniq.sort_by{|x| x.recorded_at}
+       #      else
+       #        @videos = []
+       #      end
+       #    @events.reject!{|x| x.video_id}
+       #  #@videos = []
+       # end
      @event_count = @events.length
-    @grouped_events = Event.video_grouped(@events,@videos)
+    #@grouped_events = Event.video_grouped(@events,@videos)
   end
 
   def dater(string)

@@ -1,32 +1,3 @@
-<%- content_for :quick do -%>
-<%- if user_has_right?('normal_actions') -%>
-<div id="quick" data-shortcut = 'enabled'>
-<span class = 'hdble'>
-	<%= form_tag :action => 'present', :id => session[:piecid], :filter_type => 'text' do %>
-	<%= text_field_tag 'search', '',:size => 20 %>
-	<%= submit_tag 'Search' %><%= link_to 'Show All', :action => 'present', :id => session[:piecid] %>
-	<%- end %><br />
-<span class="short-cut">N </span><%= link_to('New Scene',{:action => 'new_event',:id => 'scene'}, :class => 'get sprep')-%><br />
-<span class="short-cut">M </span><%= link_to('New Marker',{:action => 'new_marker',:id => 'marker'}, :class => 'marker mprep', :id => 'marker')-%><br />
-<span class="short-cut">S </span><%= link_to('New Sub Scene',{:action => 'new_sub_scene'}, :class => 'get ssprep')-%>
-<%- if user_has_right?('normal_actions') -%>
-<br /><br />
-<span id='dvd_quick'><%= raw video_quick_link %></span>
-<% end -%><br /><br />
-</span>
-<%= link_to "Open Scratchpad",{:controller => 'capture',:action => 'open_scratchpad'},:class => 'get-sc' %>
-<br />
-<a class = 'collapse'>Collapse </a><a class = 'expand'>Expand</a>
-<br /><br /><br />
-<div id = "dates">
-<%- g = @grouped_events.map{|x| x.second[:start]}.uniq -%>
-<%- g.each_index do |index| -%>
-<a class = "dates"id= "dat-<%= index.to_s %>"><%= g[index].strftime("%d %b %Y") %></a><br />
-<% end %>
-</div>
-</div>
-<%- end -%>s
-<%- end -%>
 
 
 <div id='events_presentation' data-pieceid='<%= current_piece.id %>'>

@@ -704,7 +704,7 @@ module ApplicationHelper
   end
   def display_creation_info(event)
     info = "<div class='sm evci'>"
-      info << event.happened_at.strftime("%d/%m %H:%M:%S") +' by ' + event.created_by + ' ' + linked_id(event)
+      info << event.happened_at.strftime("%d/%m %H:%M:%S") +' by ' + 'event.created_by' + ' ' + linked_id(event)
 
     info << '</div>'
   end
