@@ -703,8 +703,9 @@ module ApplicationHelper
     # end
   end
   def display_creation_info(event)
+    by = event.created_by || '???'
     info = "<div class='sm evci'>"
-      info << event.happened_at.strftime("%d/%m %H:%M:%S") +' by ' + 'event.created_by' + ' ' + linked_id(event)
+      info << event.happened_at.strftime("%d/%m %H:%M:%S") +' by ' + by + ' ' + linked_id(event)
 
     info << '</div>'
   end
@@ -941,14 +942,51 @@ module ApplicationHelper
   end
 
   def open_video_html(video)
-    running = video.duration ? "Duration: #{video.duration.to_time_string}" : "<span class='run'> Recording!</span>"
+    running = video.dur ? "Duration: #{video.dur.to_time_string}" : "<span class='run'> Recording!</span>"
     text = "<div id = 'vid_#{video.id}'class = 'video-block'>"
     text << "<span class='video-label'>#{video.title}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-    text << "<span class='video-inf' id='vidinf-#{video.id}'>Recorded at: #{video.recorded_at.strftime("%H:%M:%S")}  &nbsp;&nbsp;#{running}&nbsp;&nbsp;&nbsp;&nbsp;#{video.events.length} Event#{video.events.length == 1 ? '' : 's'}</span>"
+    text << "<span class='video-inf' id='vidinf-#{video.id}'>Recorded at: #{video.recorded_at.strftime("%H:%M:%S")}  &nbsp;&nbsp;#{running}&nbsp;&nbsp;&nbsp;&nbsp;</span>"
     text << "&nbsp;&nbsp;&nbsp;<span class = 'videoshow' id = 'vs-#{video.id}'>Hide</span>"
     text <<  display_video_menu(video)
     text
   end
+
+def display_children(event,search = nil)
+    text = ''
+    if event.children.length > 0
+      v = event.video
+    event.children.each do |ss|
+      extra_class = v && v.dur && ss.happened_at > v.happened_at + v.dur ? 'sm warning' : "sm sub-#{event.event_type}"
+      text << "<div class = '#{extra_class}' id = 'sus-#{ss.id.to_s}'>"
+      text << '<span style = "font-weight:bold">'
+      if v
+        start_time = ss.happened_at - v.happened_at
+        if event.video_viewable?
+          text << put_see_video_link_around_time(event,start_time)
+        else
+          text << start_time.to_time_string
+        end
+      else
+        text << '-'
+      end
+      text << '&nbsp;&nbsp;'
+      ss.description ||= ''
+      if search
+        ss.title = highlight(ss.title,search,SetupConfiguration.found_text_replacement_string)
+        ss.description = highlight(ss.description,search,SetupConfiguration.found_text_replacement_string)
+      end
+      text << "#{ss.title}"
+      text << '</span><br />&nbsp;&nbsp;'
+      text << ss.description
+      text << display_menu_link(ss,'summ','small','span',false)
+      text << '</div>'
+      
+    end
+    end
+    text
+  end
+
+
   
 end
 #, onFailure:function(transport) {alert(“Error communicating with the server: ” + transport.responseText.stripTags());}

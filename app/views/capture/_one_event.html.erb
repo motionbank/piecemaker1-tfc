@@ -5,8 +5,8 @@
 <%= raw display_creation_info(event)%>
 <%= raw display_performers(event,@terms)%>
 <%= raw display_description(event,@terms)%>
-<%= raw display_subscenes(event,@terms) %>
+<%= raw display_children(event,@terms) %>
 <%= raw display_tags(event)%>
 <%= raw display_edit_links(event) if event.is_deleted? -%> 
-<%= raw display_notes(event) if current_user.notes_on %>
+<%#= raw display_notes(event) if current_user.notes_on %>
 </div>

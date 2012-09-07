@@ -1,5 +1,5 @@
 namespace :piecemaker do
-  require RAILS_ROOT + '/config/environment'
+  #require Rails.root + '/config/environment'
   def video_base_folder
     'video'
   end

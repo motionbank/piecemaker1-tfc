@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120829104407) do
+ActiveRecord::Schema.define(:version => 20120907160144) do
 
   create_table "accounts", :force => true do |t|
     t.string   "name"
@@ -21,16 +21,16 @@ ActiveRecord::Schema.define(:version => 20120829104407) do
   end
 
   create_table "castings", :force => true do |t|
-    t.integer   "performer_id",                   :null => false
-    t.integer   "piece_id",                       :null => false
-    t.boolean   "is_original",  :default => true
-    t.integer   "cast_number",  :default => 1
-    t.timestamp "updated_at"
+    t.integer  "user_id",                       :null => false
+    t.integer  "piece_id",                      :null => false
+    t.boolean  "is_original", :default => true
+    t.integer  "cast_number", :default => 1
+    t.datetime "updated_at"
   end
 
   add_index "castings", ["id"], :name => "index_castings_on_id"
-  add_index "castings", ["performer_id"], :name => "index_castings_on_performer_id"
   add_index "castings", ["piece_id"], :name => "index_castings_on_piece_id"
+  add_index "castings", ["user_id"], :name => "index_castings_on_performer_id"
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer   "priority",   :default => 0
@@ -187,18 +187,6 @@ ActiveRecord::Schema.define(:version => 20120829104407) do
     t.integer   "account_id"
   end
 
-  create_table "sub_scenes", :force => true do |t|
-    t.string    "title"
-    t.text      "description"
-    t.timestamp "happened_at"
-    t.integer   "event_id"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-    t.integer   "account_id"
-  end
-
-  add_index "sub_scenes", ["event_id"], :name => "index_sub_scenes_on_event_id"
-
   create_table "tags", :force => true do |t|
     t.string  "name"
     t.integer "piece_id"
@@ -237,21 +225,5 @@ ActiveRecord::Schema.define(:version => 20120829104407) do
 
   add_index "users", ["id"], :name => "index_users_on_id"
   add_index "users", ["role_id"], :name => "index_users_on_role_id"
-
-  create_table "videos", :force => true do |t|
-    t.string   "title"
-    t.datetime "recorded_at"
-    t.integer  "duration"
-    t.integer  "rating",      :default => 0
-    t.text     "meta_data"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "piece_id"
-    t.boolean  "is_uploaded", :default => false
-    t.integer  "account_id"
-  end
-
-  add_index "videos", ["id"], :name => "index_videos_on_id"
-  add_index "videos", ["title"], :name => "index_videos_on_title"
 
 end

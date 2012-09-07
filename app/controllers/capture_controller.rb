@@ -63,10 +63,11 @@ class CaptureController < ApplicationController
   end
   
   def get_events(piece_id = session[:pieceid])
-    conditions = "(piece_id = #{piece_id}) AND (state = 'normal') "
+    conditions = "(piece_id = #{piece_id}) AND (state = 'normal' OR state = 'uploaded')"
     conditions += "AND (event_type != 'dev_notes') " unless user_has_right?('view_dev_notes')
     conditions += "AND (event_type != 'marker')" unless current_user.markers_on
-    Event.where(conditions).order('happened_at')#.includes([{:video => :events},:sub_scenes,:tags,:notes,:users])
+    conditions += "AND (parent_id is NULL )"
+    Event.where(conditions).order('happened_at').includes([:video,:tags,:users,:children])#.includes([{:video => :events},:sub_scenes,:tags,:notes,:users])
   end
 
   def do_present
@@ -77,45 +78,32 @@ class CaptureController < ApplicationController
     case filter_type
       when 'user_highlighted'
         @events = current_user.events.in_piece(current_piece.id)
-        @videos = []
       when 'span'
         span_count = params[:span_count] ? params[:span_count].to_i : 50
         @events = Event.order('happened_at DESC').limit(span_count)
         @show_piece = true
-        @videos = []
       when 'one_event'
         @events = [Event.find(params[:event])]
       when 'date_range'
         flash.now[:searched_for] = "Events between #{dater(params[:start_date])} and #{dater(params[:end_date])}"
         @events = current_piece.events.normal.within_date_range(params[:start_date],params[:end_date]).sort_by{|x| x.happened_at}
-        @videos = []
       when 'today_only'
         flash.now[:searched_for] = "Today's Events"
         @events = current_piece.events.normal.created_today.sort_by{|x| x.happened_at}
-        @videos = []
       when 'performer'
         @total_cast_number = current_piece.performers.length
         events = get_events
         events = performer_filter(events)
         @events = events.sort_by{|x| x.happened_at}
-        @videos = []
       when 'highlighted'
         flash.now[:searched_for] = "Highlighted Events"
         @events = current_piece.events.normal.highlighted
-        @videos = []
       when 'tag'
         @events = Tag.find_by_name(params[:taggs]).events.normal
         flash.now[:searched_for] = "Events with Tag: #{params[:taggs]}"
-        @videos = []
       when 'video'
         video_id = params[:video] == 'no_dvd' ? nil : params[:video].to_i        
         @events = current_piece.events.normal.in_video(video_id)
-        if video_id
-          video = Video.find(video_id)
-          @videos = [video]
-        else
-          @videos = []
-        end
         flash.now[:searched_for] = params[:video] == 'no_dvd' ? "Events without video" : "Events in video id: #{params[:video]}"
       
       when 'text'
@@ -127,7 +115,6 @@ class CaptureController < ApplicationController
 
         @terms = [params[:search]]
         @events = events
-        @videos = [] 
         @truncate = :none
       when 'page'
         @events = Event.paginate_by_piece_id(session[:pieceid],
@@ -136,41 +123,20 @@ class CaptureController < ApplicationController
           :per_page => 100,
           :page => params[:page],
           :include => [:sub_scenes,:tags,:notes,:video])
-        @videos = []
 
       when 'trash'
         hide_trash = false
         @events = current_piece.events.select{|x| x.is_deleted?}
-        @videos = []
       when 'rating'
         @events = Event.where("piece_id = ? AND (state = 'normal') AND (rating > ?)",session[:pieceid],params[:rating].to_i).order('happened_at').includes([:video,:sub_scenes,:tags,:notes])
-        @videos = []
       when 'tail'
         @events = Event.where("piece_id = ? AND (state = 'normal')",session[:pieceid]).order('happened_at DESC').includes([:video,:sub_scenes,:tags,:notes]).limit(100)
         vids = @events.map{|x| x.video}.uniq.compact
-        @videos = current_piece.videos.reject{|x| vids.include?(x) || x.recorded_at < @events.first.happened_at}
       when  'none'
         @events = get_events
         @refresh = 'Never' if (@total_event_number > 99 )
-        #vids = @events.map{|x| x.video}.uniq.compact
-        #@videos = current_piece.clean_recordings.reject{|x| vids.include?(x)}
-        
-        #only change for global test
-        #@videos = current_piece.empty_recordings
     end
-    
-       # unless @videos
-       #   @videos = @events.map{|x| x.video if x.video}.reject{|x| !x}
-       #       if @videos.length > 0
-       #         @videos = @videos.uniq.sort_by{|x| x.recorded_at}
-       #      else
-       #        @videos = []
-       #      end
-       #    @events.reject!{|x| x.video_id}
-       #  #@videos = []
-       # end
      @event_count = @events.length
-    #@grouped_events = Event.video_grouped(@events,@videos)
   end
 
   def dater(string)
@@ -794,8 +760,8 @@ class CaptureController < ApplicationController
       end
     end
     def promote_to_scene
-      ss = SubScene.find(params[:id])
-      oldid = ss.event_id
+      ss = Event.find(params[:id])
+      oldid = ss.parent_id
       @new_event = ss.promote_to_scene
       @event = Event.find(oldid)
     end
@@ -810,7 +776,7 @@ class CaptureController < ApplicationController
       event = Event.find(params[:id])
       ss = event.demote_to_sub_scene
       if ss
-        @event = ss.event
+        @event = ss.parent
       end
       respond_to do |format|
         format.html {redirect_to :action => 'present', :id => current_piece.id}

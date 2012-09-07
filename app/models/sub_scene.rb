@@ -40,24 +40,7 @@ class SubScene < ActiveRecord::Base
     end
   end
   
-  def promote_to_scene
-    siblings = event.sub_scenes.select{|x| x.happened_at > happened_at}
-    new_scene = Event.create(
-    :title => title,
-    :description => description,
-    :piece_id => event.piece_id,
-    :video_id => event.video_id,
-    :happened_at => happened_at,
-    :event_type => event.event_type,
-    :performers => [],
-    :created_by => event.created_by,
-    :modified_by => event.modified_by)
-    siblings.each do |sibling|
-      new_scene.sub_scenes << sibling
-    end
-    self.destroy
-    new_scene
-  end
+
 
 end
 

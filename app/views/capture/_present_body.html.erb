@@ -1,3 +1,27 @@
-<%- @events.each do |event| -%>
-<%= render :partial => 'one_event', :locals => {:event => event} %>
+<%- dates = [] -%>
+<%- next_date = @events[0].happened_at.at_midnight - 1.day if @events.length > 0 -%>
+<%- index = @events.length - 1 -%>
+<%- i = 0 -%>
+<%- while i <= index -%>
+<%- if @events[i].happened_at.at_midnight > next_date -%>   
+  <%- next_date =  @events[i].happened_at.at_midnight -%>
+  <%- dates <<  next_date -%>
+  <div style = "color:#d00;font-size:20px;margin-left:-25px" id= "dat-<%= (dates.length-1).to_s  %>" >
+    <%=  next_date.strftime("%A %d %b %Y") %>
+  </div>
+
+<%- end -%>
+<%- if @events[i].event_type == 'video' -%>
+<%- the_video = @events[i] -%>
+<%= raw open_video_html(the_video) %>
+<%- i += 1 -%>
+<%- while @events[i].happened_at < the_video.end_time -%>
+<%= render :partial => 'one_event', :locals => {:event => @events[i]} %>
+<%- i += 1 -%>
+<%- end -%>
+</div>
+<%- else -%>
+<%= render :partial => 'one_event', :locals => {:event => @events[i]} %>
+<%- i += 1 -%>
+<%- end -%>
 <%- end -%>

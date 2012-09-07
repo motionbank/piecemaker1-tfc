@@ -8,15 +8,20 @@ class Event < ActiveRecord::Base
   #acts_as_audited
   #before_create :check_for_everyone
   #before_update :check_for_everyone, :except => 'unlock'              
-  has_many :sub_scenes, :dependent => :destroy, :order => 'happened_at'
-  has_many :sub_events, :class_name => "Event", :foreign_key => 'parent_id'
-  belongs_to :parent, :class_name => "Event"
-  has_many :notes, :dependent => :destroy
+  #has_many :sub_scenes, :dependent => :destroy, :order => 'happened_at'
+
+  #has_many :notes, :dependent => :destroy
   belongs_to :piece
-  belongs_to :video
   serialize :performers
   has_and_belongs_to_many :tags
   has_and_belongs_to_many :users
+
+  has_many :subjects, :class_name => "Event",
+    :foreign_key => "video_id"
+  belongs_to :video, :class_name => "Event"
+
+  has_many :children, :class_name => "Event", :foreign_key => "parent_id", :order => 'happened_at'
+  belongs_to :parent, :class_name => "Event"
   
   #acts_as_indexed :fields => [:title, :description]
   scope :contains, lambda{|quer| {:conditions => ['title LIKE ? OR description LIKE ? OR performers LIKE ?', "%#{quer}%","%#{quer}%","%#{quer}%"],:include => :notes}}
@@ -35,12 +40,13 @@ class Event < ActiveRecord::Base
   delegate :recorded_at,:fn_arch,:fn_local,:fn_s3, :to => :video, :prefix => true
   delegate :tags, :to => :piece, :prefix => true
 
+
   def self.event_types
     %w[dev_notes discussion headline light_cue performance_notes scene sound_cue marker video]
   end
   def video_viewable?
     return false unless video_id && video
-    video.viewable?
+    true
   end
   def tag_list #tested
     self.tags.collect{|x| x.name}.join(',')
@@ -134,16 +140,22 @@ class Event < ActiveRecord::Base
       self.tags << tag
     end
   end
+  def recorded_at
+    happened_at
+  end
+  def end_time
+    happened_at + dur
+  end
   def video_start_time
     if video
-      @evst ||= (happened_at - video_recorded_at).to_i
+      @evst ||= (happened_at - video.happened_at).to_i
     else
       nil
     end
   end
   def video_end_time
     if video
-      @evet ||= ((happened_at + duration) - video_recorded_at).to_i
+      @evet ||= ((happened_at + duration) - video.happened_at).to_i
     else
       nil
     end
@@ -501,26 +513,30 @@ class Event < ActiveRecord::Base
   end
 
   def previous_scenes
-    piece.events.normal.select{|x| x.happened_at.at_midnight == happened_at.at_midnight && x.video == video && x.happened_at < happened_at && x.id != id}
+
+    Event.where("piece_id = ? AND happened_at < ? AND state = 'normal' AND parent_id is NULL", piece_id, happened_at).order('happened_at')
+    #piece.events.normal.select{|x| x.happened_at.at_midnight == happened_at.at_midnight && x.video == video && x.happened_at < happened_at && x.id != id}
   end
   def demote_to_sub_scene
     previous_scene = previous_scenes.last
-    if previous_scene
-      new_sub_scene = SubScene.create(
-      :happened_at => happened_at,
-      :title => title,
-      :description => description
-      )
-      previous_scene.sub_scenes << new_sub_scene
-      sub_scenes.each do |subscene|
-        previous_scene.sub_scenes << subscene
-      end
-      make_deleted
-      new_sub_scene
-    else
-      false
+    return false unless previous_scene
+    self.parent_id = previous_scene.id
+    save
+    children.each do |child|
+      child.parent_id = previous_scene.id
+      child.save
     end
-    
+    self  
+  end
+    def promote_to_scene
+    siblings = parent.children.select{|x| x.happened_at > happened_at}
+    self.parent_id = nil
+    save
+    siblings.each do |sibling|
+      sibling.parent_id = id
+      sibling.save
+    end
+    self
   end
   def has_user_highlights?(user)
     users.include? user
