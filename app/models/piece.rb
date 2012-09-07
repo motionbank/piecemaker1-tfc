@@ -26,7 +26,6 @@ class Piece < ActiveRecord::Base
  # has_many :short_recordings, :through => :video_recordings, :source => :video, :order => :recorded_at
   has_many :photos, :dependent => :destroy
   has_many :tags
-  acts_as_tenant(:account)
 
 
 

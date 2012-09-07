@@ -4,14 +4,6 @@ class AdministrationController < ApplicationController
    def index
    end
    
-   def list_accounts
-     if @current_account.name == 'seed'
-       @accounts = Account.all
-     else
-       redirect_to '/'
-     end
-   end
-   
   def delete_ev
     event = Event.find(params[:id])
     flash[:notice] = event.destroy ? "Destroyed Event ID: #{params[:id]}" : "Couldn't destroy Event ID: #{params[:id]}"

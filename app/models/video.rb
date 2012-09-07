@@ -14,7 +14,6 @@ class Video < ActiveRecord::Base
   has_many :events,:dependent => :nullify, :order => :happened_at,:conditions => "state = 'normal'"
   scope :active, :conditions => "state = 'normal'"
 
-  acts_as_tenant(:account)
 
   after_save :rename_files_on_title_change###################
 
@@ -30,7 +29,6 @@ class Video < ActiveRecord::Base
         :dur => video.duration,
         :created_at => video.created_at,
         :updated_at => video.updated_at,
-        :account_id => video.account_id,
         :description => video.meta_data,
         :event_type => 'video'
 

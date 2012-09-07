@@ -13,7 +13,6 @@ gem 'sass'
 #gem 'rdoc'
 #gem 'delayed_job_active_record'
 gem 'active_record_query_trace'
-gem "acts_as_tenant", "~> 0.2.7"
 gem 'ancestry'
 gem 'thin'
 group :development do

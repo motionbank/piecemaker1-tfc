@@ -12,7 +12,6 @@ Piecemakerlite::Application.routes.draw do
     match '/capture/rate_video/:rating/:id.:format' => 'capture#rate_video'
     match '/video_upload/:id1/:id2' => 'video#new'
     match '/video_viewer/:piece_id/:id' => 'video#viewer'
-    match '/capture/pieces_for_account/:id/:key' => 'capture#pieces_for_account'
     match '/add_annotation/:piece_id/:id/:time.:format' => 'events#add_annotation'
     match '/add_sub_annotation/:piece_id/:id/:time.:format' => 'events#add_sub_annotation'
     match '/add_marker/:piece_id/:id/:time.:format' => 'events#add_marker'

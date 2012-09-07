@@ -1,7 +1,6 @@
 class SubScene < ActiveRecord::Base
   belongs_to :event
   scope :contains, lambda{|quer| {:conditions => ['title LIKE ? OR description LIKE ?', "%#{quer}%","%#{quer}%"]}}
-  acts_as_tenant(:account)
   def self.convert_to_scenes
     SubScene.all.each do |sub|
       ee = Event.create(
@@ -11,8 +10,7 @@ class SubScene < ActiveRecord::Base
         :title => sub.title,
         :happened_at => sub.happened_at,
         :created_at => sub.created_at,
-        :updated_at => sub.updated_at,
-        :account_id => sub.account_id
+        :updated_at => sub.updated_at
       )
     end
   end

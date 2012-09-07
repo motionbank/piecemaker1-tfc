@@ -1,12 +1,10 @@
 <div id="banner">
   <div id='logo'>
-    PIECEMAKERLITE <%= " // " + show_tennant if show_tennant %>
+    PIECEMAKERLITE
   </div>
-<%- if @current_account -%>
   <div id = 'login_div'>
     <%= render(:partial => '_shared/login_info') -%>
   </div>
-<%- end -%>
 
 </div>
 <div id='menu_strip' class='menu'>

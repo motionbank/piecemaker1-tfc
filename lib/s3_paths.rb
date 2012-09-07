@@ -1,8 +1,7 @@
 module S3Paths
 
     def s3_prefix(new_way=false)
-      account = Account.find(account_id)
-      account.name + '/' +self.class.name.downcase
+      'tfc' + '/' +self.class.name.downcase
     end
     
     def s3_path(style = 'original')

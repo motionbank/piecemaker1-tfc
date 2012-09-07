@@ -9,49 +9,23 @@ class ApplicationController < ActionController::Base
     # Pick a unique cookie name to distinguish our session data from others'
     #session :session_key => '_piecemaker_session_id'
     
-    before_filter :login_required, :except => [:login, :welcome, :documentation, :contact,:update_vid_time,:mark_from_marker_list,:quick_piece,:pieces_for_account]
-    set_current_tenant_through_filter
+    before_filter :login_required, :except => [:login, :welcome, :documentation, :contact,:update_vid_time,:mark_from_marker_list,:quick_piece]
     
-    before_filter :your_method_that_finds_the_current_tenant
     before_filter :set_defaults, :except => [:authorize,:update_vid_time,:fill_video_menu,:fill_extra_menu,:quick_marker,:mark_from_marker_list]
     before_filter :catch_came_from
 
     helper_method :user_has_right?, :duration_to_hash, :duration_hash_to_string, :video_in?
-    helper_method :yield_authenticity_token, :current_piece, :s3_bucket, :came_from_or
-    helper_method :show_tennant, :current_tennant
+    helper_method :yield_authenticity_token, :current_piece, :s3_bucket, :came_from_or,:set_time_zone
 ##################
   # def current_user
   #   @cu ||= User.find(1)
   # end
 
-
-    def your_method_that_finds_the_current_tenant
-      if SetupConfiguration.app_is_local?  || Account.all.length == 1
-        account = Account.find(1)
-      else
-        account = Account.find_by_name(request.subdomain.downcase)
-      end
-      if account
-        set_current_tenant(account)
-      end
-      @current_account = account
-    end
-
-  # 
-  # current_account = Account.find(1)
-  # #set_current_tenant_by_subdomain(:account,:subdomain)
-  # set_current_tenant_to(current_account)
   
-  def show_tennant
-    @current_account ? @current_account.name : nil
-  end
   def logged_in?
     !!current_user
   end
 
-  def current_tennant
-    @current_account
-  end
   def authorized?(action=nil, resource=nil, *args)
     logged_in?
   end
@@ -133,7 +107,7 @@ class ApplicationController < ActionController::Base
       end
 
     def set_time_zone
-      Time.zone = @current_account.time_zone
+      Time.zone = 'Berlin'
     end
 
     def user_has_right?(right)

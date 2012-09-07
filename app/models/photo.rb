@@ -4,7 +4,6 @@ class Photo < ActiveRecord::Base
   include S3Paths
   
   belongs_to :piece
-  acts_as_tenant(:account)
   def new_name
     false
   end
