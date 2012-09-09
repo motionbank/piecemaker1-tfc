@@ -1,7 +1,7 @@
 <%- if !@player -%>
 <h3 style = 'color:#c00'>Warning: Quicktime Player is not responding. No video will be recorded.<br />Please Click 'Cancel', make sure Quicktime Player is running and try again.<br />Click 'Create' if you're sure you want to continue without recording video.</h3>
 <%- else -%>
-<%- if current_tennant.use_auto_video? && 'Start' == @text -%>
+<%- if SetupConfiguration.use_auto_video? && 'Start' == @text -%>
 <h3 style = 'color:#00c'> Please check the QuickTime Player is configured properly.</h3>
 <% end %>
 <%- end -%>

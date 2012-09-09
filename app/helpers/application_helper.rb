@@ -246,8 +246,8 @@ module ApplicationHelper
   end
   def put_viewer_menu
     text = "<ul id = \"eviewlist\">"
-    text << "<li><a class = 'get pause' href='/events/edit_annotation/'>Edit</a></li>"
-    text << "<li><a class=\"menhi\" href=\"/events/rate/0/\">Rate 0</a> <a class=\"menhi\" href=\"/events/rate/1/\">1</a> <a class=\"menhi\" href=\"/events/rate/2/\">2</a> <a class=\"menhi\" href=\"/events/rate/3/\">3</a> <a class=\"menhi\" href=\"/events/rate/4/\">4</a> <a class=\"menhi\" href=\"/events/rate/5/\">5</a></li>"
+    text << "<li><a class = 'get pause' href='/viewer/edit_annotation/'>Edit</a></li>"
+    text << "<li><a class=\"menhi\" href=\"/viewer/rate/0/\">Rate 0</a> <a class=\"menhi\" href=\"/viewer/rate/1/\">1</a> <a class=\"menhi\" href=\"/viewer/rate/2/\">2</a> <a class=\"menhi\" href=\"/viewer/rate/3/\">3</a> <a class=\"menhi\" href=\"/viewer/rate/4/\">4</a> <a class=\"menhi\" href=\"/viewer/rate/5/\">5</a></li>"
     text << "</ul>"
   end
   def put_viewer_sub_menu
@@ -334,7 +334,7 @@ module ApplicationHelper
   
   def piece_select_with_none
     start = [['None', '']]
-    start += current_tennant.pieces.map{|x| [x.title,x.id]}
+    start += Pieces.all.map{|x| [x.title,x.id]}
   end
   
   def put_role_select(selected)

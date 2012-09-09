@@ -30,7 +30,6 @@ GEM
       i18n (~> 0.6)
       multi_json (~> 1.0)
     acts-as-list (0.1.2)
-    acts_as_tenant (0.2.7)
     ancestry (1.2.5)
       activerecord (>= 2.2.2)
     arel (3.0.2)
@@ -194,7 +193,6 @@ PLATFORMS
 DEPENDENCIES
   active_record_query_trace
   acts-as-list
-  acts_as_tenant (~> 0.2.7)
   ancestry
   aws-s3
   bcrypt-ruby (~> 3.0.0)

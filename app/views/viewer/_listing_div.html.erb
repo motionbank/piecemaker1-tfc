@@ -1,0 +1,4 @@
+<div id = 'tme' data-time="<%= video.times %>"></div>
+<%- video.subjects.select{|x| x.is_active?}.each do |event| -%>
+<%= render :partial => '/viewer/listing_span',:locals => {:event => event,:video => video} %>
+<% end -%>

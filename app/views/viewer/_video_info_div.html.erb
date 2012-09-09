@@ -5,7 +5,7 @@
   <%- end -%>
   <div style = 'line-height:20px;font-size:14px;font-weight:bold'>
       Click on a name to turn on/off events.<br />
-  <%- @video.events.map{|x| x.created_by}.uniq.each do |name| -%>
+  <%- @video.subjects.map{|x| x.created_by}.uniq.each do |name| -%>
   <span class = 'name-toggle greenish'><%= name %></span><br />
   <% end %>
   <br />

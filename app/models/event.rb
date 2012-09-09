@@ -96,42 +96,7 @@ class Event < ActiveRecord::Base
     self.modified_by = current_user.login unless incremental
     self
   end
-  def self.video_grouped(events,videos)
-    assoc = ActiveSupport::OrderedHash.new
-    index,vidindex,old_key,caught = 0,0,'start',false
-    events.each do |event|
-      # get videos who were recorded before the event
-       while videos[vidindex] && videos[vidindex].recorded_at < event.happened_at
-              assoc[videos[vidindex].id] = {
-                :video => videos[vidindex],
-                :events => [],
-                :start => videos[vidindex].recorded_at.at_midnight}
-              vidindex += 1
-       end
-       # now you add the rest of the events contained in lthe last found video
-      key = event.video_id
-      if !key && old_key == 'start'
-        key = "null-#{index.to_s}"
-        old_key = key
-      end
-      key ||= "null-#{index.to_s}"
-      if key != old_key
-        index += 1
-        old_key = key
-      end
-      if assoc[key]
-        assoc[key][:events] << event
-      else
-        vv = event.video
-        assoc[key] = {:video => vv, :events => [event],:start => vv ? vv.recorded_at.at_midnight : event.happened_at.at_midnight}
-      end
-    end
-    while videos[vidindex] #slurp up leftover videos recorded after last event
-           assoc[videos[vidindex].id] = {:video => videos[vidindex], :events => [],:start => videos[vidindex].recorded_at.at_midnight}
-           vidindex += 1
-    end
-    assoc
-  end
+
   
   def add_title_from_tag(params)
     if params[:tag_title] && params[:tag_title] != 'select a title from this list'
@@ -153,13 +118,7 @@ class Event < ActiveRecord::Base
       nil
     end
   end
-  def video_end_time
-    if video
-      @evet ||= ((happened_at + duration) - video.happened_at).to_i
-    else
-      nil
-    end
-  end
+
   def add_tag(new_tag)#tested
     unless self.tags.include?(new_tag)
       self.tags << new_tag
@@ -570,6 +529,44 @@ class Event < ActiveRecord::Base
     end
   end
 
+  def set_video_title(piece)
+
+    time = Time.now.strftime("%Y-%m-%d")
+    last_dvd = piece.videos.last
+    if last_dvd && last_dvd.title
+      last_title = last_dvd.title.split('_')
+      last_time = last_title[0]
+      last_number = last_title[1].to_i
+      if last_time == time #same day #increment serial number
+        new_number = last_number + 1
+      else #new day number = 1
+        new_number = 1
+      end
+
+    else #no dvd make a new title
+      new_number = 1
+    end
+    new_title = time + '_' + Event.pad_number(new_number)
+    new_title << '_' + piece.short_name + '.mp4'
+    self.title = new_title
+
+  end
+
+  def full_local_alias
+    '/video/full/' + title
+  end
+
+  def online?
+    file_path = Rails.root.to_s + '/public' + full_local_alias
+    File.exists? file_path
+  end
+
+    def times
+    tims = subjects.map{|x| [x.video_start_time,x.dur,x.id]}
+    tims.sort_by{|x| x[0]}
+    times = tims.to_json
+  end
+
   protected
 
   def check_for_everyone #tested
@@ -605,3 +602,27 @@ end
 #  happened_at     :datetime
 #
 
+
+#from subscend
+  # def parse_performers_and_give_to_parent
+  #   old_performers = event.performers
+  #   all_performers = self.event.piece.performers.map{|x| x.login}
+  #   all_performers = all_performers.reject{|x| [nil,''].include?(x)}
+  #   low_desc =  self.description ? self.description.downcase : ''
+  #   low_title = self.title ? self.title.downcase : ''
+  #   all_performers.each do |performer|
+  #     search_term = /\b#{performer.downcase}\b/
+  #     if old_performers && !old_performers.include?(performer)&&(low_desc =~ search_term || low_title =~ search_term)
+  #       self.event.performers << performer
+  #     end
+  #   end
+  #   self.event.performers = self.event.performers.sort if self.event.performers
+  #   self.event.save
+  # end
+  # def video_start_time
+  #   if event.video
+  #     @evst ||= (happened_at - event.video_recorded_at).to_i
+  #   else
+  #     nil
+  #   end
+  # end

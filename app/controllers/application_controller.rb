@@ -159,8 +159,8 @@ class ApplicationController < ActionController::Base
       videos = current_piece.videos
       return false unless videos.length > 0
       video = videos.last
-      return video unless video.duration
-      return video if (video.recorded_at + video.duration) >= Time.now
+      return video unless video.dur
+      return video if (video.happened_at + video.dur) >= Time.now
       false
     end
 

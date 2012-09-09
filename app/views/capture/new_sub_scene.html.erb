@@ -16,7 +16,10 @@
 <p><label for="sub_scene_description">Description</label><br/>
 <%= text_area 'sub_scene', 'description', :size => "75x9"  %></p>
 <%= hidden_field_tag('sub_scene[happened_at]', @sub_scene.happened_at) -%>
-<%= hidden_field_tag('sub_scene[event_id]',@latest_event.id) %>
+<%= hidden_field_tag('sub_scene[parent_id]',@latest_event.id) %>
+<%= hidden_field_tag('sub_scene[piece_id]',@latest_event.piece_id) %>
+<%= hidden_field_tag('sub_scene[event_type]',@latest_event.event_type) %>
+<%= hidden_field_tag('sub_scene[created_by]',current_user.login) %>
 <%- if @create_scene -%>
 <%= hidden_field_tag('create_scene', 'true') %>
 <%- end -%>

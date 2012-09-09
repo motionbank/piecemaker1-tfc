@@ -1,4 +1,4 @@
-module VideoHelper
+module ViewerHelper
   def show_form?
     user_has_right?('group_admin') #&& @piece
   end
@@ -61,4 +61,5 @@ module VideoHelper
       "http://#{Video.archive_path}/#{video.title}"
     end
   end
+
 end

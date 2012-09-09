@@ -12,7 +12,7 @@
 <span style = "font-size:14px;<%= 'color:#600' if event.event_type == 'marker' %>"><%= event.title %></span><br />
 <span>&nbsp;&nbsp;&nbsp;&nbsp;<%= event.description %><br /> 
 </span>
-<%- event.sub_scenes.each do |sub| -%>
+<%- event.children.each do |sub| -%>
 <div class = 'one-listing sb <%= "sub-#{event.event_type}" %>'>
 <%= link_to sub.video_start_time.to_time_string, {},:class => 'bolda go_to', :id => "go-#{sub.video_start_time.to_s}" %>
 <%= link_to "set in","/sub_scene/move_from_viewer/#{sub.id}",:class => 'ajx' ,'data-confirm' => 'Move Sub Scene Start to Current Play Position?'  %>

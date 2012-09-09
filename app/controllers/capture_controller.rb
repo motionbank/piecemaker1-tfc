@@ -168,9 +168,9 @@ class CaptureController < ApplicationController
   end
   def add_event_to_video
     @create = true
-    @video = Video.find(params[:id])
-    @event = @video.events.create(
-    :happened_at => @video.recorded_at + 1,
+    @video = Event.find(params[:id])
+    @event = @video.subjects.create(
+    :happened_at => @video.happened_at + 2,
     :created_by => current_user.login,
     :modified_by => current_user.login,
     :performers => [],
@@ -388,7 +388,7 @@ class CaptureController < ApplicationController
       if (@latest_event.video && @latest_event.video.duration && Time.now > @latest_event.video.recorded_at + @latest_event.video.duration) || !@latest_event.video && video_in?
         @create_scene = true
       end
-      @sub_scene = SubScene.new(
+      @sub_scene = Event.new(
       :happened_at => Time.now + 1)
       respond_to do |format|
         format.html {render :action => 'new_sub_scene'}
@@ -403,28 +403,28 @@ class CaptureController < ApplicationController
 
   end
   def create_sub_scene
-    @event = Event.find(params[:sub_scene][:event_id])
+    @event = Event.find(params[:sub_scene][:parent_id])
     if params[:create_scene] == 'true'
       @new_event = @event.dup
       @new_event.title << ' ...Continued...'
       @new_event.video_id = video_in? ? video_in?.id : nil
       @new_event.happened_at = Time.now
       @new_event.save
-      params[:sub_scene][:event_id] = @new_event.id
+      params[:sub_scene][:parent_id] = @new_event.id
       @event = @new_event
       @create = true
     end
     
-    sub_scene = SubScene.create(params[:sub_scene])
-    sub_scene.parse_performers_and_give_to_parent
+    sub_scene = Event.create(params[:sub_scene])
+    #sub_scene.parse_performers_and_give_to_parent
     #extra code
-    new_sub = Event.create(
-    :state => 'temp',
-    :title => sub_scene.title,
-    :happened_at => sub_scene.happened_at,
-    :description => sub_scene.description,
-    :parent_id => @event.id
-    )
+    # new_sub = Event.create(
+    # :state => 'temp',
+    # :title => sub_scene.title,
+    # :happened_at => sub_scene.happened_at,
+    # :description => sub_scene.description,
+    # :parent_id => @event.id
+    # )
     respond_to do |format|
       format.html { redirect_to :controller => 'capture', :action => "present", :id => session[:pieceid] }
       format.js {render :action => 'modi_ev', :layout => false} 
@@ -432,18 +432,18 @@ class CaptureController < ApplicationController
   end
   def edit_sub_scene
     @action = 'update_sub_scene'
-    @sub_scene = SubScene.find(params[:id])
-    @latest_event = @sub_scene.event
+    @sub_scene = Event.find(params[:id])
+    @latest_event = @sub_scene.parent
     respond_to do |format|
       format.html {render :action => 'new_sub_scene'}
       format.js {render :action => 'new_sub_scene',:layout => false} 
     end
   end
   def update_sub_scene
-    sub = SubScene.find(params[:id])
+    sub = Event.find(params[:id])
     sub.update_attributes(params[:sub_scene])
-    sub.parse_performers_and_give_to_parent
-    @event = sub.event
+    #sub.parse_performers_and_give_to_parent
+    @event = sub.parent
     respond_to do |format|
       format.html { redirect_to :controller => 'capture', :action => "present", :id => session[:pieceid] }
       format.js {render :action => 'modi_ev', :layout => false} 
@@ -544,8 +544,8 @@ class CaptureController < ApplicationController
     else
       piece = Piece.find(session[:pieceid])
       @create = true
-      @video = Video.new  
-      @video.set_new_title(piece)
+      @video = Event.new  
+      @video.set_video_title(piece)
       Video.prepare_recording if true
       respond_to do |format|
         format.html
@@ -557,13 +557,16 @@ class CaptureController < ApplicationController
   def confirm_video_in
     @after_id = params[:aid] #needed to tell jquery where to insert event
     @create = true if params[:create] == 'true'
-    @video = Video.new(params[:video])
-    @video.recorded_at = Time.now
+    @video = Event.new(params[:video])
+    @video.happened_at = Time.now
+    @video.created_by = current_user.login
+    @video.modified_by = current_user.login
+    @video.event_type = 'video'
     @video.save
-    current_piece.videos << @video
+    current_piece.events << @video
     @dvd_quick = 'out'
     @truncate = :less unless @truncate == :none
-    result = Video.start_recording if current_tennant.use_auto_video?
+    result = Video.start_recording if SetupConfiguration.use_auto_video?
 
     respond_to do |format|
       format.html {redirect_to :action => 'present', :id => session[:pieceid] }
@@ -573,12 +576,12 @@ class CaptureController < ApplicationController
   def confirm_video_out
     @after_id = params[:aid] #needed to tell jquery where to insert event
     @create = true if params[:create] == 'true'
-    @video = Video.find_by_id(params[:id])
+    @video = Event.find_by_id(params[:id])
     @dvd_quick = 'insert'
-    @video.duration = Time.now - @video.recorded_at
+    @video.dur = Time.now - @video.happened_at
     @video.save
     @truncate = :less unless @truncate == :none
-    result = Video.stop_recording(@video.title) if current_tennant.use_auto_video?
+    result = Video.stop_recording(@video.title) if SetupConfiguration.use_auto_video?
       if result && result != 'error'
         #@video.rename_quicktime_and_queue_processing(result)
         @flash_message = "#{result} stored as #{@video.title}"
@@ -782,6 +785,26 @@ class CaptureController < ApplicationController
       end
       
     end
+# from subscene controller
+  #   def move_from_viewer
+  #   @sub_scene = SubScene.find(params[:id])
+  #   time = params[:time].gsub('.js','')
+  #   @sub_scene.happened_at = @sub_scene.event.video.recorded_at + time.to_i
+  #   @sub_scene.save
+  #   #@sub_scene.check_for_reposition
+  #   @video = @sub_scene.event.video
+  #   respond_to do |format|
+  #     format.html
+  #     format.js {render :controller => 'events', :action => 'move_from_viewer'}
+  #   end
+  # end
+  # def edit_sub_annotation
+  #   @sub_scene = SubScene.find(params[:id])
+  #   respond_to do |format|
+  #     format.html
+  #     format.js {render :layout => false}
+  #   end
+  # end
 
 end
 

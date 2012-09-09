@@ -1,21 +1,10 @@
-class Video < ActiveRecord::Base
+class Video
 
   MOVIE_EXTENSIONS = %w[mov mp4 m4v flv]
 
 
   require 's3_paths'
   include S3Paths
-
-
-  #belongs_to :event
-  belongs_to :piece
-
-  #has_many :video_recordings
-  has_many :events,:dependent => :nullify, :order => :happened_at,:conditions => "state = 'normal'"
-  scope :active, :conditions => "state = 'normal'"
-
-
-  after_save :rename_files_on_title_change###################
 
 ## this is to help migrations
  def self.create_events
@@ -169,28 +158,7 @@ class Video < ActiveRecord::Base
   def event_at(time)
     events.select{|x| x.happened_at - recorded_at < time}.last
   end
-  def set_new_title(piece)
 
-    time = Time.now.strftime("%Y-%m-%d")
-    last_dvd = piece.videos.last
-    if last_dvd && last_dvd.title
-      last_title = last_dvd.title.split('_')
-      last_time = last_title[0]
-      last_number = last_title[1].to_i
-      if last_time == time #same day #increment serial number
-        new_number = last_number + 1
-      else #new day number = 1
-        new_number = 1
-      end
-
-    else #no dvd make a new title
-      new_number = 1
-    end
-    new_title = time + '_' + Event.pad_number(new_number)
-    new_title << '_' + piece.short_name + '.mp4'
-    self.title = new_title
-
-  end
 
 
   def guess_piece_title

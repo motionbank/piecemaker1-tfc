@@ -19,7 +19,7 @@ class AdministrationController < ApplicationController
      @key = params[:id]
    end
    def list_s3
-     @list = S3Config.connect_and_get_objects(current_tennant.s3_sub_folder)
+     @list = S3Config.connect_and_get_objects(SetupConfiguration.s3_sub_folder)
    end
   
   def main
