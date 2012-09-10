@@ -4,7 +4,7 @@
 
   <!--[form:notes]-->
   <p><label for="note_note">Note</label><br/>
-  <%= text_area 'note', 'note', :size => "40x10"  %></p>
+  <%= text_area 'note', 'description', :size => "40x10"  %></p>
 
   <!--[eoform:notes]-->
 	<%= submit_tag "Create" %><%= link_to("Cancel",{:action => 'present', :id => session[:pieceid] },:class => 'cancel') -%>

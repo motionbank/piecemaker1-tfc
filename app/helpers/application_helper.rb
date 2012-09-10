@@ -657,7 +657,7 @@ module ApplicationHelper
   end
   def display_notes(event)
     text = ''
-    event.notes.each do |note|
+    event.children.notes.each do |note|
      text << "<div class='note' id ='note-#{note.id}'>"
       text << display_whole_note(note)
       text << '</div>'
@@ -831,7 +831,7 @@ module ApplicationHelper
   end
   def display_whole_note(note)
     text = ''
-    text << note.note + '&nbsp;&nbsp;--'
+    text << note.description + '&nbsp;&nbsp;--'
     text << "<span class = 'noteinfo'>#{note.created_by} @ #{note.created_at.strftime("%d/%m - %H:%M")}:</span>&nbsp;&nbsp;"
     
     text << raw(display_note_edit_links(note))
@@ -953,9 +953,9 @@ module ApplicationHelper
 
 def display_children(event,search = nil)
     text = ''
-    if event.children.length > 0
+    if event.children.sub_events.length > 0
       v = event.video
-    event.children.each do |ss|
+    event.children.sub_events.each do |ss|
       extra_class = v && v.dur && ss.happened_at > v.happened_at + v.dur ? 'sm warning' : "sm sub-#{event.event_type}"
       text << "<div class = '#{extra_class}' id = 'sus-#{ss.id.to_s}'>"
       text << '<span style = "font-weight:bold">'

@@ -1,6 +1,6 @@
   <%= form_tag({:action => 'edit_note',:id => @note.id}, :class => 'ajax') do -%>  
   <h2>Edit Note</h2>
-  <%= text_area 'notes', 'note', :size => "40x10",:value => @note.note %></p>
+  <%= text_area 'notes', 'description', :size => "40x10",:value => @note.description %></p>
   
 
   <br />

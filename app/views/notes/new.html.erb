@@ -1,7 +1,0 @@
-<h1>New note</h1>
-
-<%= form_tag  :controller => 'pieces', :action => 'add_note' do %>
-  <%= render :partial => 'notes/form' %>	
-  <%= submit_tag "Create" %> 
-  <%= button_to 'Cancel', :controller => 'pieces', :action => 'cancel_note', :id => params[:id] %>
-<% end %>

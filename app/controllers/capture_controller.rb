@@ -216,8 +216,14 @@ class CaptureController < ApplicationController
   def new_note
     if request.post?
       @event = Event.find(params[:id]) # this is needed to display the event after the note is created
-      @note = Note.new(params[:note])
-      @note.event_id = params[:id].to_i
+      @note = Event.new(params[:note])
+      @note.parent_id = params[:id].to_i
+      @note.piece_id = @event.piece_id
+      @note.modified_by = current_user.login
+      @note.happened_at = Time.now
+      @note.event_type = 'note'
+      @note.title = 'Note'
+      @note.performers = []
       @note.created_by = current_user.login
       if @note.save
         respond_to do |format|
@@ -228,7 +234,7 @@ class CaptureController < ApplicationController
         render :controller => 'capture', :action => 'new_note'
       end
     else
-      @note = Note.new
+      @note = Event.new
       respond_to do |format|
         format.html { render :partial => 'note_form', :layout => 'standard'}
         format.js {render :partial => 'note_form', :layout => false} 
@@ -239,15 +245,15 @@ class CaptureController < ApplicationController
 
   def edit_note
     if request.post?
-      @note    = Note.find(params[:id])
-      @note.note = params[:notes][:note]
+      @note    = Event.find(params[:id])
+      @note.description = params[:notes][:description]
       @note.save
       respond_to do |format|
         format.html {redirect_to :action => 'present'}
         format.js {render :action => 'edit_note', :layout => false} 
       end
     else
-      @note = Note.find(params[:id])
+      @note = Event.find(params[:id])
       respond_to do |format|
         format.html { render :partial => 'note_edit_form', :layout => 'standard'}
         format.js {render :partial => 'note_edit_form', :layout => false} 
@@ -256,7 +262,7 @@ class CaptureController < ApplicationController
   end
 
   def delete_note
-    @note = Note.find(params[:id])
+    @note = Event.find(params[:id])
     if request.post?
       @note.destroy
       respond_to do |format|
@@ -411,6 +417,7 @@ class CaptureController < ApplicationController
       @new_event.happened_at = Time.now
       @new_event.save
       params[:sub_scene][:parent_id] = @new_event.id
+
       @event = @new_event
       @create = true
     end
@@ -625,7 +632,7 @@ class CaptureController < ApplicationController
       end
   end
   
-  def incremental_mod_ev
+  def incremental_mod_ev #???
     @incremental = true
     @event = Event.find(params[:id])
     @event.do_event_changes(params,current_user,true)
@@ -635,7 +642,7 @@ class CaptureController < ApplicationController
     end
   end
     
-  def tag_with_title
+  def tag_with_title #???
     @event.tag_with_title
     respond_to do |format|
       format.html {redirect_to :action => "present", :id => session[:pieceid] }
@@ -768,10 +775,6 @@ class CaptureController < ApplicationController
       oldid = ss.parent_id
       @new_event = ss.promote_to_scene
       @event = Event.find(oldid)
-    end
-    def quick_piece
-      piece = Piece.find(params[:id])
-      render :text => piece.title.to_s, :layout => false
     end
 
     def convert_to_sub_scene

@@ -5,6 +5,9 @@
 #end
 
 class Event < ActiveRecord::Base
+  def self.event_types
+    %w[dev_notes discussion headline light_cue performance_notes scene sound_cue marker video sub_scene note]
+  end
   #acts_as_audited
   #before_create :check_for_everyone
   #before_update :check_for_everyone, :except => 'unlock'              
@@ -23,11 +26,8 @@ class Event < ActiveRecord::Base
   has_many :children, :class_name => "Event", :foreign_key => "parent_id", :order => 'happened_at'
   belongs_to :parent, :class_name => "Event"
   
-  #acts_as_indexed :fields => [:title, :description]
   scope :contains, lambda{|quer| {:conditions => ['title LIKE ? OR description LIKE ? OR performers LIKE ?', "%#{quer}%","%#{quer}%","%#{quer}%"],:include => :notes}}
   scope :highlighted, :conditions => "highlighted = '1'"
-  scope :scenes, :conditions => "event_type = 'scene'"
-  scope :headlines, :conditions => "event_type = 'headline'"
   scope :in_piece, lambda{|piece_id| {:conditions => ['piece_id = ?', "#{piece_id}"]}}
   scope :in_video, lambda{|video_id| {:conditions => ['video_id = ?', "#{video_id}"]}}
   scope :within_date_range, lambda{|date1,date2| {:conditions => ["happened_at between '#{date1}' and '#{date2}'"]}}
@@ -35,15 +35,35 @@ class Event < ActiveRecord::Base
   scope :deleted, :conditions => "state = 'deleted'"
   scope :normal, :conditions => "state = 'normal'"
   scope :locked, :conditions => "locked != 'none'"
-  scope :markers, :conditions => "state = 'normal' AND event_type = 'marker'"
+  scope :sub_events, :conditions => "event_type != 'note'"
+
+  Event.event_types.each do |type|
+    scope type+'s', :conditions => "event_type = '#{type}'"
+  end
   
   delegate :recorded_at,:fn_arch,:fn_local,:fn_s3, :to => :video, :prefix => true
   delegate :tags, :to => :piece, :prefix => true
 
-
-  def self.event_types
-    %w[dev_notes discussion headline light_cue performance_notes scene sound_cue marker video]
+  def self.get_notes
+    notes = Note.all
+    notes.each do |note|
+      if note.event
+        Event.create(
+          :parent_id => note.event_id,
+          :description => note.note,
+          :created_by => note.created_by,
+          :modified_by => note.created_by,
+          :created_at => note.created_at,
+          :piece_id => note.event.piece_id,
+          :performers => [],
+          :event_type => 'note',
+          :title => 'Note'
+        )
+      end
+    end
   end
+
+
   def video_viewable?
     return false unless video_id && video
     true
