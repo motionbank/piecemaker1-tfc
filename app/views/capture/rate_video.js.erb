@@ -1,1 +1,1 @@
-$('#m-<%= @video.id %>').replaceWith("<%= escape_javascript(display_video_menu(@video)) -%>");
+$('#m-<%= @video.id %>').replaceWith("<%= escape_javascript(raw display_video_menu(@video)) -%>");

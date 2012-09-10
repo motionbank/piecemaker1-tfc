@@ -142,14 +142,14 @@ class CaptureController < ApplicationController
   def dater(string)
     string.split(' ').first.split('-').reverse.join('/')
   end
-  def toggle_user_highlight
+  def toggle_user_highlight #OK
     @event.toggle_user_highlight(current_user)
     respond_to do |format|
       format.html { redirect_to :action => "present", :id => session[:pieceid] }
       format.js {render :action => 'modi_ev', :layout => false} 
     end
   end
-  def rate
+  def rate #OK
     @event.rating = params[:rating].to_i
     @event.save
     respond_to do |format|
@@ -157,8 +157,8 @@ class CaptureController < ApplicationController
       format.js {render :action => 'modi_ev', :layout => false} 
     end
   end
-  def rate_video
-    @video = Video.find(params[:id])
+  def rate_video #OK
+    @video = Event.find(params[:id])
     @video.rating = params[:rating].to_i
     @video.save
     respond_to do |format|
@@ -213,7 +213,7 @@ class CaptureController < ApplicationController
  #
  # methods for creating, editing and deleting notes and photo attachments
  #
-  def new_note
+  def new_note #OK
     if request.post?
       @event = Event.find(params[:id]) # this is needed to display the event after the note is created
       @note = Event.new(params[:note])
@@ -243,7 +243,7 @@ class CaptureController < ApplicationController
   end
 
 
-  def edit_note
+  def edit_note #OK
     if request.post?
       @note    = Event.find(params[:id])
       @note.description = params[:notes][:description]
@@ -261,7 +261,7 @@ class CaptureController < ApplicationController
     end
   end
 
-  def delete_note
+  def delete_note #OK
     @note = Event.find(params[:id])
     if request.post?
       @note.destroy
@@ -406,9 +406,8 @@ class CaptureController < ApplicationController
         format.js {render :action => 'empty_sub_scene',:layout => false} 
       end
     end
-
   end
-  def create_sub_scene
+  def create_sub_scene#OK except for parse performers....
     @event = Event.find(params[:sub_scene][:parent_id])
     if params[:create_scene] == 'true'
       @new_event = @event.dup
@@ -417,27 +416,19 @@ class CaptureController < ApplicationController
       @new_event.happened_at = Time.now
       @new_event.save
       params[:sub_scene][:parent_id] = @new_event.id
-
       @event = @new_event
       @create = true
     end
-    
     sub_scene = Event.create(params[:sub_scene])
+    sub_scene.performers = []
+    sub_scene.save
     #sub_scene.parse_performers_and_give_to_parent
-    #extra code
-    # new_sub = Event.create(
-    # :state => 'temp',
-    # :title => sub_scene.title,
-    # :happened_at => sub_scene.happened_at,
-    # :description => sub_scene.description,
-    # :parent_id => @event.id
-    # )
     respond_to do |format|
       format.html { redirect_to :controller => 'capture', :action => "present", :id => session[:pieceid] }
       format.js {render :action => 'modi_ev', :layout => false} 
     end
   end
-  def edit_sub_scene
+  def edit_sub_scene #OK
     @action = 'update_sub_scene'
     @sub_scene = Event.find(params[:id])
     @latest_event = @sub_scene.parent
@@ -446,7 +437,7 @@ class CaptureController < ApplicationController
       format.js {render :action => 'new_sub_scene',:layout => false} 
     end
   end
-  def update_sub_scene
+  def update_sub_scene #OK
     sub = Event.find(params[:id])
     sub.update_attributes(params[:sub_scene])
     #sub.parse_performers_and_give_to_parent
@@ -456,15 +447,15 @@ class CaptureController < ApplicationController
       format.js {render :action => 'modi_ev', :layout => false} 
     end
   end
-  def delete_sub_scene
-    sub = SubScene.find(params[:id])
-    id = sub.event_id
+  def delete_sub_scene #OK
+    sub = Event.find(params[:id])
+    id = sub.parent_id
     @event = Event.find(id)
-    @event.sub_scenes.delete(sub)
-     respond_to do |format|
-        format.html { redirect_to :controller => 'capture', :action => "present", :id => session[:pieceid] }
-        format.js {render :text => "#{sub.id}", :layout => false} 
-      end
+    sub.destroy
+    respond_to do |format|
+      format.html { redirect_to :controller => 'capture', :action => "present", :id => session[:pieceid] }
+      format.js {render :text => "#{sub.id}", :layout => false} 
+    end
   end
   def cancel_new_ev
     if @event = Event.find_by_id(params[:id])
@@ -502,7 +493,6 @@ class CaptureController < ApplicationController
       format.html
       format.js {render :partial => partial_name, :layout => false} 
     end
-
   end
 
   def move_event
@@ -663,7 +653,7 @@ class CaptureController < ApplicationController
     end
   end
 
- def toggle_highlight
+ def toggle_highlight #OK
    @event = Event.find(params[:id]).toggle_highlight!
    respond_to do |format|
      format.html { redirect_to :action => "present", :id => session[:pieceid] }
@@ -671,54 +661,54 @@ class CaptureController < ApplicationController
    end
  end
 
- def create_video
+ def create_video #???
    if @video = Video.find(params[:id])
      @video.update_from_params(params)
    end
    redirect_to  :action => 'present', :id => params[:piece_id]
  end
 
-    def search_type
-      if params[:yes]
-        return 'exclusive'
-      end
-      if params[:semi]
-        return 'semi_exclusive'
-      end
-      if params[:everyone]
-        return 'everyone'
-      end
-      if params[:non_with_everyone]
-        return 'non_with_everyone'
-      end
-      if params[:no]
-        return 'non_exclusive'
-      end
+  def search_type
+    if params[:yes]
+      return 'exclusive'
     end
-    def performer_filter(events)
-      name_list = performer_names_from_params.join(' ')
-      if performer_names_from_params.length == 0 && search_type != 'everyone'
-        return []
-      end
-      
-      case search_type
-        when 'exclusive' #exactly the searched for people and no others
-          flash.now[:searched_for] = "Exclusive Search for : \"#{name_list}\""
-          batch = events.select{|x| x.performer_exclusive?(performer_names_from_params)}
-        when 'semi_exclusive'
-          flash.now[:searched_for] = "Semi-Exclusive Search for : \"#{name_list}\""
-          batch = events.select{|x| x.performer_semi_exclusive?(performer_names_from_params)}
-        when 'everyone'
-          flash.now[:searched_for] = "Search for : Everyone"
-          batch = events.select{|x| x.performer_everyone?}
-        when  'non_with_everyone'
-          flash.now[:searched_for] = "Non-Exclusive Search for : \"#{name_list}\" and Everyone"
-          batch = events.select{|x| x.performer_non_exclusive_with_everyone?(performer_names_from_params)}
-        else #returns all events where the person appears except for events with "everone"
-          flash.now[:searched_for] = "Non-Exclusive Search for : \"#{name_list}\""
-          batch = events.select{|x| x.performer_non_exclusive?(performer_names_from_params)}
-        end
+    if params[:semi]
+      return 'semi_exclusive'
     end
+    if params[:everyone]
+      return 'everyone'
+    end
+    if params[:non_with_everyone]
+      return 'non_with_everyone'
+    end
+    if params[:no]
+      return 'non_exclusive'
+    end
+  end
+  def performer_filter(events)
+    name_list = performer_names_from_params.join(' ')
+    if performer_names_from_params.length == 0 && search_type != 'everyone'
+      return []
+    end
+    
+    case search_type
+      when 'exclusive' #exactly the searched for people and no others
+        flash.now[:searched_for] = "Exclusive Search for : \"#{name_list}\""
+        batch = events.select{|x| x.performer_exclusive?(performer_names_from_params)}
+      when 'semi_exclusive'
+        flash.now[:searched_for] = "Semi-Exclusive Search for : \"#{name_list}\""
+        batch = events.select{|x| x.performer_semi_exclusive?(performer_names_from_params)}
+      when 'everyone'
+        flash.now[:searched_for] = "Search for : Everyone"
+        batch = events.select{|x| x.performer_everyone?}
+      when  'non_with_everyone'
+        flash.now[:searched_for] = "Non-Exclusive Search for : \"#{name_list}\" and Everyone"
+        batch = events.select{|x| x.performer_non_exclusive_with_everyone?(performer_names_from_params)}
+      else #returns all events where the person appears except for events with "everone"
+        flash.now[:searched_for] = "Non-Exclusive Search for : \"#{name_list}\""
+        batch = events.select{|x| x.performer_non_exclusive?(performer_names_from_params)}
+      end
+  end
 
     def empty_trash
       piece = Piece.find(params[:id])
@@ -755,14 +745,14 @@ class CaptureController < ApplicationController
       @event = Event.find(params[:id])
     end
 
-    def open_scratchpad
+    def open_scratchpad #OK
       @pad = current_user.scratchpad
       respond_to do |format|
         format.html
         format.js {render :action => 'open_scratchpad', :layout => false} 
       end
     end
-    def update_scratchpad
+    def update_scratchpad #OK
       current_user.scratchpad = params[:scratchpad]
       current_user.save
       respond_to do |format|
@@ -787,7 +777,6 @@ class CaptureController < ApplicationController
         format.html {redirect_to :action => 'present', :id => current_piece.id}
         format.js {render :action => 'convert_to_sub_scene', :layout => false} 
       end
-      
     end
 # from subscene controller
   #   def move_from_viewer
