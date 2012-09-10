@@ -6,7 +6,6 @@
 <%- dates = [] -%>
 <%- next_date = @events[0].happened_at.at_midnight - 1.day if @events.length > 0 -%>
 <%- index = @events.length - 1 -%>
-<%= index -%>
 <%- i = 0 -%>
 <%- while i <= index -%>
 <%- if @events[i].happened_at.at_midnight > next_date -%>   
@@ -22,13 +21,11 @@
 <%= raw open_video_html(the_video) %>
 <%- i += 1 -%>
 <%- while @events[i] && @events[i].happened_at < the_video.end_time -%>
-<%= i %>
 <%= render :partial => 'one_event', :locals => {:event => @events[i]} %>
 <%- i += 1 -%>
 <%- end -%>
 </div>
 <%- elsif @events[i] -%>
-<%= i %>
 <%= render :partial => 'one_event', :locals => {:event => @events[i]} %>
 <%- i += 1 -%>
 <%- end -%>
