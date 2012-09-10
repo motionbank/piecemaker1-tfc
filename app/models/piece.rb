@@ -35,9 +35,6 @@ class Piece < ActiveRecord::Base
     scenes.reject!{|x| x.happened_at > pos} if pos
     scenes.last
   end
-  def empty_recordings
-    videos.select{|x| x.events.length == 0}
-  end
   def event_types
     Event.event_types
   end
