@@ -385,7 +385,7 @@ class CaptureController < ApplicationController
     @latest_event = piece.events.normal.last
 
     if @latest_event
-      if (@latest_event.video && @latest_event.video.duration && Time.now > @latest_event.video.recorded_at + @latest_event.video.duration) || !@latest_event.video && video_in?
+      if (@latest_event.video && @latest_event.video.dur && Time.now > @latest_event.video.recorded_at + @latest_event.video.duration) || !@latest_event.video && video_in?
         @create_scene = true
       end
       @sub_scene = Event.new(
@@ -562,6 +562,7 @@ class CaptureController < ApplicationController
     @video.created_by = current_user.login
     @video.modified_by = current_user.login
     @video.event_type = 'video'
+    @video.performers = []
     @video.save
     current_piece.events << @video
     @dvd_quick = 'out'

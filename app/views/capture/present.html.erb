@@ -7,6 +7,7 @@
 <%- next_date = @events[0].happened_at.at_midnight - 1.day if @events.length > 0 -%>
 <%- index = @events.length - 1 -%>
 <%- i = 0 -%>
+
 <%- while i <= index -%>
 <%- if @events[i].happened_at.at_midnight > next_date -%>   
   <%- next_date =  @events[i].happened_at.at_midnight -%>
@@ -15,12 +16,14 @@
     <%=  next_date.strftime("%A %d %b %Y") %>
   </div>
 
+
+
 <%- end -%>
 <%- if @events[i] && @events[i].event_type == 'video' -%>
 <%- the_video = @events[i] -%>
 <%= raw open_video_html(the_video) %>
 <%- i += 1 -%>
-<%- while @events[i] && @events[i].happened_at < the_video.end_time -%>
+<%- while @events[i] && (!the_video.dur || (@events[i].happened_at < the_video.end_time)) -%>
 <%= render :partial => 'one_event', :locals => {:event => @events[i]} %>
 <%- i += 1 -%>
 <%- end -%>
