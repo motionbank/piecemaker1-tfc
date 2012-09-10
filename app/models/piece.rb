@@ -25,7 +25,7 @@ class Piece < ActiveRecord::Base
  # has_many :clean_recordings, :through => :video_recordings, :source => :video, :uniq => true, :order => :recorded_at
  # has_many :short_recordings, :through => :video_recordings, :source => :video, :order => :recorded_at
   has_many :photos, :dependent => :destroy
-  has_many :tags
+  has_many :tags, :dependent => :destroy
 
 
 
