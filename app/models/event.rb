@@ -319,9 +319,9 @@ class Event < ActiveRecord::Base
   end
 
   def set_video_time_info
-      video = piece.videos.select{|x| x.recorded_at < happened_at}.last
+      video = piece.videos.select{|x| x.happened_at < happened_at}.last
       return nil unless video
-      return nil if video.duration && video.recorded_at + video.duration < happened_at
+      return nil if video.dur && video.recorded_at + video.dur < happened_at
       
       self.video_id = video.id
   end

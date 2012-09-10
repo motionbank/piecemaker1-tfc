@@ -14,10 +14,10 @@
 ActiveRecord::Schema.define(:version => 20120907160144) do
 
   create_table "accounts", :force => true do |t|
-    t.string   "name"
-    t.datetime "created_at",                       :null => false
-    t.datetime "updated_at",                       :null => false
-    t.string   "time_zone",  :default => "Berlin"
+    t.string    "name"
+    t.timestamp "created_at",                       :null => false
+    t.timestamp "updated_at",                       :null => false
+    t.string    "time_zone",  :default => "Berlin"
   end
 
   create_table "castings", :force => true do |t|
@@ -210,45 +210,45 @@ ActiveRecord::Schema.define(:version => 20120907160144) do
   add_index "tags", ["piece_id"], :name => "index_tags_on_piece_id"
 
   create_table "users", :force => true do |t|
-    t.string   "login",                     :limit => 40
-    t.string   "name",                      :limit => 100
-    t.string   "email",                     :limit => 100
-    t.string   "crypted_password",          :limit => 40
-    t.string   "salt",                      :limit => 40
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "remember_token",            :limit => 40
-    t.datetime "remember_token_expires_at"
-    t.integer  "role_id",                                  :default => 1
-    t.string   "role_name"
-    t.boolean  "notes_on",                                 :default => true
-    t.boolean  "markers_on",                               :default => true
-    t.integer  "refresh_pref",                             :default => 0
-    t.string   "truncate",                                 :default => "more"
-    t.boolean  "inherit_cast",                             :default => false
-    t.datetime "last_login"
-    t.text     "scratchpad"
-    t.string   "first_name"
-    t.string   "last_name"
-    t.boolean  "is_performer",                             :default => true
-    t.string   "password_digest"
-    t.integer  "account_id"
+    t.string    "login",                     :limit => 40
+    t.string    "name",                      :limit => 100
+    t.string    "email",                     :limit => 100
+    t.string    "crypted_password",          :limit => 40
+    t.string    "salt",                      :limit => 40
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
+    t.string    "remember_token",            :limit => 40
+    t.timestamp "remember_token_expires_at"
+    t.integer   "role_id",                                  :default => 1
+    t.string    "role_name"
+    t.boolean   "notes_on",                                 :default => true
+    t.boolean   "markers_on",                               :default => true
+    t.integer   "refresh_pref",                             :default => 0
+    t.string    "truncate",                                 :default => "more"
+    t.boolean   "inherit_cast",                             :default => false
+    t.timestamp "last_login"
+    t.text      "scratchpad"
+    t.string    "first_name"
+    t.string    "last_name"
+    t.boolean   "is_performer",                             :default => true
+    t.string    "password_digest"
+    t.integer   "account_id"
   end
 
   add_index "users", ["id"], :name => "index_users_on_id"
   add_index "users", ["role_id"], :name => "index_users_on_role_id"
 
   create_table "videos", :force => true do |t|
-    t.string   "title"
-    t.datetime "recorded_at"
-    t.integer  "duration"
-    t.integer  "rating",      :default => 0
-    t.text     "meta_data"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "piece_id"
-    t.boolean  "is_uploaded", :default => false
-    t.integer  "account_id"
+    t.string    "title"
+    t.timestamp "recorded_at"
+    t.integer   "duration"
+    t.integer   "rating",      :default => 0
+    t.text      "meta_data"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
+    t.integer   "piece_id"
+    t.boolean   "is_uploaded", :default => false
+    t.integer   "account_id"
   end
 
   add_index "videos", ["id"], :name => "index_videos_on_id"
