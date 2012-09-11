@@ -543,7 +543,7 @@ class CaptureController < ApplicationController
       @create = true
       @video = Event.new  
       @video.set_video_title(piece)
-      Video.prepare_recording if true
+      Video.prepare_recording(SetupConfiguration.quicktime_player) if true
       respond_to do |format|
         format.html
         format.js {render :partial => 'new_auto_video', :layout => false} 
@@ -564,7 +564,7 @@ class CaptureController < ApplicationController
     current_piece.events << @video
     @dvd_quick = 'out'
     @truncate = :less unless @truncate == :none
-    result = Video.start_recording if SetupConfiguration.use_auto_video?
+    result = Video.start_recording(SetupConfiguration.quicktime_player) if SetupConfiguration.use_auto_video?
 
     respond_to do |format|
       format.html {redirect_to :action => 'present', :id => session[:pieceid] }
@@ -579,7 +579,10 @@ class CaptureController < ApplicationController
     @video.dur = Time.now - @video.happened_at
     @video.save
     @truncate = :less unless @truncate == :none
-    result = Video.stop_recording(@video.title) if SetupConfiguration.use_auto_video?
+    logger.warn('********************hi')
+    result = Video.stop_recording(@video.title,SetupConfiguration.quicktime_player) if SetupConfiguration.use_auto_video?
+    
+    flash[:notice] = 'result'
       if result && result != 'error'
         #@video.rename_quicktime_and_queue_processing(result)
         @flash_message = "#{result} stored as #{@video.title}"

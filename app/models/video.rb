@@ -239,11 +239,15 @@ ENDOT
 
 
   def self.stop_recording(new_file_name = nil,player_name = 'QuickTime Player 7')
+    # i have to do this becaus3 of differences between qt player versions
+    
+
+    qt_path_command = player_name == 'QuickTime Player 7' ? 'path' : 'file'
 stop = <<ENDOT
 tell application "#{player_name}"
 try
   stop every document
-  set y to file of first document
+  set y to #{qt_path_command} of first document
   y
 on error
   return "error"
@@ -252,7 +256,7 @@ end tell
 ENDOT
     orig_file_path = `osascript -e '#{stop}'`.chomp
     if orig_file_path != 'error'
-      file_path = orig_file_path.gsub(' ', '\ ').split(':')
+      file_path = orig_file_path.gsub(' ', '\ ').split('/')
       file_path.slice!(0) #take off first part of path, I will put in a / later
       qt_file_name = file_path.pop #original name given by quicktime
       file_path = '/' + file_path.join('/')
@@ -265,6 +269,7 @@ ENDOT
         system "mv #{full_qt_file_name} #{backup_name}"
       else
         #system "cp #{full_qt_file_name} #{backup_name}"
+
         system "mv #{full_qt_file_name} #{new_name}" # move output to temp and rename
       end
       qt_file_name

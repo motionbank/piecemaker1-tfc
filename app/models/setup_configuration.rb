@@ -3,6 +3,9 @@ class SetupConfiguration
   def self.time_zone
     'Berlin'
   end
+  def self.quicktime_player
+    'QuickTime Player 7'
+  end
   def self.cdn?
     true
   end
