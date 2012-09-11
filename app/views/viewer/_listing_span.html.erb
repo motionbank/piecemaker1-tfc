@@ -1,4 +1,4 @@
-<div class = 'one-listing <%= "type#{event.event_type}" %> small user-<%= event.created_by %>' id = 'listing-<%= event.id %>' data-time="<%= event.video_start_time %>" data-duration="<%= event.duration %>"data-id="<%= event.id %>"data-user="<%= event.created_by %>" >
+<div class = 'one-listing <%= "type#{event.event_type}" %> small user-<%= event.created_by %>' id = 'listing-<%= event.id %>' data-time="<%= event.video_start_time %>" data-duration="<%= event.dur %>"data-id="<%= event.id %>"data-user="<%= event.created_by %>" >
 
 
 <%= link_to event.video_start_time.to_time_string, {},:class => 'go_to bolda', :id => "go-#{event.video_start_time.to_s}"  %>
@@ -6,7 +6,7 @@
 <%= raw display_menu_link(event,'viewermen','','div',true)%> 
 <%= link_to "set in","/events/move_from_viewer/#{event.id}",:class => 'ajx', 'data-confirm' => 'Move Event Start to Current Play Position?'  %>
 <%= link_to "set out","/events/set_out/#{event.id}",:class => 'ajx', 'data-confirm' => 'Move Event End to Current Play Position?' %>
-<%= event.duration %>
+<%= event.dur %>
 <%- end -%>
 <br />
 <span style = "font-size:14px;<%= 'color:#600' if event.event_type == 'marker' %>"><%= event.title %></span><br />
