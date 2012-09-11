@@ -214,11 +214,11 @@ class Video
   end
 
 
-  def self.prepare_recording
+  def self.prepare_recording(player_name = 'QuickTime Player 7')
     prep = <<ENDOT
 do shell script "defaults write com.apple.QuickTimePlayerX NSNavLastRootDirectory ~/Desktop"
 
-tell application "QuickTime Player"
+tell application "#{player_name}"
 close every document
 new movie recording
 end tell
@@ -227,9 +227,9 @@ ENDOT
   end
 
 
-  def self.start_recording
+  def self.start_recording(player_name = 'QuickTime Player 7')
     start = <<ENDOT
-tell application "QuickTime Player"
+tell application "#{player_name}"
 start every document
 activate
 end tell
@@ -238,9 +238,9 @@ ENDOT
   end
 
 
-  def self.stop_recording(new_file_name = nil)
+  def self.stop_recording(new_file_name = nil,player_name = 'QuickTime Player 7')
 stop = <<ENDOT
-tell application "QuickTime Player"
+tell application "#{player_name}"
 try
   stop every document
   set y to file of first document
