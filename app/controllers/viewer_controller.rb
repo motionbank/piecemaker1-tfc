@@ -55,35 +55,7 @@ class ViewerController < ApplicationController
       end
     end
 
-    def index #make this work without pieceid
-
-      
-      sorter = params[:sorter] ? params[:sorter] : 'id'
-      order_by = params[:order] ? params[:order] : 'DESC'
-      @order = order_by == 'ASC' ? 'DESC' : 'ASC'
-      sorts = {'title' => 'title','id' => 'id'}
-      if params[:id]
-        @piece = Piece.find(params[:id])
-        @videos = @piece.videos.paginate(
-                  :limit => 50,
-                  :conditions => filter_from_universal_table_params(),
-                  :page => params[:page],
-                  :order => sort_from_universal_table_params,
-                  :include => [:events]
-                  )
-      else
-        @videos = Video.paginate(
-                  :limit => 50,
-                  :conditions => filter_from_universal_table_params(),
-                  :page => params[:page],
-                  :order => sort_from_universal_table_params,
-                  :include => [:events]
-                  )
-      end
-       
-        
-      
-    end
+    
 
     def edit
       @return_to = params[:from]  

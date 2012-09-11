@@ -17,6 +17,7 @@ Piecemakerlite::Application.routes.draw do
     match '/add_marker/:piece_id/:id/:time.:format' => 'viewer#add_marker'
     match '/edit_annotation/.:format' => 'viewer#edit_annotation'
     match '/edit_sub_annotation/.:format' => 'viewer#edit_sub_annotation'
+    match '/video/index' => 'video#index'
     match ':controller/service.wsdl' => '#wsdl'
     match '/:controller(/:action(/:id))'
     match ':controller/:action.:format' => '#index'

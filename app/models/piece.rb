@@ -18,7 +18,7 @@ class Piece < ActiveRecord::Base
   has_many :documents, :dependent => :destroy
   has_many :events, :dependent => :destroy, :order => 'happened_at'
   has_many :videos, :class_name => 'Event', :conditions => "event_type = 'video'", :order => 'happened_at'
- 
+  has_many :unordered_videos, :class_name => 'Event', :conditions => "event_type = 'video'"
   has_many :photos, :dependent => :destroy
   has_many :tags, :dependent => :destroy
 
