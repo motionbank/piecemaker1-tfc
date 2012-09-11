@@ -67,7 +67,7 @@ class CaptureController < ApplicationController
     conditions += "AND (event_type != 'dev_notes') " unless user_has_right?('view_dev_notes')
     conditions += "AND (event_type != 'marker')" unless current_user.markers_on
     conditions += "AND (parent_id is NULL )"
-    Event.where(conditions).order('happened_at').includes([:video,:tags,:users,:children])#.includes([{:video => :events},:sub_scenes,:tags,:notes,:users])
+    Event.where(conditions).order('happened_at').includes([:video,:tags,:users,:children,:notes])#.includes([{:video => :events},:sub_scenes,:tags,:notes,:users])
   end
 
   def do_present

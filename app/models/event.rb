@@ -23,7 +23,8 @@ class Event < ActiveRecord::Base
     :foreign_key => "video_id"
   belongs_to :video, :class_name => "Event"
 
-  has_many :children, :class_name => "Event", :foreign_key => "parent_id", :order => 'happened_at'
+  has_many :children, :class_name => "Event", :foreign_key => "parent_id", :order => 'happened_at', :conditions => "event_type != 'note'"
+  has_many :notes, :class_name => "Event", :foreign_key => 'parent_id', :order => 'happened_at', :conditions => "event_type = 'note'"
   belongs_to :parent, :class_name => "Event"
   
   scope :contains, lambda{|quer| {:conditions => ['title LIKE ? OR description LIKE ? OR performers LIKE ?', "%#{quer}%","%#{quer}%","%#{quer}%"],:include => :notes}}
