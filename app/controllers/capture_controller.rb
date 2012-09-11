@@ -200,9 +200,9 @@ class CaptureController < ApplicationController
  end
  
  def fill_video_menu
-   video = Video.find(params[:id])
+   video = Event.find(params[:id])
    text = ''
-   if video.viewable?
+   if true#video.viewable?
      text << "<li class = 'removable'><a class = 'ignore' href = '/video_viewer/#{params[:pieceid]}/#{params[:id]}'>Watch in Viewer</a></li>"
    else
      text << "<li style = 'color:#ccc' class = 'removable'>Video Not Viewable.</li>"

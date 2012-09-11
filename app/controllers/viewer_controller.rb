@@ -37,7 +37,7 @@ class ViewerController < ApplicationController
     end
 
     def edit_from_viewer
-        @video = Video.find(params[:id])
+        @video = Event.find(params[:id])
         respond_to do |format|
           format.html
           format.js {render :layout => false}

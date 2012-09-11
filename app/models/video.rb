@@ -6,55 +6,6 @@ class Video
   require 's3_paths'
   include S3Paths
 
-## this is to help migrations
- def self.create_events
-    Video.all.each do |video|
-      ee = Event.create(
-        :title => video.title,
-        :piece_id => video.piece_id,
-        :rating => video.rating,
-        :state => video.is_uploaded ? 'uploaded' : 'normal',
-        :happened_at => video.recorded_at,
-        :dur => video.duration,
-        :created_at => video.created_at,
-        :updated_at => video.updated_at,
-        :description => video.meta_data,
-        :event_type => 'video'
-
-        )
-      video.events.each do |ev|
-        ev.video_id = ee.id
-        ev.save
-      end
-    end
-  end
-  def self.add_suffixes
-    all.each do |x|
-      if x.title && x.title.split('.') != 'mp4'
-        x.title = x.title + '.mp4'
-        x.save
-      end
-    end
-  end
-  def self.fix_recordings
-    all.each do |vid|
-      if vid.video_recordings.length == 1
-        vid.piece_id = vid.video_recordings.first.piece_id
-        vid.save
-        vid.video_recordings.first.destroy
-      end
-    end
-  end
-  def self.fix_uploaded
-    all.each do |vid|
-      vid.is_uploaded = true if vid.fn_s3 == '.mp4'
-      vid.save
-    end
-  end
-
-
-## end of migration stuff
-
   def self.days_back_to_compress
     40
   end
@@ -255,34 +206,30 @@ end try
 end tell
 ENDOT
     orig_file_path = `osascript -e '#{stop}'`.chomp
-    if orig_file_path != 'error'
-      file_path = orig_file_path.gsub(' ', '\ ').split('/')
-      file_path.slice!(0) #take off first part of path, I will put in a / later
-      qt_file_name = file_path.pop #original name given by quicktime
-      file_path = '/' + file_path.join('/')
-      full_qt_file_name = file_path + '/' + qt_file_name
-      new_file_name ||= qt_file_name
-      new_name = Video.uncompressed_dir + '/' + new_file_name
-      backup_name = Video.backup_dir + new_file_name
-      if false#true# system "which qt-fast"
-        system "/usr/local/bin/qt-fast #{full_qt_file_name} #{new_name}" # move output to temp and rename
-        system "mv #{full_qt_file_name} #{backup_name}"
-      else
-        #system "cp #{full_qt_file_name} #{backup_name}"
-
-        system "mv #{full_qt_file_name} #{new_name}" # move output to temp and rename
-      end
-      qt_file_name
+    return 'error' if orig_file_path == 'error'
+    file_path = orig_file_path.gsub(' ', '\ ').split('/')
+    file_path.slice!(0) #take off first part of path, I will put in a / later
+    qt_file_name = file_path.pop #original name given by quicktime
+    file_path = '/' + file_path.join('/')
+    full_qt_file_name = file_path + '/' + qt_file_name
+    new_file_name ||= qt_file_name
+    new_name = Video.uncompressed_dir + '/' + new_file_name
+    backup_name = Video.backup_dir + new_file_name
+    if true# system "which qt-fast"
+      system "/usr/local/bin/qt-fast #{full_qt_file_name} #{new_name}" # move output to temp and rename
+      #system "mv #{full_qt_file_name} #{backup_name}"
     else
-      'error'
+      #system "cp #{full_qt_file_name} #{backup_name}"
+      system "mv #{full_qt_file_name} #{new_name}" # move output to temp and rename
     end
+    qt_file_name
 end
   def self.get_files_from_directory(dir_name)
     Dir.chdir(dir_name)
     Dir.glob('*').select{|x| ['mp4','mov'].include?(x.split('.').last)}
   end
 
- def self.compressable_files(days_back = nil)
+  def self.compressable_files(days_back = nil)
     days_back ||= Video.days_back_to_compress
     full = Video.uncompressed_dir
     comp = Video.compressed_dir

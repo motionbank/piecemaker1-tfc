@@ -62,11 +62,13 @@ class Event < ActiveRecord::Base
       end
     end
   end
-
+  def viewable?
+    true#is_uploaded
+  end
 
   def video_viewable?
     return false unless video_id && video
-    true
+    video.viewable?
   end
   def tag_list #tested
     self.tags.collect{|x| x.name}.join(',')

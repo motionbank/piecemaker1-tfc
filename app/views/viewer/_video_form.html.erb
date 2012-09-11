@@ -14,12 +14,9 @@
 <br />
 <b>Duration:</b><%= text_field_tag 'video[duration]',@video.duration, :size => 10 %> Seconds<br />
 <b>Meta Data</b><br />
-<%= text_area 'video', 'meta_data',:size => '50x5' %>
+<%= text_area 'video', 'description',:size => '50x5' %>
 <br />
 <%= "Uploaded:" %>
-<%= check_box_tag 'video[is_uploaded]', 'true', @video.is_uploaded %>
-<br>
-
-<b>Piece:</b>
-<%= select_tag 'piece_id', options_for_select(piece_select_with_none,@video.piece_id) %>
-<br /><br />
+<%#= check_box_tag 'video[is_uploaded]', 'true', @video.state == 'uploaded' %>
+<br />
+<br />
