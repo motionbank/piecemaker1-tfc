@@ -107,7 +107,7 @@ class ApplicationController < ActionController::Base
       end
 
     def set_time_zone
-      Time.zone = 'Berlin'
+      SetupConfiguration.time_zone
     end
 
     def user_has_right?(right)

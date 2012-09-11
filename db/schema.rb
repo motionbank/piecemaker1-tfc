@@ -11,14 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120907160144) do
-
-  create_table "accounts", :force => true do |t|
-    t.string    "name"
-    t.timestamp "created_at",                       :null => false
-    t.timestamp "updated_at",                       :null => false
-    t.string    "time_zone",  :default => "Berlin"
-  end
+ActiveRecord::Schema.define(:version => 20120910135608) do
 
   create_table "castings", :force => true do |t|
     t.integer  "user_id",                       :null => false
@@ -126,21 +119,6 @@ ActiveRecord::Schema.define(:version => 20120907160144) do
     t.integer   "account_id"
   end
 
-  create_table "notes", :force => true do |t|
-    t.timestamp "created_at"
-    t.string    "created_by"
-    t.text      "note"
-    t.integer   "event_id"
-    t.string    "img"
-    t.timestamp "updated_at"
-    t.string    "private_note"
-    t.integer   "account_id"
-  end
-
-  add_index "notes", ["event_id"], :name => "event_id"
-  add_index "notes", ["event_id"], :name => "index_notes_on_event_id"
-  add_index "notes", ["id"], :name => "index_notes_on_id"
-
   create_table "photos", :force => true do |t|
     t.string    "picture_file_name"
     t.string    "picture_content_type"
@@ -168,37 +146,6 @@ ActiveRecord::Schema.define(:version => 20120907160144) do
 
   add_index "pieces", ["id"], :name => "index_pieces_on_id"
 
-  create_table "setup_configurations", :force => true do |t|
-    t.integer   "location_id"
-    t.string    "time_zone"
-    t.boolean   "use_auto_video",    :default => false
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-    t.boolean   "read_only",         :default => false
-    t.boolean   "use_heroku",        :default => false
-    t.string    "s3_sub_folder"
-    t.integer   "default_piece_id"
-    t.text      "file_locations"
-    t.integer   "desired_on_time"
-    t.integer   "min_entrances"
-    t.integer   "max_entrances"
-    t.integer   "min_entrance_time"
-    t.integer   "max_entrance_time"
-    t.integer   "account_id"
-  end
-
-  create_table "sub_scenes", :force => true do |t|
-    t.string    "title"
-    t.text      "description"
-    t.timestamp "happened_at"
-    t.integer   "event_id"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-    t.integer   "account_id"
-  end
-
-  add_index "sub_scenes", ["event_id"], :name => "index_sub_scenes_on_event_id"
-
   create_table "tags", :force => true do |t|
     t.string  "name"
     t.integer "piece_id"
@@ -210,48 +157,32 @@ ActiveRecord::Schema.define(:version => 20120907160144) do
   add_index "tags", ["piece_id"], :name => "index_tags_on_piece_id"
 
   create_table "users", :force => true do |t|
-    t.string    "login",                     :limit => 40
-    t.string    "name",                      :limit => 100
-    t.string    "email",                     :limit => 100
-    t.string    "crypted_password",          :limit => 40
-    t.string    "salt",                      :limit => 40
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-    t.string    "remember_token",            :limit => 40
-    t.timestamp "remember_token_expires_at"
-    t.integer   "role_id",                                  :default => 1
-    t.string    "role_name"
-    t.boolean   "notes_on",                                 :default => true
-    t.boolean   "markers_on",                               :default => true
-    t.integer   "refresh_pref",                             :default => 0
-    t.string    "truncate",                                 :default => "more"
-    t.boolean   "inherit_cast",                             :default => false
-    t.timestamp "last_login"
-    t.text      "scratchpad"
-    t.string    "first_name"
-    t.string    "last_name"
-    t.boolean   "is_performer",                             :default => true
-    t.string    "password_digest"
-    t.integer   "account_id"
+    t.string   "login",                     :limit => 40
+    t.string   "name",                      :limit => 100
+    t.string   "email",                     :limit => 100
+    t.string   "crypted_password",          :limit => 40
+    t.string   "salt",                      :limit => 40
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "remember_token",            :limit => 40
+    t.datetime "remember_token_expires_at"
+    t.integer  "role_id",                                  :default => 1
+    t.string   "role_name"
+    t.boolean  "notes_on",                                 :default => true
+    t.boolean  "markers_on",                               :default => true
+    t.integer  "refresh_pref",                             :default => 0
+    t.string   "truncate",                                 :default => "more"
+    t.boolean  "inherit_cast",                             :default => false
+    t.datetime "last_login"
+    t.text     "scratchpad"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.boolean  "is_performer",                             :default => true
+    t.string   "password_digest"
+    t.integer  "account_id"
   end
 
   add_index "users", ["id"], :name => "index_users_on_id"
   add_index "users", ["role_id"], :name => "index_users_on_role_id"
-
-  create_table "videos", :force => true do |t|
-    t.string    "title"
-    t.timestamp "recorded_at"
-    t.integer   "duration"
-    t.integer   "rating",      :default => 0
-    t.text      "meta_data"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-    t.integer   "piece_id"
-    t.boolean   "is_uploaded", :default => false
-    t.integer   "account_id"
-  end
-
-  add_index "videos", ["id"], :name => "index_videos_on_id"
-  add_index "videos", ["title"], :name => "index_videos_on_title"
 
 end

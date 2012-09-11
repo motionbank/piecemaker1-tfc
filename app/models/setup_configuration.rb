@@ -1,5 +1,8 @@
 class SetupConfiguration
 
+  def self.time_zone
+    'Berlin'
+  end
   def self.cdn?
     true
   end
