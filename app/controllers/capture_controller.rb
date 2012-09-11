@@ -178,7 +178,7 @@ class CaptureController < ApplicationController
     :piece_id => session[:pieceid])
     respond_to do |format|
       format.html { redirect_to :action => "present", :id => session[:pieceid] }
-      format.js {render :partial => 'modify_event', :layout => false} 
+      format.js {render :partial => 'event_form', :layout => false} 
     end
   end
 
@@ -370,7 +370,7 @@ class CaptureController < ApplicationController
     @event.performers = nil
     @event.save
     respond_to do |format|
-      format.html {render :action => 'modify_event'}
+      format.html {render :action => 'event_form'}
       format.js {render :action => 'modi_ev',:layout => false} 
     end
   end
@@ -380,11 +380,11 @@ class CaptureController < ApplicationController
     @event = Event.new
     @after_event = @event.set_attributes_from_params(params,current_user,current_piece)
     respond_to do |format|
-      format.html {render :action => 'modify_event'}
-      format.js {render :partial => 'modify_event',:layout => false} 
+      format.html {render :action => 'event_form'}
+      format.js {render :partial => 'event_form',:layout => false} 
     end
   end
-  def new_sub_scene
+  def new_sub_scene #OK
     @create_scene = false
     @action = 'create_sub_scene'
     piece = Piece.find(session[:pieceid])
@@ -487,7 +487,7 @@ class CaptureController < ApplicationController
       @original_event.lock(current_user.login)
       @original_event.save
       @modify = true
-      partial_name = 'modify_event'
+      partial_name = 'event_form'
     end
     respond_to do |format|
       format.html
@@ -618,7 +618,7 @@ class CaptureController < ApplicationController
           format.js {render :action => 'modi_ev', :layout => false}
         end
       else
-        render :action => 'modify_event'
+        render :action => 'event_form'
       end
   end
   
