@@ -86,7 +86,15 @@ class PiecesController < ApplicationController
     redirect_to :action => 'show', :id => @piece.id
   end
 
-
+  def empty_trash
+    piece = Piece.find(params[:id])
+    events = piece.events.deleted
+    events.each do |event|
+      event.destroy
+    end
+    redirect_to :controller => 'pieces', :action => 'show', :id => params[:id]
+  end
+  
   def list_tags
   end
 

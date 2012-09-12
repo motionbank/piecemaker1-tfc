@@ -17,6 +17,7 @@ class Piece < ActiveRecord::Base
   has_many :meta_infos, :dependent => :destroy
   has_many :documents, :dependent => :destroy
   has_many :events, :dependent => :destroy, :order => 'happened_at'
+  has_many :root_events, :class_name => 'Event', :conditions => "parent_id is NULL", :order => 'happened_at'
   has_many :videos, :class_name => 'Event', :conditions => "event_type = 'video'", :order => 'happened_at'
   has_many :unordered_videos, :class_name => 'Event', :conditions => "event_type = 'video'"
   has_many :photos, :dependent => :destroy

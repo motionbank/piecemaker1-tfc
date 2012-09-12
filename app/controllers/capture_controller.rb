@@ -4,7 +4,10 @@ class CaptureController < ApplicationController
   # present makes the main page
   #
   before_filter :get_event_from_params, :only => [:rate, :delete_event, :undelete_event, :destroy_event, :move_event, :unlock, :tag_with_title, :more_description, :less_description, :do_move,:toggle_user_highlight]
-
+  
+  def get_event_from_params
+    @event = Event.find(params[:id])
+  end
 
   def search_by_performer
     params[:performer_filter] = 'true'
@@ -186,7 +189,7 @@ class CaptureController < ApplicationController
     videos = Piece.find(session[:pieceid]).videos
     text = 'Video: '
    if videos.length > 0
-     if videos.last.duration && videos.last.recorded_at + videos.last.duration < Time.now
+     if videos.last.dur && videos.last.recorded_at + videos.last.dur < Time.now
        text << 'none'
      else
        time = Time.now.to_i - videos.last.recorded_at.to_i
@@ -388,7 +391,7 @@ class CaptureController < ApplicationController
     @create_scene = false
     @action = 'create_sub_scene'
     piece = Piece.find(session[:pieceid])
-    @latest_event = piece.events.normal.last
+    @latest_event = piece.root_events.normal.last
 
     if @latest_event
       if (@latest_event.video && @latest_event.video.dur && Time.now > @latest_event.video.recorded_at + @latest_event.video.duration) || !@latest_event.video && video_in?
@@ -561,6 +564,20 @@ class CaptureController < ApplicationController
     @video.event_type = 'video'
     @video.performers = []
     @video.save
+    if params[:quick_take] && params[:quick_take] == 'true'
+      Event.create(
+        :piece_id => current_piece.id,
+        :video_id => @video.id,
+        :performers => [],
+        :event_type => 'performance_notes',
+        :title => "Performance of #{current_piece.title}",
+        :created_by => current_user.login,
+        :modified_by => current_user.login,
+        :happened_at => Time.now + 1,
+        :state => 'normal',
+        :description => ''
+        )
+    end
     current_piece.events << @video
     @dvd_quick = 'out'
     @truncate = :less unless @truncate == :none
@@ -579,7 +596,6 @@ class CaptureController < ApplicationController
     @video.dur = Time.now - @video.happened_at
     @video.save
     @truncate = :less unless @truncate == :none
-    logger.warn('********************hi')
     result = Video.stop_recording(@video.title,SetupConfiguration.quicktime_player) if SetupConfiguration.use_auto_video?
     
     flash[:notice] = 'result'
@@ -596,7 +612,7 @@ class CaptureController < ApplicationController
     end
   end
   
-  def modi_ev
+  def modi_ev #OK
     #actually changes the event and saves it
       @after_id = params[:aid] #needed to tell jquery where to insert event
       @create = true if params[:create] == 'true'
@@ -643,7 +659,7 @@ class CaptureController < ApplicationController
     end
   end
 
-  def cancel_modify 
+  def cancel_modify #OK
     draft_event = Event.find(params[:id])
     @event = draft_event.get_original
     draft_event.destroy
@@ -671,7 +687,7 @@ class CaptureController < ApplicationController
    redirect_to  :action => 'present', :id => params[:piece_id]
  end
 
-  def search_type
+  def search_type #OK
     if params[:yes]
       return 'exclusive'
     end
@@ -688,13 +704,13 @@ class CaptureController < ApplicationController
       return 'non_exclusive'
     end
   end
-  def performer_filter(events)
+  def performer_filter(events) #OK
     name_list = performer_names_from_params.join(' ')
     if performer_names_from_params.length == 0 && search_type != 'everyone'
       return []
     end
     
-    case search_type
+    case search_type #OK
       when 'exclusive' #exactly the searched for people and no others
         flash.now[:searched_for] = "Exclusive Search for : \"#{name_list}\""
         batch = events.select{|x| x.performer_exclusive?(performer_names_from_params)}
@@ -713,16 +729,8 @@ class CaptureController < ApplicationController
       end
   end
 
-    def empty_trash
-      piece = Piece.find(params[:id])
-      events = piece.events.deleted
-      events.each do |event|
-        event.destroy
-      end
-      redirect_to :controller => 'pieces', :action => 'show', :id => params[:id]
-    end
 
-    def more_description
+    def more_description #OK
       set_current_piece(@event.piece_id)
       @truncate = :less
       respond_to do |format|
@@ -730,7 +738,7 @@ class CaptureController < ApplicationController
         format.js {render :partial => 'one_event', :locals => {:event => @event}, :layout => false}
       end
     end
-    def less_description
+    def less_description #OK
       set_current_piece(@event.piece_id)
       @truncate = :more
       respond_to do |format|
@@ -741,11 +749,6 @@ class CaptureController < ApplicationController
 
     def cheap_rtf
       @events = Event.where("pieceid = ?", session[:pieceid]).order('happened_at')
-    end
-
-
-    def get_event_from_params
-      @event = Event.find(params[:id])
     end
 
     def open_scratchpad #OK
@@ -763,14 +766,14 @@ class CaptureController < ApplicationController
         format.js {render :text => "$('#scratchpad').hide();$('.formhide').show();"} 
       end
     end
-    def promote_to_scene
+    def promote_to_scene #OK
       ss = Event.find(params[:id])
       oldid = ss.parent_id
       @new_event = ss.promote_to_scene
       @event = Event.find(oldid)
     end
 
-    def convert_to_sub_scene
+    def convert_to_sub_scene #OK
       event = Event.find(params[:id])
       ss = event.demote_to_sub_scene
       if ss

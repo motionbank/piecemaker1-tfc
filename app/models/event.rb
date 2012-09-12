@@ -8,6 +8,13 @@ class Event < ActiveRecord::Base
   def self.event_types
     %w[dev_notes discussion headline light_cue performance_notes scene sound_cue marker video sub_scene note]
   end
+  def self.menu_event_types
+    ev = event_types
+    ev.delete('video')
+    ev.delete('sub_scene')
+    ev.delete('note')
+    ev
+  end
   #acts_as_audited
   #before_create :check_for_everyone
   #before_update :check_for_everyone, :except => 'unlock'              
@@ -110,7 +117,7 @@ class Event < ActiveRecord::Base
   def do_event_changes(params,current_user,incremental = false)
     params[:event][:inherits_title] ||= false
     self.process_tags(params[:tags]) unless incremental
-    params[:event][:performers] = params[:performers] || [] if needs_performers_field?
+    params[:event][:performers] = params[:performers] || []
     params[:event][:description] ||= ''
     self.attributes = (params[:event])
     self.unlock
@@ -590,6 +597,10 @@ class Event < ActiveRecord::Base
     times = tims.to_json
   end
 
+  def destroy_all
+    #delete_s3
+    destroy
+  end
   protected
 
   def check_for_everyone #tested

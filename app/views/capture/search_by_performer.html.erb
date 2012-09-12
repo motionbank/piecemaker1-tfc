@@ -1,6 +1,6 @@
 <h2>Performer Search:</h2>
 <%= form_tag  :controller => 'capture', :action => 'present', :filter_type => 'performer' do %>
-<%= checklist('search_ids[]',current_piece.performers,['login','login']) -%>
+<%= raw checklist('search_ids[]',current_piece.performers,['login','login']) -%>
 <br />
 <%= submit_tag "Search", :name => 'yes' %> search for scenes with exactly the checked performers<br /><br />
 <%= submit_tag "Search", :name => 'semi' %> search for scenes with any of the checked performers but no one else<br /><br />

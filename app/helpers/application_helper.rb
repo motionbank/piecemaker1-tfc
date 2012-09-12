@@ -919,6 +919,7 @@ module ApplicationHelper
       text << '<span class="short-cut">I </span><a id = "vidinout" class = "get hdble vout" href = "/capture/confirm_video_out/'+vvid+'">Stop Video</a>'
     else
       text << '<span class="short-cut">I </span><a id = "vidinout" class = "get hdble vprep" href = "/capture/new_auto_video_in">Prepare Video</a>'
+      text << '<br /><span class="short-cut">B </span><a id = "vidinout" class = "get hdble vprep" href = "/capture/new_auto_video_in?quick_take=true">Prep. Vid & Scene</a>'
     end
     text
   end

@@ -321,6 +321,10 @@ $(function(){
 			ajaxFunction(jQuery(this),$('#marker').attr('href')+'.js')
 			return false;
 		});
+		$(document).bind('keydown', 'Ctrl+b', function(){
+			getFunction('/capture/new_auto_video_in?quick_take=true.js')
+			return false;
+		});
 		$(document).bind('keydown', 'Ctrl+i', function(){
 			var theUrl = $('#vidinout').attr('href') + '.js';
 			if( $('#vidinout').hasClass('vprep') ){

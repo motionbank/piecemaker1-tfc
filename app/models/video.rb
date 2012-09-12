@@ -17,7 +17,7 @@ class Video
     Rails.root.to_s + '/public/video/compressed'
   end
   def self.backup_dir
-    Rails.root.to_s + '/public/video/back'
+    Rails.root.to_s + '/public/video/backup'
   end
   def full_local_alias
     '/video/full/' + title
@@ -159,10 +159,7 @@ class Video
   end
 
 
-  def destroy_all
-    delete_s3
-    destroy
-  end
+
 
 
   def self.prepare_recording(player_name = 'QuickTime Player 7')
@@ -214,15 +211,18 @@ ENDOT
     full_qt_file_name = file_path + '/' + qt_file_name
     new_file_name ||= qt_file_name
     new_name = Video.uncompressed_dir + '/' + new_file_name
-    backup_name = Video.backup_dir + new_file_name
+    backup_name = Video.backup_dir + '/' + new_file_name
     if true# system "which qt-fast"
-      system "/usr/local/bin/qt-fast #{full_qt_file_name} #{new_name}" # move output to temp and rename
-      #system "mv #{full_qt_file_name} #{backup_name}"
+      system "mv #{full_qt_file_name} #{backup_name}"
+      system "/usr/local/bin/qt-fast #{backup_name} #{new_name}" # move output to temp and rename
+      x = 'fast'
     else
       #system "cp #{full_qt_file_name} #{backup_name}"
       system "mv #{full_qt_file_name} #{new_name}" # move output to temp and rename
+      x = 'not fast'
     end
-    qt_file_name
+    full_qt_file_name + x + new_name
+    #qt_file_name
 end
   def self.get_files_from_directory(dir_name)
     Dir.chdir(dir_name)

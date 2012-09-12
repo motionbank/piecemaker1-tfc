@@ -52,7 +52,7 @@
       %strong Trash:
       = link_to 'View',:controller => 'capture', :action => 'present', :id => @piece, :filter_type => 'trash'
       |
-      = link_to 'Empty',:controller => 'capture', :action => 'empty_trash', :id => @piece
+      = link_to 'Empty',:controller => 'pieces', :action => 'empty_trash', :id => @piece
       %br/
       .pieceshow
         - @piece.events.deleted.each_with_index do |trash,index|
