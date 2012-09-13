@@ -1,0 +1,8 @@
+site_name: 'hello'
+found_text_replacement_string: '<span class="found">\1</span>'
+truncate_length: 300
+no_video_string: '<span class="no-video">No Video</span>'
+time_zone: 'Berlin'
+quicktime_player: 'QuickTime Player 7'
+cdn?: true
+s3_sub_folder: 'tfc'

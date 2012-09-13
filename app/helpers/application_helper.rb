@@ -1,6 +1,11 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
-  
+  def found_text_replacement_string
+    Piecemakerlite.config.found_text_replacement_string || '<span class="found">\1</span>'
+  end
+  def truncate_length
+    Piecemakerlite.config.truncate_length || 300
+  end
   def error_messages_for(thing)
     if thing.errors.any?
       text = '<ul>'
@@ -666,7 +671,7 @@ module ApplicationHelper
   end
   def display_title(event, search = nil)
     content_tag(:div,:class => "evtit#{event.tagged_with_title? ? ' ital' : ''}") do
-      text = event.title ? highlight(sanitize(event.title), search, SetupConfiguration.found_text_replacement_string) : ''
+      text = event.title ? highlight(sanitize(event.title), search, found_text_replacement_string) : ''
       text << " (#{event.piece.title})" if @show_piece
       text
     end
@@ -690,7 +695,7 @@ module ApplicationHelper
           text << event.video_start_time.to_time_string
         end
       else
-        text << SetupConfiguration.no_video_string
+        text << Piecemakerlite.config.no_video_string
       end
     text << '</div>'
   end
@@ -724,7 +729,7 @@ module ApplicationHelper
     text
   end
   def more_string(event)
-    length = event.description.length - SetupConfiguration.truncate_length
+    length = event.description.length - truncate_length
     string = '&nbsp;&nbsp;<a class = "more" href="'
     string << "#{event.id}"
     string << '">'+length.to_s+' More</a>'
@@ -740,12 +745,12 @@ module ApplicationHelper
       text = "<div class='sm evdes'>"
       
       tt = case @truncate
-        when :more then my_tags(truncate(event.description,:length => SetupConfiguration.truncate_length, :omission => more_string(event)))
-        when :less then event.description.length > SetupConfiguration.truncate_length ? my_tags(event.description) + less_string(event) : my_tags(event.description)
+        when :more then my_tags(truncate(event.description,:length => truncate_length, :omission => more_string(event)))
+        when :less then event.description.length > truncate_length ? my_tags(event.description) + less_string(event) : my_tags(event.description)
         else  my_tags(event.description)
         end
       if search
-        tt = highlight(tt,search,SetupConfiguration.found_text_replacement_string)
+        tt = highlight(tt,search,found_text_replacement_string)
       end
       text << tt
       text << '</div>'
@@ -774,8 +779,8 @@ module ApplicationHelper
       text << '&nbsp;&nbsp;'
       ss.description ||= ''
       if search
-        ss.title = highlight(ss.title,search,SetupConfiguration.found_text_replacement_string)
-        ss.description = highlight(ss.description,search,SetupConfiguration.found_text_replacement_string)
+        ss.title = highlight(ss.title,search,found_text_replacement_string)
+        ss.description = highlight(ss.description,search,found_text_replacement_string)
       end
       text << "#{ss.title}"
       text << '</span><br />&nbsp;&nbsp;'
@@ -973,8 +978,8 @@ def display_children(event,search = nil)
       text << '&nbsp;&nbsp;'
       ss.description ||= ''
       if search
-        ss.title = highlight(ss.title,search,SetupConfiguration.found_text_replacement_string)
-        ss.description = highlight(ss.description,search,SetupConfiguration.found_text_replacement_string)
+        ss.title = highlight(ss.title,search,found_text_replacement_string)
+        ss.description = highlight(ss.description,search,found_text_replacement_string)
       end
       text << "#{ss.title}"
       text << '</span><br />&nbsp;&nbsp;'

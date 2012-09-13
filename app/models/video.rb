@@ -189,7 +189,7 @@ ENDOT
   def self.stop_recording(new_file_name = nil,player_name = 'QuickTime Player 7')
     # i have to do this becaus3 of differences between qt player versions
     
-
+    divider = player_name == 'QuickTime Player 7' ? '/' : ':'
     qt_path_command = player_name == 'QuickTime Player 7' ? 'path' : 'file'
 stop = <<ENDOT
 tell application "#{player_name}"
@@ -204,7 +204,7 @@ end tell
 ENDOT
     orig_file_path = `osascript -e '#{stop}'`.chomp
     return 'error' if orig_file_path == 'error'
-    file_path = orig_file_path.gsub(' ', '\ ').split('/')
+    file_path = orig_file_path.gsub(' ', '\ ').split(divider)
     file_path.slice!(0) #take off first part of path, I will put in a / later
     qt_file_name = file_path.pop #original name given by quicktime
     file_path = '/' + file_path.join('/')

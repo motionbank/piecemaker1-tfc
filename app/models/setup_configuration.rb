@@ -26,9 +26,7 @@ class SetupConfiguration
     Piece.all
   end
 
-  def self.no_video_string
-    '<span style="color:#f00">No Video</span>'
-  end
+  
   def self.event_types
     %w[discussion headline light_cue performance_notes scene sound_cue dev_notes marker video]
   end
@@ -46,15 +44,7 @@ class SetupConfiguration
       'view_dev_notes'      => %w[group_admin]
     }
   end
-  def self.field_types
-    %w[enabled title creation_info description performers edit_links media_time tags]
-  end
-  def self.truncate_length
-    300
-  end
-  def self.found_text_replacement_string
-    '<span class="found">\1</span>'
-  end
+  
 end
 
 # == Schema Information

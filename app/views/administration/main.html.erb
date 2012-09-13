@@ -7,4 +7,5 @@
 <h2>Database: <%= Rails.configuration.database_configuration[Rails.env]['database'] %> </h2>
 <h2>Client IP: <%= @ip %></h2>
 <h2>Bucket: <%= ENV['S3_BUCKET'] %></h2>
-<h2>S3 Base folder: <%= show_tennant %></h2>
+<h2>S3 Base folder: <%=  %></h2>
+<h2>Site Name: <%= Piecemakerlite.config.site_name %></h2>

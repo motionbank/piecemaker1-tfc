@@ -184,6 +184,9 @@ overflow:auto;
 font-weight:bold;
 background:#0df
 }
+.no-video{
+  color:#f00;
+}
 
 .form_div a {display:inline;padding:4px;background:#55b;color:#ccc;text-decoration:none;font-size:11px;}
 .form_div a:hover{color:#fff;background:#99f;}

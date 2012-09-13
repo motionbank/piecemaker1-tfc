@@ -216,7 +216,7 @@ class Event < ActiveRecord::Base
     if video
       video.title#.to_i
     else
-      SetupConfiguration.no_video_string
+      Piecemakerlite.config.no_video_string
     end
   end
   
