@@ -14,7 +14,13 @@ module Piecemakerlite
         Application.config
     end
   class Application < Rails::Application
-    YAML.load_file("#{Rails.root}/config/config.yml").each { |k,v| config.send "#{k}=", v }
+    if File.exists? "#{Rails.root}/config/config.yml"
+        file_to_load = "#{Rails.root}/config/config.yml"
+    else
+        file_to_load = "#{Rails.root}/config/config-example.yml"
+    end
+    config.file_to_load = file_to_load
+    YAML.load_file(file_to_load).each { |k,v| config.send "#{k}=", v }
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
