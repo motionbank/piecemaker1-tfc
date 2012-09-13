@@ -15,6 +15,7 @@ module ApplicationHelper
       text << '</ul>'
     end
   end
+  
   def came_from_string
     @cf ||= '?came_from='+@came_from.to_s.gsub('/','%2F')
   end
@@ -676,7 +677,7 @@ module ApplicationHelper
       text
     end
   end
-  #class="go_to" id="go-6363"
+
   def put_see_video_link_around_time(event,time)
     st = "<a class = 'hdble go_to' id = 'go-#{time.to_i}' href = '/video_viewer/#{event.piece_id}/#{event.video_id}?event_id=#{event.id}&seek=#{time.to_i}'>"
     st << "<b>"
