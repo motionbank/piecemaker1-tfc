@@ -162,9 +162,8 @@ class Video
 
 
 
-  def self.prepare_recording(player_name = 'QuickTime Player 7')
+  def self.prepare_recording(player_name = Piecemakerlite.config.quicktime_player)
     prep = <<ENDOT
-do shell script "defaults write com.apple.QuickTimePlayerX NSNavLastRootDirectory ~/Desktop"
 
 tell application "#{player_name}"
 close every document
@@ -175,7 +174,7 @@ ENDOT
   end
 
 
-  def self.start_recording(player_name = 'QuickTime Player 7')
+  def self.start_recording(player_name = Piecemakerlite.config.quicktime_player)
     start = <<ENDOT
 tell application "#{player_name}"
 start every document
@@ -186,7 +185,7 @@ ENDOT
   end
 
 
-  def self.stop_recording(new_file_name = nil,player_name = 'QuickTime Player 7')
+  def self.stop_recording(new_file_name = nil,player_name = Piecemakerlite.config.quicktime_player)
     # i have to do this becaus3 of differences between qt player versions
     
     divider = player_name == 'QuickTime Player 7' ? '/' : ':'
@@ -221,8 +220,7 @@ ENDOT
       system "mv #{full_qt_file_name} #{new_name}" # move output to temp and rename
       x = 'not fast'
     end
-    full_qt_file_name + x + new_name
-    #qt_file_name
+    qt_file_name
 end
   def self.get_files_from_directory(dir_name)
     Dir.chdir(dir_name)
