@@ -271,6 +271,10 @@ function viewerShortcutsEnabled(){
 };
 
 $(function(){
+	$('#video-table').dataTable({
+        "aaSorting": [[ 0, "asc" ]]
+    });
+
 	showType = ['Markers','Others'];
 	$('#listing_div').data('hide',[]);
 	$('#listing_div').data('typehide',[]);

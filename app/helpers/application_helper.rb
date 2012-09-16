@@ -15,7 +15,7 @@ module ApplicationHelper
       text << '</ul>'
     end
   end
-  
+
   def came_from_string
     @cf ||= '?came_from='+@came_from.to_s.gsub('/','%2F')
   end
@@ -39,6 +39,91 @@ module ApplicationHelper
     else
       text
     end
+  end
+  def new_universal_table(id,items, options = {})
+    confirmables = ['Destroy', 'Destroy All']
+    return "<h2>No Items</h2>" if items.length < 1
+    text = ''
+    options[:actions] ||= [] #actions are links to actions in the same controller can also take a hash of {'action_description' => 'action_path'} if action name is destroy it will give you a confirm
+    options[:admin] ||= {}
+    options[:columns] ||= []
+    show_form = options[:form] && options[:form][:show]
+    if show_form
+      text << options[:form]['form'] + "&nbsp;&nbsp;Check/Uncheck All: " + check_box_tag('hi',false,false,:class => 'check-all x')
+    end
+    # Start Table & Header Row
+    text << "<table class = 'pretty' id = '#{id}'>\n<thead>\n<tr>\n"
+    # Checkboxes
+    text << "<th>\n#{options[:form]['label_for_checkboxes']}</th />\n" if show_form
+    # Start Header Cells
+    options[:columns].each do |column|
+      field_label = column.first[0]
+      text << "<th>"
+      text << field_label
+      text << "</th>\n"
+    end
+    options[:actions].each do |action|
+      text << "<th>"
+      text << ""
+      text << "</th>\n"
+    end
+    text << "</tr>\n" #end header row
+    
+    text << "</thead>\n<tbody>\n" #start body rows
+    items.each do |item|
+      text << "<tr>"
+      if show_form
+        text << "<td>"
+        text << check_box_tag(options[:form]['label_for_checkboxes'],item.id,false,:class => 'check_all_able x')
+        text << "</td>"
+      end
+      options[:columns].each do |column|
+        field_label = column.first[0]
+        field_method = column.first[1]
+        text << "<td>"
+        if field_method[-3,3]=='_at'
+          rec = recursive_send(item,field_method)
+          text << rec.strftime("%Y-%d-%m - %H:%M %Z") if rec
+        else
+          addon = wrap_boolean(recursive_send(item,field_method).to_s)
+          if options[:truncate]
+            text <<  truncate(addon,:length => options[:truncate])
+          else
+            text <<  addon
+          end
+          
+        end
+        text << "</td>"
+      end
+      if !options[:actions].empty?
+        options[:actions].each do |action|
+          came_from = ''
+          array = action.to_a.first
+          action_label = array[0]
+          if array[1][-1,1] == '$'
+            came_from = came_from_string
+            array[1].chop!
+          end
+          action_action = array[1]
+          text << "<td>"
+          
+          if !options[:admin][action_label] ||  user_has_right?(options[:admin][action_label])
+            text << "*" if options[:admin][action_label]
+            
+            confirm = confirmables.include?(action_label) ? 'Are You Sure?' : nil
+            method = confirmables.include?(action_label) ? 'post' : 'get'
+            text << link_to(action_label,"#{action_action}/#{item.id.to_s}#{came_from_string}",:method => method, :confirm => confirm )
+          end
+          text << "</td>"
+        end 
+      end
+      text << "</tr>\n"
+    end
+    text << "</tbody>\n</table>" #end body rows
+    
+    text << "</form>" if show_form
+    text
+
   end
   def universal_table(items, options = {})
     confirmables = ['Destroy', 'Destroy All']

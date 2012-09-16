@@ -18,6 +18,7 @@ Piecemakerlite::Application.routes.draw do
     match '/edit_annotation/.:format' => 'viewer#edit_annotation'
     match '/edit_sub_annotation/.:format' => 'viewer#edit_sub_annotation'
     match '/video/index' => 'video#index'
+    match '/video/new_list' => 'video#new_list'
     match ':controller/service.wsdl' => '#wsdl'
     match '/:controller(/:action(/:id))'
     match ':controller/:action.:format' => '#index'

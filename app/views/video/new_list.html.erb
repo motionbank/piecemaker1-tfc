@@ -1,0 +1,22 @@
+<%= raw new_universal_table(
+    'video-table',
+@videos,
+{
+  :columns => [ {'ID' => 'id',:sort => 'id'},
+                {'Title' => 'title',:sort => 'title'},
+                {'S3' => 'state'},
+                {'Piece'=> 'piece.title'},
+                {'Length' => 'dur'},
+              ],
+  :actions => [ {'Annotate' => "/video_viewer/#{params[:id]}"},
+                {'Details' => '/video/show'},
+                {'Edit' => '/video/edit$'},
+                {'Destroy' => '/video/delete'},
+                {'Destroy All' => '/video/delete_all'}
+              ],
+  :admin => {'Destroy'=>'group_admin',
+    'Data' => 'group_admin',
+    'Destroy All' => 'group_admin'},
+  :search_field => 'title'
+}
+) %>

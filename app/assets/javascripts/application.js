@@ -20,6 +20,7 @@
 //= require jquery-tools
 //= require jquery-menubox
 //= require jquery-periodical
+//= require jquery.dataTables
 //= require old-application
 //= require capture
 //= require s3_upload
