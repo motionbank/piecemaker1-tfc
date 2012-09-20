@@ -5,12 +5,20 @@ class VideoController < ApplicationController
       @video = Event.find(params[:id])
       @piece = @video.piece
   end
-  def new_list
-    @videos = Event.where("event_type = 'video'").includes([:piece])
+  
+  def edit
+    @event = Event.find(params[:id])
+    render :layout => false
+  end
+  def update
+    @video = Event.find(params[:id])
+    @video.update_attributes(params[:event])
+    respond_to do |format|
+      format.js {render :partial => 'update_index', :layout => false;} 
+    end
   end
   def index
-    new_list
-    render :action => 'new_list'
+    @videos = Event.where("event_type = 'video'").includes([:piece])
   end
   def delete
     if @video.destroy

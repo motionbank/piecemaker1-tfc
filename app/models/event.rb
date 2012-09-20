@@ -27,7 +27,7 @@ class Event < ActiveRecord::Base
   has_and_belongs_to_many :users
 
   has_many :subjects, :class_name => "Event",
-    :foreign_key => "video_id"
+    :foreign_key => "video_id", :order => 'happened_at'
   belongs_to :video, :class_name => "Event"
 
   has_many :children, :class_name => "Event", :foreign_key => "parent_id", :order => 'happened_at', :conditions => "event_type != 'note'"
@@ -445,7 +445,21 @@ class Event < ActiveRecord::Base
   def next_scene#tested
     @next_scene ||= Event.where("piece_id = ? AND event_type = 'scene'",piece_id).order("happened_at").select{|x| x.is_active?}.select{|x| x.happened_at > self.happened_at}.first
   end
-  
+  def dur_string
+    if dur
+    hourmin = dur.divmod(3600)
+    minsec = hourmin[1].divmod(60)
+    timestring = ''
+    if(hourmin[0] > 0)
+      timestring << hourmin[0].to_s+'h'
+    end
+    if(minsec[0] > 0)
+      timestring << minsec[0].to_s+'m'
+    end
+    timestring << minsec[1].to_s+'s'
+    timestring
+    end
+  end
   def in_which_video
     videos = piece.videos.sort_by{|x| x.recorded_at}
     before = videos.reject{|x| x.recorded_at > happened_at}.last
@@ -600,6 +614,58 @@ class Event < ActiveRecord::Base
   def destroy_all
     #delete_s3
     destroy
+  end
+  def next_video
+    x = Event.where("piece_id = '#{piece_id}' AND event_type = 'video' AND happened_at > :start_time AND happened_at < :end_time", {:start_time => happened_at, :end_time => (happened_at + 1.day).at_midnight}).order('happened_at')
+    next_video = x.any? ? x.last : nil 
+  end
+  def self.fix
+    num = 0
+    x = Event.where("title LIKE '%bluebox%'")
+    x.each do |vid|
+      if vid.subjects.length == 0
+        vid.destroy  
+      end
+    end
+    num
+  end
+  def get_quicktime_duration
+    nil
+  end
+  def self.fix_piece_duration(pieceid)
+    acc = []
+    x = Event.where("piece_id = '#{pieceid}' AND event_type = 'video'")
+    x.each do |v|
+      d = v.fix_duration
+      acc << d if d
+    end
+    acc
+  end
+  def fix_duration(force = false)
+    if dur && !force
+      #do nothing if dur is set
+    elsif dd = get_quicktime_duration # quicktime file duration is most reliable
+      self.dur = dd
+      save
+      id
+    elsif subjects.any? #60 seconds after last subject. video is probably longer
+      self.dur = subjects.last.happened_at - happened_at
+      self.dur += 60
+      save
+      id
+    elsif next_video # 5 seconds before next video of day. 
+      self.dur = next_video.happened_at - happened_at 
+      self.dur -= 5
+      save
+      id
+    else # 2 hours or end of day whichever comes first. too bad if session lasts after midnight
+      end_of_day = (happened_at + 1.day).at_midnight
+      time_left = (end_of_day - happened_at) - 1 
+      self.dur = 7200 >=  time_left ? time_left : 7200
+      save
+      id
+    end
+    
   end
   protected
 

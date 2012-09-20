@@ -431,6 +431,10 @@ $(function(){
   $('#body a').live('click', function(event){
 		var theUrl = $(this).attr('href')+'.js';
 		
+		// if($(this).hasClass('tabby')){
+		// 	alert('tabby');
+		// 	return false;
+		// };
 
 		if($(this).hasClass('get-sc')){
 			$.get(theUrl, function(data){
@@ -441,16 +445,7 @@ $(function(){
 		};
 
 		if($(this).hasClass('get')){
-			
-			switch($(this).data('action')){
-				case 'alert' :
-				alert('hi');
-				break;
-				default:
-				
-			}
-			
-			
+						
 			if($(this).hasClass('vout')){
 				if(confirm('Do you wish to stop the video?')){
 					ajaxFunction($(this),$('#vidinout').attr('href')+'.js')
@@ -467,7 +462,7 @@ $(function(){
 				getFunction(theUrl,false);
 			}
 
-		$(".hdble").hide();
+			$(".hdble").hide();
 			return false;
 		}//if class get
 
@@ -476,13 +471,13 @@ $(function(){
 		if($(this).hasClass('promote')){
 			if(confirm('Promote this Sub Scene into a Scene')){
 			ajaxFunction($(this),theUrl)
-		}
+			}
 			return false;
 		}
 		if($(this).hasClass('process')){
 			if(confirm('Do you really wish to start processing todays videos? This will overwrite the data on piecemaker.org!')){
 			ajaxFunction($(this),theUrl)
-		}
+			}
 			return false;
 		}
 		if($(this).hasClass('dg')){
@@ -560,7 +555,7 @@ $(function(){
 			$.get(theUrl, "_method=post", function(data) {
 		    loadFormDiv(data,false);
 		    });
-		$(".hdble").hide();
+			$(".hdble").hide();
 				return false;
 		}
 

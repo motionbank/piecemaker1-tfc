@@ -1,22 +1,33 @@
-<%= raw new_universal_table(
-    'video-table',
-@videos,
-{
-  :columns => [ {'ID' => 'id',:sort => 'id'},
-                {'Title' => 'title',:sort => 'title'},
-                {'S3' => 'state'},
-                {'Piece'=> 'piece.title'},
-                {'Length' => 'dur'},
-              ],
-  :actions => [ {'Annotate' => "/video_viewer/#{params[:id]}"},
-                {'Details' => '/video/show'},
-                {'Edit' => '/video/edit$'},
-                {'Destroy' => '/video/delete'},
-                {'Destroy All' => '/video/delete_all'}
-              ],
-  :admin => {'Destroy'=>'group_admin',
-    'Data' => 'group_admin',
-    'Destroy All' => 'group_admin'},
-  :search_field => 'title'
-}
-) %>
+<table id = 'video-table' class = 'pretty'>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>ID</th>
+            <th>S3</th>
+            <th>Piece</th>
+            <th>Duration</th>
+            <%- if true -%>
+            <th>Annotate</th>
+            <th>Edit</th>
+            <th>Destroy</th>
+            <% end -%>
+        </tr>
+    </thead>
+    <tbody>
+        <%- @videos.each do |video| -%>
+        <tr id = 'rowId<%= video.id %>'>
+            <td><%= video.title %></td>
+            <td><%= video.id %></td>
+            <td><%= video.state %></td>
+            <td><%= video.piece.title if video.piece %></td>
+            <td><%= video.dur_string %></td>
+            <%- if true -%>
+            <td><a href="/video_viewer/<%= video.id %>">Annotate</a></td>
+            <td><a href="/video/edit/<%= video.id %>" class='get'>Edit</a></td>
+            <td><a href="/video/confirm_destroy/<%= video.id %>">Delete</a></td>
+            <% end -%>
+        </tr>
+        <%- end -%>
+    </tbody>
+
+</table>

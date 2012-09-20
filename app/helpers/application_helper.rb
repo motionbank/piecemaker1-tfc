@@ -109,10 +109,10 @@ module ApplicationHelper
           
           if !options[:admin][action_label] ||  user_has_right?(options[:admin][action_label])
             text << "*" if options[:admin][action_label]
-            
+            link_class = action_label == 'Edit' ? 'get': ''
             confirm = confirmables.include?(action_label) ? 'Are You Sure?' : nil
             method = confirmables.include?(action_label) ? 'post' : 'get'
-            text << link_to(action_label,"#{action_action}/#{item.id.to_s}#{came_from_string}",:method => method, :confirm => confirm )
+            text << link_to(action_label,"#{action_action}/#{item.id.to_s}#{came_from_string}", :confirm => confirm, :class => link_class )
           end
           text << "</td>"
         end 
@@ -306,10 +306,10 @@ module ApplicationHelper
   end
 
   def put_menu
-    text = "<ul id = \"capmenlsr\">"
-    text << "<li><a class=\"mened\" href=\"/capture/mod_ev/\">Edit</a></li>"
+    text = "<ul id = \"\">"
+    text << "<li><a  href=\"/capture/mod_ev/\">Edit</a></li>"
     text << "<li><a class=\"mendel\" href=\"/capture/delete_event/\">Delete</a></li>"
-    text << "<li><a class=\"mened\" href=\"/capture/new_note/\">New Note</a></li>"
+    text << "<li><a  href=\"/capture/new_note/\">New Note</a></li>"
     text << "</ul>"
     text << "<ul id = \"capmenlss\">"
     if user_has_right?('highlight')
@@ -321,9 +321,9 @@ module ApplicationHelper
       text << "<li><a class=\"menhi\" href=\"/capture/tag_with_title/\">Tag With Title</a></li>"
     end
     if user_has_right?('advanced_actions')
-      text << "<li><a class=\"mened\" href=\"/capture/new_event/scene?after=\">Insert Event After</a></li>"
+      text << "<li><a  href=\"/capture/new_event/scene?after=\">Insert Event After</a></li>"
       text << "<li><a class=\"menhisub\" href=\"/capture/convert_to_sub_scene/\">Convert to Subscene</a></li>"
-      text << "<li><a class=\"mened\" href=\"/capture/move_event/\">Move Event</a></li>"
+      text << "<li><a  href=\"/capture/move_event/\">Move Event</a></li>"
     end
     text << "</ul>"
   end

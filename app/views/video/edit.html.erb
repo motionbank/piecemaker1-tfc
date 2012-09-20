@@ -1,7 +1,45 @@
 <h3>Edit Video</h3>
-<%= form_tag "/video/update/#{@video.id}?came_from=#{params[:came_from]}" do %>
-  <%= render :partial => 'form' %>
+<%= form_tag({:action => 'update', :id => @event}, :class => 'ajax') do %>
+  <!--[form:event]-->
+ID: <%= @event.id %>&nbsp;&nbsp;Created by: <%= @event.created_by %>&nbsp;&nbsp;Modified By: <%= @event.modified_by %>&nbsp;&nbsp;Updated At: <%= @event.updated_at %><br /><br />
+<label for="event_title">Title</label>
+<%= text_field 'event', 'title'  %>
+<label for="event_event_type">Type</label>
+
+ <%= select_tag('event[event_type]', options_for_select(Event.event_types,@event.event_type)) -%>
+&nbsp;&nbsp;<label for="event_title">Inherits Title</label>
+<%= check_box_tag 'event[inherits_title]','true',@event.inherits_title %>
+<br /><br />
+<label for="event_happened_at">Happened At</label>
+ <%= text_field 'event', 'happened_at',:size => 40  %>
+ <label for="event_dur">Duration</label>
+ <%= text_field 'event', 'dur',:size => 10  %>
+
+<label for="event_locked">Locked</label>
+<%= text_field 'event', 'locked',:size => 8 %>
+
+<br /><br />
+
+<label for="event_piece_id">Piece ID</label>
+<%= text_field 'event', 'piece_id',:size => 6  %>
+<label for="event_video_id">Video ID</label>
+<%= text_field 'event', 'video_id',:size => 6 %>
+
+
+<br /><br />
+
+<label for="event_state">State</label>
+<%= text_field 'event', 'state',:size => 7 %> (normal, deleted, draft_of:)&nbsp;&nbsp;
+<label for="event_rating">Rating</label>
+<%= text_field 'event', 'rating',:size => 6 %>
+<br />
+Number of Annotations: <%= @event.subjects.length -%>
+
+<br />
+<br />
+<!--[eoform:event]-->
+
 <%= submit_tag "Save Changes" %>
 <% end %>
 <br />
-<%= link_to 'Back to List', came_from_or({:action => 'index', :id => @return_to}) %>
+<%= link_to 'Cancel', "/video/new_list",:class => 'cancel' %>

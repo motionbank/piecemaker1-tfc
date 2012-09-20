@@ -1,0 +1,3 @@
+$("#form_div").hide();
+$("#form_div").html('');
+$("#rowId<%= @video.id %>").html('<%= escape_javascript(render(:partial => 'video_table_row', :locals =>{:video => @video})) -%>')

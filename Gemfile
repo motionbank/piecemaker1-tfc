@@ -25,7 +25,6 @@ gem 'factory_girl_rails', '~> 3.0.0' ,:group => [:test, :cucumber]
 group :test do
   gem 'capybara'           # better than webrat
   gem 'guard-rspec' 
-  gem 'capybara'           # better than webrat
   gem 'database_cleaner'   # clean database between tests
   gem 'cucumber-rails'
   gem 'cucumber'

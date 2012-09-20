@@ -1,0 +1,10 @@
+            <td><%= video.title %></td>
+            <td><%= video.id %></td>
+            <td><%= video.state %></td>
+            <td><%= video.piece.short_name if video.piece %></td>
+            <td><%= video.dur_string %></td>
+            <%- if true -%>
+            <td><a href="/video_viewer/<%= video.id %>">Annotate</a></td>
+            <td><a href="/video/edit/<%= video.id %>" class='get'>Edit</a></td>
+            <td><a href="/video/confirm_destroy/<%= video.id %>">Delete</a></td>
+            <% end -%>
