@@ -18,7 +18,11 @@ class VideoController < ApplicationController
     end
   end
   def index
-    @videos = Event.where("event_type = 'video'").includes([:piece])
+    if params[:id]
+      @videos = Event.where("event_type = 'video' AND piece_id = #{params[:id]}").includes([:piece])
+    else
+      @videos = Event.where("event_type = 'video'").includes([:piece])
+    end
   end
   def delete
     if @video.destroy
