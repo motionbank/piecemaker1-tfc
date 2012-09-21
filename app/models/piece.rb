@@ -85,7 +85,7 @@ class Piece < ActiveRecord::Base
   def date_list #tested
     dates = Array.new
     self.events.each do |event|
-      unless dates.include?(event.happened_at.at_midnight)
+      unless !event.happened_at || dates.include?(event.happened_at.at_midnight)
         dates << event.happened_at.midnight
       end
     end
