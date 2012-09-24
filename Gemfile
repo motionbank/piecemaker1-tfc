@@ -15,6 +15,7 @@ gem 'sass'
 gem 'active_record_query_trace'
 gem 'ancestry'
 gem 'thin'
+gem 'term-ansicolor'
 group :development do
   gem 'taps'
 end

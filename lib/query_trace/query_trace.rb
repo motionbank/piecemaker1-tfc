@@ -11,7 +11,7 @@ module QueryTrace
 
   def log_info_with_trace(event)
     log_info_without_trace(event)
-    logger.debug("\e[1m\e[35m\e[1m\e[47mCalled from:\e[0m " + clean_trace(caller[2..40]).join("\n "))
+    logger.debug("Called from: " + clean_trace(caller[2..-2]).join("\n "))
   end
 
   def clean_trace(trace)

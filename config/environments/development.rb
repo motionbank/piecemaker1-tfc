@@ -34,4 +34,6 @@ Piecemakerlite::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = false
+
+  config.colorize_logging = false
 end
