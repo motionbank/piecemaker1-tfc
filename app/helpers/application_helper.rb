@@ -1,10 +1,10 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
   def found_text_replacement_string
-    Piecemakerlite.config.found_text_replacement_string || '<span class="found">\1</span>'
+    Piecemaker.config.found_text_replacement_string || '<span class="found">\1</span>'
   end
   def truncate_length
-    Piecemakerlite.config.truncate_length || 300
+    Piecemaker.config.truncate_length || 300
   end
   def error_messages_for(thing)
     if thing.errors.any?
@@ -781,7 +781,7 @@ module ApplicationHelper
           text << event.video_start_time.to_time_string
         end
       else
-        text << Piecemakerlite.config.no_video_string
+        text << Piecemaker.config.no_video_string
       end
     text << '</div>'
   end

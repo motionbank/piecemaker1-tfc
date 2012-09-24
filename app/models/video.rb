@@ -162,7 +162,7 @@ class Video
 
 
 
-  def self.prepare_recording(player_name = Piecemakerlite.config.quicktime_player)
+  def self.prepare_recording(player_name = Piecemaker.config.quicktime_player)
     prep = <<ENDOT
 
 tell application "#{player_name}"
@@ -174,7 +174,7 @@ ENDOT
   end
 
 
-  def self.start_recording(player_name = Piecemakerlite.config.quicktime_player)
+  def self.start_recording(player_name = Piecemaker.config.quicktime_player)
     start = <<ENDOT
 tell application "#{player_name}"
 start every document
@@ -185,7 +185,7 @@ ENDOT
   end
 
 
-  def self.stop_recording(new_file_name = nil,player_name = Piecemakerlite.config.quicktime_player)
+  def self.stop_recording(new_file_name = nil,player_name = Piecemaker.config.quicktime_player)
     # i have to do this becaus3 of differences between qt player versions
     
     divider = player_name == 'QuickTime Player 7' ? '/' : ':'

@@ -9,7 +9,7 @@ if defined?(Bundler)
   # Bundler.require(:default, :assets, Rails.env)
 end
 
-module Piecemakerlite
+module Piecemaker
     def self.config
         Application.config
     end

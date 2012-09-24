@@ -1,4 +1,4 @@
-Piecemakerlite::Application.routes.draw do
+Piecemaker::Application.routes.draw do
     
     match '/pref.:format' => 'users#pref', :as => :pref
     resources :users
