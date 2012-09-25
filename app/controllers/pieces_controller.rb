@@ -103,7 +103,7 @@ class PiecesController < ApplicationController
       tag = Tag.find(params[:id])
       tag.name = params[:tag][:name]
       tag.save
-      redirect_to :action => 'list_tags', :id => tag.piece_id
+      redirect_to :action => 'show', :id => tag.piece_id
     else
        @tag = Tag.find(params[:id])
     end   
@@ -111,9 +111,9 @@ class PiecesController < ApplicationController
   
   def destroy_tag
     tag = Tag.find(params[:id])
+    piece_id = tag.piece_id
     tag.destroy
-    redirect_to url_for(params[:came_from])
-    #redirect_to :action => 'list_tags', :id => tag.piece_id
+    redirect_to :action => 'show', :id => tag.piece_id
   end
 
   

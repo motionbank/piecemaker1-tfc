@@ -12,7 +12,7 @@ gem "pg", "~> 0.13.2"
 #gem 'rake', '0.9.2.2'
 #gem 'rdoc'
 #gem 'delayed_job_active_record'
-gem 'active_record_query_trace'
+#gem 'active_record_query_trace'
 gem 'ancestry'
 gem 'thin'
 gem 'term-ansicolor'

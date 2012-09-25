@@ -14,7 +14,6 @@ GEM
       rack-cache (~> 1.1)
       rack-test (~> 0.6.1)
       sprockets (~> 2.1.2)
-    active_record_query_trace (1.1)
     activemodel (3.2.2)
       activesupport (= 3.2.2)
       builder (~> 3.0.0)
@@ -192,7 +191,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active_record_query_trace
   acts-as-list
   ancestry
   aws-s3
