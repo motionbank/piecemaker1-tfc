@@ -31,6 +31,11 @@
 #end
 
 class Event < ActiveRecord::Base
+
+  require 's3_paths'
+  include S3Paths
+
+  
   def self.event_types
     %w[dev_notes discussion headline light_cue performance_notes scene sound_cue marker video sub_scene note]
   end
@@ -99,9 +104,9 @@ class Event < ActiveRecord::Base
   def viewable?
     true#is_uploaded
   end
-  def s3_path
-    'tfc/video/' + title
-  end
+  # def s3_path
+  #   'tfc/video/' + title
+  # end
   def is_uploaded
     true
   end
