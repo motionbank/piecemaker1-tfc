@@ -99,7 +99,9 @@ class Event < ActiveRecord::Base
   def viewable?
     true#is_uploaded
   end
-
+  def is_uploaded
+    true
+  end
   def video_viewable?
     return false unless video_id && video
     video.viewable?

@@ -271,28 +271,4 @@ end
     #Video.send_later(:do_moov_atom,id,full_uncompressed_path,full_temp_path)
     ##Video.send_later(:backup_and_compress, id, full_backup_path, full_compressed_path,full_uncompressed_path,full_archive_path,full_temp_path)
   #end
-
-
-
-
-
 end
-
-# == Schema Information
-#
-# Table name: videos
-#
-#  id          :integer(4)      not null, primary key
-#  title       :string(255)
-#  recorded_at :datetime
-#  duration    :integer(4)
-#  fn_local    :string(255)
-#  fn_arch     :string(255)
-#  fn_s3       :string(255)
-#  vid_type    :string(255)     default("rehearsal")
-#  rating      :integer(4)      default(0)
-#  meta_data   :text
-#  created_at  :datetime
-#  updated_at  :datetime
-#
-

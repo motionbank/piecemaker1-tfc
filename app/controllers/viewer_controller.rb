@@ -12,7 +12,7 @@ class ViewerController < ApplicationController
       
       if SetupConfiguration.app_is_local? && @video.online?
         @flow_type = 'local_plain'
-      elsif @video_is_uploaded
+      elsif @video.is_uploaded
         @flow_type = 's3'
       else
         @flow_type = false
