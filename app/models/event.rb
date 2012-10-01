@@ -99,6 +99,9 @@ class Event < ActiveRecord::Base
   def viewable?
     true#is_uploaded
   end
+  def s3_path
+    'tfc/video/' + title
+  end
   def is_uploaded
     true
   end

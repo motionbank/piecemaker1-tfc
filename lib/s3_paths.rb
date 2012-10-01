@@ -7,8 +7,8 @@ module S3Paths
     def s3_path(style = 'original')
       return nil unless s3_prefix
       case self.class.name
-        when 'Video'
-          s3_prefix + '/' + title
+        when 'Event'
+          'tfc/video/' + title
         when 'Photo'
           s3_prefix + "/#{style}/" + (picture_file_name || '')
         when 'Document'
