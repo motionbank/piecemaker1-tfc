@@ -1,3 +1,29 @@
+# == Schema Information
+#
+# Table name: events
+#
+#  id             :integer          not null, primary key
+#  title          :string(255)
+#  happened_at    :datetime
+#  dur            :integer
+#  event_type     :string(255)
+#  video_id       :integer
+#  piece_id       :integer
+#  locked         :string(255)      default("none"), not null
+#  state          :string(255)      default("normal")
+#  description    :text
+#  created_by     :string(255)
+#  modified_by    :string(255)
+#  updated_at     :datetime
+#  performers     :text
+#  created_at     :datetime
+#  highlighted    :boolean          default(FALSE)
+#  inherits_title :boolean          default(FALSE)
+#  location       :string(255)
+#  rating         :integer          default(0)
+#  parent_id      :integer
+#
+
 #class Array
 #  def has_everyone
 #    newself = self.select{|x| x.performers && x.performers[0] == 'Everyone'}
@@ -677,30 +703,6 @@ class Event < ActiveRecord::Base
   
 end
 
-
-# == Schema Information
-#
-# Table name: events
-#
-#  id              :integer(4)      not null, primary key
-#  created_at      :datetime
-#  created_by      :string(255)
-#  title           :string(255)
-#  description     :text
-#  event_type      :string(255)
-#  modified_by     :string(255)
-#  updated_at      :datetime
-#  locked          :string(255)     default("none"), not null
-#  performers      :text
-#  media_time      :integer(4)
-#  piece_id        :integer(4)
-#  video_id        :integer(4)      default(0)
-#  highlighted     :boolean(1)      default(FALSE)
-#  inherits_title  :boolean(1)      default(FALSE)
-#  state           :string(255)     default("normal")
-#  rating          :integer(4)      default(0)
-#  happened_at     :datetime
-#
 
 
 #from subscend

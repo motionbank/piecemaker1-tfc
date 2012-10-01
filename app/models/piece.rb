@@ -2,13 +2,13 @@
 #
 # Table name: pieces
 #
-#  id           :integer(4)      not null, primary key
-#  created_at   :datetime
-#  title        :string(255)
-#  updated_at   :datetime
-#  modified_by  :string(255)
-#  short_name   :string(255)
-#  is_active    :boolean(1)      default(TRUE)
+#  id          :integer          not null, primary key
+#  created_at  :datetime
+#  title       :string(255)
+#  updated_at  :datetime
+#  modified_by :string(255)
+#  short_name  :string(255)
+#  is_active   :boolean          default(TRUE)
 #
 
 class Piece < ActiveRecord::Base

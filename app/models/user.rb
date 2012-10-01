@@ -1,3 +1,32 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id                        :integer          not null, primary key
+#  login                     :string(40)
+#  name                      :string(100)
+#  email                     :string(100)
+#  crypted_password          :string(40)
+#  salt                      :string(40)
+#  created_at                :datetime
+#  updated_at                :datetime
+#  remember_token            :string(40)
+#  remember_token_expires_at :datetime
+#  role_id                   :integer          default(1)
+#  role_name                 :string(255)
+#  notes_on                  :boolean          default(TRUE)
+#  markers_on                :boolean          default(TRUE)
+#  refresh_pref              :integer          default(0)
+#  truncate                  :string(255)      default("more")
+#  inherit_cast              :boolean          default(FALSE)
+#  last_login                :datetime
+#  scratchpad                :text
+#  first_name                :string(255)
+#  last_name                 :string(255)
+#  is_performer              :boolean          default(TRUE)
+#  password_digest           :string(255)
+#
+
 class User < ActiveRecord::Base
   has_secure_password
   has_many :messages
@@ -62,31 +91,4 @@ class User < ActiveRecord::Base
 
 
 end
-
-
-# == Schema Information
-#
-# Table name: users
-#
-#  id                        :integer(4)      not null, primary key
-#  login                     :string(40)
-#  name                      :string(100)
-#  email                     :string(100)
-#  crypted_password          :string(40)
-#  salt                      :string(40)
-#  created_at                :datetime
-#  updated_at                :datetime
-#  remember_token            :string(40)
-#  remember_token_expires_at :datetime
-#  role_id                   :integer(4)      default(1)
-#  performer                 :boolean(1)      default(FALSE)
-#  role_name                 :string(255)
-#  notes_on                  :boolean(1)      default(TRUE)
-#  markers_on                :boolean(1)      default(TRUE)
-#  refresh_pref              :integer(4)      default(0)
-#  truncate                  :string(255)     default("more")
-#  inherit_cast              :boolean(1)      default(FALSE)
-#  last_assemblage_id        :integer(4)
-#  last_login                :datetime
-#
 

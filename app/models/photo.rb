@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: photos
+#
+#  id                   :integer          not null, primary key
+#  picture_file_name    :string(255)
+#  picture_content_type :string(255)
+#  picture_file_size    :integer
+#  created_at           :datetime
+#  updated_at           :datetime
+#  piece_id             :integer
+#  path                 :string(255)
+#  has_thumb            :boolean          default(FALSE)
+#
+
 
 class Photo < ActiveRecord::Base
   require 's3_paths'
@@ -45,20 +60,4 @@ class Photo < ActiveRecord::Base
   end
 
 end
-
-
-# == Schema Information
-#
-# Table name: photos
-#
-#  id                   :integer(4)      not null, primary key
-#  picture_file_name    :string(255)
-#  picture_content_type :string(255)
-#  picture_file_size    :integer(4)
-#  created_at           :datetime
-#  updated_at           :datetime
-#  piece_id             :integer(4)
-#  path                 :string(255)
-#  has_thumb            :boolean(1)      default(FALSE)
-#
 

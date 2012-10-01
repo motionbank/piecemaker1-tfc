@@ -17,6 +17,7 @@ gem 'ancestry'
 gem 'thin'
 gem 'term-ansicolor'
 group :development do
+  gem 'annotate', ">=2.5.0"
   gem 'taps'
 end
 

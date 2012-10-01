@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: messages
+#
+#  id         :integer          not null, primary key
+#  user_id    :integer
+#  message    :text
+#  from_id    :integer
+#  created_at :datetime
+#  updated_at :datetime
+#
+
 class Message < ActiveRecord::Base
   belongs_to :user
   def self.message_to(to,from,message)
@@ -7,16 +19,3 @@ class Message < ActiveRecord::Base
     :message => message)
   end
 end
-
-# == Schema Information
-#
-# Table name: messages
-#
-#  id         :integer(4)      not null, primary key
-#  user_id    :integer(4)
-#  message    :text
-#  from_id    :integer(4)
-#  created_at :datetime
-#  updated_at :datetime
-#
-

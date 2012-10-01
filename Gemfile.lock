@@ -31,6 +31,8 @@ GEM
     acts-as-list (0.1.2)
     ancestry (1.2.5)
       activerecord (>= 2.2.2)
+    annotate (2.5.0)
+      rake
     arel (3.0.2)
     aws-s3 (0.6.2)
       builder
@@ -193,6 +195,7 @@ PLATFORMS
 DEPENDENCIES
   acts-as-list
   ancestry
+  annotate (>= 2.5.0)
   aws-s3
   bcrypt-ruby (~> 3.0.0)
   capybara

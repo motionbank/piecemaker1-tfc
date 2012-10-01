@@ -2,10 +2,12 @@
 #
 # Table name: castings
 #
-#  id           :integer(4)      not null, primary key
-#  user_id :integer(4)      not null
-#  piece_id     :integer(4)      not null
-#  is_original  :boolean(1)      default(TRUE)
+#  id          :integer          not null, primary key
+#  user_id     :integer          not null
+#  piece_id    :integer          not null
+#  is_original :boolean          default(TRUE)
+#  cast_number :integer          default(1)
+#  updated_at  :datetime
 #
 
 class Casting < ActiveRecord::Base

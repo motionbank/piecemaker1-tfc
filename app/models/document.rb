@@ -2,11 +2,11 @@
 #
 # Table name: documents
 #
-#  id               :integer(4)      not null, primary key
+#  id               :integer          not null, primary key
 #  doc_file_name    :string(255)
 #  doc_content_type :string(255)
-#  doc_file_size    :integer(4)
-#  piece_id         :integer(4)
+#  doc_file_size    :integer
+#  piece_id         :integer
 #  created_at       :datetime
 #  updated_at       :datetime
 #

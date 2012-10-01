@@ -2,10 +2,10 @@
 #
 # Table name: tags
 #
-#  id       :integer(4)      not null, primary key
+#  id       :integer          not null, primary key
 #  name     :string(255)
-#  piece_id :integer(4)
-#  tag_type :string(255)     default("normal")
+#  piece_id :integer
+#  tag_type :string(255)      default("normal")
 #
 
 class Tag < ActiveRecord::Base

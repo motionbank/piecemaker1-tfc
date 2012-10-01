@@ -1,14 +1,10 @@
-class DelayedJob < ActiveRecord::Base
-
-end
-
 # == Schema Information
 #
 # Table name: delayed_jobs
 #
-#  id         :integer(4)      not null, primary key
-#  priority   :integer(4)      default(0)
-#  attempts   :integer(4)      default(0)
+#  id         :integer          not null, primary key
+#  priority   :integer          default(0)
+#  attempts   :integer          default(0)
 #  handler    :text
 #  last_error :text
 #  run_at     :datetime
@@ -19,3 +15,6 @@ end
 #  updated_at :datetime
 #
 
+class DelayedJob < ActiveRecord::Base
+
+end
