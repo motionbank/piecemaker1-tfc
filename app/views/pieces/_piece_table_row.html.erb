@@ -1,0 +1,9 @@
+            <td><%= piece.title %></td>
+            <td><%= piece.short_name %></td>
+            <td><%= piece.id %></td>
+            <td><%= piece.is_active %></td>
+            <%- if true -%>
+            <td><a href="/pieces/show/<%= piece.id %>">Show</a></td>
+            <td><a href="/pieces/edit/<%= piece.id %>" class='get'>Edit</a></td>
+            <td><%= link_to 'Delete',"/pieces/destroy/#{piece.id}",:confirm => 'Are you Sure?' %></td>
+            <% end -%>

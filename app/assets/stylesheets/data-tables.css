@@ -56,7 +56,7 @@ table.pretty tbody th {
 }
      
 table.pretty tbody td {
-    text-align: center;
+    text-align: left;
     background: #dddddd;
 }
          

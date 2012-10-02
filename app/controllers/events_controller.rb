@@ -13,27 +13,14 @@ class EventsController < ApplicationController
     redirect_non_admins('normal_actions',home_url) and return
     if params[:id]
       @piece = Piece.find_by_id(params[:id])
-      @events = Event.paginate(
-                            :conditions => "piece_id = '#{params[:id]}'",
-                            :per_page => 50,
-                            :page => params[:page],
-                            :order => sort_from_universal_table_params,
-                            :include => [:piece])
+      @events = Event.find_all_by_piece_id(@piece.id)
     else
       redirect_non_admins('group_admin',home_url) and return
-      @events = Event.paginate(
-                      :per_page => 50,
-                      :page => params[:page],
-                      :order => sort_from_universal_table_params,
-                      :include => [:piece])
+      @events = Event.all
     end
   end
   def list_trash
-    @events = Event.paginate(
-                    :per_page => 50,
-                    :conditions => "state = 'deleted'",
-                    :page => params[:page],
-                    :order => sort_from_universal_table_params,
+    @events = Event.find_all_by_state('deleted',
                     :include => [:piece])
     render :action => 'list'
   end
@@ -59,16 +46,13 @@ class EventsController < ApplicationController
   end
 
   def destroy
+    if params[:piece_id]
+      id = params[:piece_id].to_s
+    end
     redirect_non_admins('normal_actions',home_url) and return
     event = Event.find(params[:id])
     event.destroy
-    redirect_to :action => 'list'
-  end
-  def delete_ev #delete from event list
-    redirect_non_admins('normal_actions',home_url) and return
-    event = Event.find(params[:id])
-    event.destroy
-    redirect_to url_for(params[:came_from])
+    redirect_to :action => 'list', :id => id
   end
 
 

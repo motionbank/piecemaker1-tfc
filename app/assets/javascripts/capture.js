@@ -271,7 +271,7 @@ function viewerShortcutsEnabled(){
 };
 
 $(function(){
-	$('#video-table').dataTable({
+	$('.pretty').dataTable({
         "aaSorting": [[ 0, "asc" ]]
     });
 

@@ -1,0 +1,30 @@
+<table id = 'doc_table' class = 'pretty'>
+  <thead>
+  <tr>
+    <th>File Name</th>
+    <th>Created At</th>
+    <th>Type</th>
+    <th>File Size</th>
+    <th>Piece id</th>
+    <th>S3 OK?</th>
+    <th>Show</th>
+    <th>Download</th>
+    <th>Destroy</th>
+  </tr>
+  </thead>
+  <tbody>
+<% for document in @documents %>
+<tr>
+  <td><%= document.doc_file_name %></td>
+  <td><%= document.created_at %></td>
+  <td><%= document.doc_content_type %></td>
+  <td><%= document.doc_file_size %></td>
+  <td><%= document.piece_id %></td>
+  <td><%= document.id %></td>
+  <td><%= link_to 'Show', :action => 'show', :id => document %></td>
+	<td><%= link_to 'Download',"http://s3.amazonaws.com/#{s3_bucket}/#{document.s3_path}" %></td>
+  <td><%= link_to 'Destroy', { :action => 'destroy', :id => document }, :confirm => 'Are you sure?', :method => :post %></td>
+</tr>
+<% end %>
+</tbody>
+</table>

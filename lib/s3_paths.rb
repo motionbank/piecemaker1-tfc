@@ -12,7 +12,8 @@ module S3Paths
         when 'Photo'
           s3_prefix + "/#{style}/" + (picture_file_name || '')
         when 'Document'
-          s3_prefix + '/' + (doc_file_name || '')
+          'tfc/p-' + piece_id.to_s + '/asset/d-' + id.to_s + '/' + (doc_file_name || '')
+          #s3_prefix + '/' + (doc_file_name || '')
         when 'Sound'
           s3_prefix + '/' + (title || '')
         else 

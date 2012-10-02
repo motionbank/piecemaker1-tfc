@@ -10,9 +10,5 @@ Last Modified by: <%= @events.last.created_by -%> at <%= @events.last.created_at
 <%- if (@filter_type == 'trash') -%>
  &nbsp;&nbsp;&nbsp;<span style = "color:#f00"><b>Showing Deleted Events</b></span>
 <%- end -%>
-<%- if (@filter_type == 'page') -%>
-<%= render :partial => '_shared/pager', :locals =>{:events => @events} %>
-<%- end -%>
-
 </div>
 <%- end -%>

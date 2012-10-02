@@ -1,14 +1,23 @@
 <h1>Photos</h1>
-<%= raw universal_table(
-  @photos,{
-  :columns => [{'ID' => 'id'},
-                {'Piece' => 'piece.title'},                
-                {'Created At' => 'created_at'}
-    ],
-  :actions => [
-              {'Destroy' => '/photos/delete_from_gallery'}
-    ],
-  :admin => {'Destroy'=>'normal_actions'},
-  :truncate => 15
-  })
-  %>
+
+<table id = 'photo-table' class = 'pretty'>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>ID</th>
+            <th>Piece</th>
+            <th>Created At</th>
+            <%- if true -%>
+            <th>Destroy</th>
+            <% end -%>
+        </tr>
+    </thead>
+    <tbody>
+        <%- @photos.each do |photo| -%>
+        <tr id = 'rowId<%= photo.id %>'>
+        <%= render :partial =>'photo_table_row',:locals =>{:photo => photo} %>
+        </tr>
+        <%- end -%>
+    </tbody>
+
+</table>

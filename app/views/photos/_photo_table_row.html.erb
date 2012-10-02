@@ -1,0 +1,7 @@
+            <td><%= photo.picture_file_name %></td>
+            <td><%= photo.id %></td>
+            <td><%= photo.piece_id %></td>
+            <td><%= photo.created_at %></td>
+            <%- if true -%>
+            <td><%= link_to 'Delete',"/photos/destroy/#{photo.id}",:confirm => 'Are you Sure?' %></td>
+            <% end -%>

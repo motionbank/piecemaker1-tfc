@@ -1,11 +1,26 @@
 <h2>Messages</h2>
-<%= raw universal_table(
-  @messages,
-  {
-    :columns => [ {'ID' => 'id'},
-                  {'To' => 'user_id'},
-                  {'Message' => 'message'}],
-    :actions => [ {'Destroy' => '/message/destroy'}
-      ]
-  }
-  ) %>
+<table id = 'message-table' class = 'pretty'>
+    <thead>
+        <tr>
+            <th>ID&nbsp;&nbsp;&nbsp;</th>
+            <th>To&nbsp;&nbsp;&nbsp;</th>
+            <th>Message</th>
+            <%- if true -%>
+            <th>Destroy</th>
+            <% end -%>
+        </tr>
+    </thead>
+    <tbody>
+        <%- @messages.each do |message| -%>
+        <tr id = 'rowId<%= message.id %>'>
+        <td><%= message.id %></td>
+        <td><%= message.user_id %></td>
+        <td><%= message.message %></td>
+        <%- if true -%>
+        <td><%= link_to 'Destroy', '/message/destroy', :confirm => 'Are You Sure' %></td>
+        <%- end -%>
+        </tr>
+        <%- end -%>
+    </tbody>
+
+</table>

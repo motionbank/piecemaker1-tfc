@@ -1,27 +1,37 @@
 <h1>Listing Events
 <%- if @piece -%>
 in "<%= @piece.title %>"
+<%- return_id = @piece.id -%>
 <%- end -%>
 </h1>
-<h2><%= @events.length %> Events</h2>
-<%= will_paginate @events %><br />
-<%= raw universal_table(
-  @events,{
-  :columns => [{'ID' => 'id',:sort => 'id'},
-                {'Piece' => 'piece.title'},
-                {'Type' => 'event_type'},
-                {'Title' => 'title',:sort => 'title'},
-                {'Description' => 'description'},
-                {'Created At' => 'created_at'},
-                {'Locked' => 'locked_by'},
-                {'Media Time' => 'video_start_time'},
-                {'State' => 'state'}
-    ],
-  :actions => [  {'Show' => '/events/show'},
-                  {'Edit' => '/events/edit'},
-                  {'Destroy' => '/events/delete_ev$'}
-    ],
-  :admin => {'Edit' => 'group_admin','Destroy'=>'normal_actions'},
-  :truncate => 15
-  })
-  %>
+
+<table id = 'event_table' class = 'pretty'>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Title</th>
+    <th>Type</th>
+    <th>Happened At</th>
+    <th>Piece id</th>
+    <th>State</th>
+    <th>Show</th>
+    <th>Edit</th>
+    <th>Destroy</th>
+  </tr>
+  </thead>
+  <tbody>
+<% for event in @events %>
+<tr>
+  <td><%= event.id %></td>
+  <td><%= event.title %></td>
+  <td><%= event.event_type %></td>
+  <td><%= event.happened_at %></td>
+  <td><%= event.piece_id %></td>
+  <td><%= event.state %></td>
+  <td><%= link_to 'Show', :action => 'show', :id => event %></td>
+  <td><%= link_to 'Edit',"/events/edit/#{event.id}" %></td>
+  <td><%= link_to 'Destroy',"/events/destroy/#{event.id}/?piece_id=#{return_id}", :confirm => 'Are You Sure?' %></td>
+</tr>
+<% end %>
+</tbody>
+</table>

@@ -4,7 +4,6 @@ gem 'rails', '~> 3.2.2'
 gem 'bcrypt-ruby', '~> 3.0.0'
 gem 'aws-s3', :require => 'aws/s3'
 gem 'acts-as-list', :require => 'acts_as_list'
-gem "will_paginate", "~> 3.0.3" 
 gem 'haml'
 gem 'sass'
 #gem "heroku", "~> 2.21.3"

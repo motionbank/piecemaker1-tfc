@@ -2,10 +2,6 @@ class DocumentsController < ApplicationController
   
   layout "standard"
   before_filter :get_document_by_params_and_redirect_wrong, :only => [:show,:edit,:update,:destroy]
-  def index
-    list
-    render :action => 'list'
-  end
 
   # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
   # verify :method => :post, :only => [ :destroy, :create, :update ],
@@ -14,13 +10,9 @@ class DocumentsController < ApplicationController
     @document = Document.find(params[:id])
   end
 
-  def list
+  def index
     redirect_non_admins('group_admin') and return
-    @documents = Document.paginate(
-                    :per_page => 50,
-                    :page => params[:page],
-                    :order => sort_from_universal_table_params
-                    )
+    @documents = Document.all
   end
   
   def list_by_piece

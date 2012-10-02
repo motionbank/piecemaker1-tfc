@@ -119,14 +119,6 @@ class CaptureController < ApplicationController
         @terms = [params[:search]]
         @events = events
         @truncate = :none
-      when 'page'
-        @events = Event.paginate_by_piece_id(session[:pieceid],
-          :order => 'happened_at',
-          :conditions => "(state = 'normal')",
-          :per_page => 100,
-          :page => params[:page],
-          :include => [:sub_scenes,:tags,:notes,:video])
-
       when 'trash'
         hide_trash = false
         @events = current_piece.events.select{|x| x.is_deleted?}

@@ -21,8 +21,8 @@ class PiecesController < ApplicationController
 
   def list
     unset_current_piece
-    @title = 'Pieces'
-    @piecess = Piece.order(sort_from_universal_table_params('title'))
+    @title = 'All Pieces'
+    @pieces = Piece.all
     respond_to do |wants|
       wants.html {  }
     end

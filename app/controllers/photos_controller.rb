@@ -3,11 +3,7 @@ class PhotosController < ApplicationController
   layout  "standard"
   def index
     redirect_non_admins and return
-    @photos = Photo.paginate(
-                    :per_page => 50,
-                    :page => params[:page],
-                    :order => sort_from_universal_table_params
-                    )
+    @photos = Photo.all
   end
 
   def new

@@ -70,21 +70,6 @@ class ApplicationController < ActionController::Base
       params[:came_from] || a_path
     end
 
-    def sort_from_universal_table_params(sort = 'id')
-      if params[:sort]
-        "#{params[:sort]} #{params[:order]}"
-      else
-        sort
-      end
-    end
-    def filter_from_universal_table_params(add = '')
-      text = add == '' ? '' : "#{add}"
-      if params[:search_field]
-        text << " lower(#{params[:search_field]}) LIKE lower('%#{params[:search_term]}%')"
-      end
-      text
-    end
-
     def redirect_non_admins(right = 'group_admin',destination = pieces_url)
       unless user_has_right?(right)
         flash[:notice] = "You can't do that!"

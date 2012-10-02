@@ -6,11 +6,6 @@
 	  <li><%= link_to 'Last 100', :controller => "capture", :action => 'present', :id => session[:pieceid], :filter_type => 'tail' -%></li>
     <li><%= link_to 'Today\'s Events Only', :controller => "capture", :action => 'present', :id => session[:pieceid], :filter_type => 'today_only' -%></li>
     <li><%= link_to('Date Range',{:controller => 'capture', :action => 'date_range', :id => session[:pieceid]},:class => "get") -%></li>
-    <%-  if params[:page] -%>
-    <li><%= link_to 'Don\'t Paginate', :controller => "capture", :action => 'present', :id => session[:pieceid], :filter_type => 'none' -%></li>
-    <%- else -%>
-    <li><%= link_to 'Paginate', :controller => "capture", :action => 'present', :id => session[:pieceid], :filter_type => 'page', :page => '1' -%></li>
-    <%- end -%>
     <li><%= link_to 'Only Highlighted', :controller => "capture", :action => 'present', :id => session[:pieceid], :filter_type => 'highlighted' -%></li>
     <li><%= link_to "Highlighted by #{current_user.login}" , :controller => "capture", :action => 'present', :id => session[:pieceid], :filter_type => 'user_highlighted' -%></li>
     <li><%= link_to('Tag Search',{:controller => 'capture', :action => 'search_by_tag', :id => session[:pieceid]}, :class => "get") -%></li>

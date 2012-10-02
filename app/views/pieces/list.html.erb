@@ -1,0 +1,27 @@
+<table id = 'piece-table' class = 'pretty'>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Abbrev</th>
+            <th>ID</th>
+            <th>Active</th>
+            <%- if true -%>
+            <th>Show</th>
+            <th>Edit</th>
+            <th>Destroy</th>
+            <% end -%>
+        </tr>
+    </thead>
+    <tbody>
+        <%- @pieces.each do |piece| -%>
+        <tr id = 'rowId<%= piece.id %>'>
+        <%= render :partial =>'piece_table_row',:locals =>{:piece => piece} %>
+        </tr>
+        <%- end -%>
+    </tbody>
+
+</table>
+<br />
+<%= content_tag :div, :style => 'width:120px' do %>
+<%= link_to('Create New Piece', :action => 'new') if user_has_right?('normal_actions') %>
+<% end -%>
