@@ -30,3 +30,12 @@ System Stuff
 	ImageMagick		- resizes photos
 	qt_info			- can get the quicktime metadata
 
+S3_ACCESS_KEY_ID=1CJMB5SJQFWXFP6AM1G2
+
+APP_LOCATION=dev
+
+S3_SECRET_ACCESS_KEY=8S/YjcyW44IvG4oTXpI8fTCPzBS9CwH1Oo0uAL7i
+
+S3_BUCKET=piecemaker
+
+

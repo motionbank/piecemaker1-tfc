@@ -1,71 +1,12 @@
-try archive stuff at tfc
-  move to archive, move from archive
-  also get from archive and compress
-make video title its filename and fn_s3 etc only booleans
-    some outerspace titles are backwards
-    make archive files mp4
-  copy extensions to filenames as long as they're not conflicting
-  change code to use filenames
-  change fields to boolean
+
 put vid compression scripts into lib folder
-eliminate .flv
-  copy and recompress all flv files
-  script to rename .mov to .mp4
-    try it on my machine
-    try one on archive to test speed
-    ask nils if its ok
-    
+
 apache streaming tries to go to the spot but the plugin is cancelled
 
 what happens when you start an event or sub_scene then change the video while you are still editing?
 
-upload days video should be upload uploadable
-
-find compressable
-find uploadable
-
-
-
-convert subscenes back to events
-	add parent_id field to events
-	convert subscenes
-	move subscene methods to event.rb
-	fix views and controller actions of subscenes
-	
 how to make the heroku db:push retry on failure
 make piecemaker.org read-only
 what to do if during an edit the server goes down and you are left with a form with only the cancel button on?
 
 rename all files method
-
-
-
-Improve markering by "test audience" on set in October at score recording session.
-
-1) speed: both on the server side as the well the client side
-
-2) server side
-- production mode
-- separate recording of video and markers? ... or maybe only record the clapper board at beginning for sync?
-
-3) client side
-
-More general points that came up, some of it we touched on github already.
-
-1) markers should not be linked to one/any video
-We have 5 cams on set and these recordings should go into PM for later markering. Any marker should be available for viewing to any video so we can (for example) switch perspectives at a certain points in time.
-
-2) multiple videos for same time
-
-3) global timeline
-A global timeline would solve many things: videos could be events (start time) as are markers (and any other type of event).
-
-4) restrict access to events per user
-If we ask a user to re-marker certain recordings we might not want him to see the already existing markers.
-
-5) restrict access to videos per user
-Same background of re-markering: Deborah wants the dancers not to watch the recordings of the other dancers. In general we might not want to allow all users to see all videos ..
-
-6) filter markers
-This is more an interface request: on the player-page (maybe elsewhere as well) it would be great to show / hide markers and events based upon certain filtering mechanisms (per user, per type, ..)
-
