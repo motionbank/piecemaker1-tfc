@@ -40,6 +40,8 @@ production:
   password: swordfis
   encoding: utf8
   socket: /var/pgsql_socket/.s.PGSQL.5432
+
+  
 # development:
 #   adapter: sqlite3
 #   database: db/databases/piecemaker-tfc
