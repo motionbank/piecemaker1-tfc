@@ -8,4 +8,15 @@ Model:
  ☐ 
  UI:
    ☐ jquery plugin that stores form in local data until it can update server-- no need for making drafts etc.
-   ☐ 
+   ☐
+ ☐ check document lists
+ ☐ fix s3 paths for assets photos etc
+ ☐ make meta info a type of event without a happened_at
+ ☐ make great edit and show for events to do admin editing
+ ☐ separate video model stuff in a smart way
+ ☐ figure out what works on heroku and what not
+   ☐ heroku and s3 are config options which turn on and off certain features
+   ☐ s3
+   ☐ heroku
+   ☐ quicktime auto record
+ ☐ make new install instructions with rvm postgres apache conf 
