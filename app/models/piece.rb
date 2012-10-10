@@ -13,7 +13,7 @@
 
 class Piece < ActiveRecord::Base
   has_many :castings, :dependent => :destroy
-  has_many :performers, :through => :castings, :source => :user
+  has_many :performers, :through => :castings, :source => :user, :order => :login
   has_many :meta_infos, :dependent => :destroy
   has_many :documents, :dependent => :destroy
   has_many :events, :dependent => :destroy, :order => 'happened_at'
@@ -24,7 +24,9 @@ class Piece < ActiveRecord::Base
   has_many :tags, :dependent => :destroy
 
 
-
+  def performer_list
+    performers.map{|x| x.login}
+  end
   def latest_scene(pos = nil) #tested
     scenes = self.events.sort_by{|x| x.happened_at}.select{|x| x.event_type == 'scene'}
     scenes.reject!{|x| x.is_draft?}

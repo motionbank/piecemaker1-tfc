@@ -88,7 +88,9 @@ function toHex(color){
 	}
 	return color;
 }
-
+function clearStorage(keyName){
+	localStorage.removeItem(keyName)
+}
 function clearFormDiv(){
 	$('#form_div').html('');
 	$('#form_div').hide();
@@ -105,6 +107,25 @@ function loadFormDiv(data,isSide){
 	$('#form_div').show();
 	$("#form_div textarea:first").focus();
 	$("#form_div input[type='text']:first").focus();
+	if(typeof(Storage) !== "undefined") {
+			var textName = "event[description]"
+			var titleName = "event[title]"
+			var title = localStorage.getItem(titleName);
+			var description = localStorage.getItem(textName);
+			if(title){
+				alert('Refilling Title with recovered data.');
+				$('input[name="'+titleName+'"]').val(title)
+			}
+			if(description){
+				alert('Refilling Description with recovered data.');
+				$('textarea[name="'+textName+'"]').val(description)
+			}
+			$('form.timer').everyTime(2000,'backup',function (){
+				localStorage[titleName] = $('input[name="'+titleName+'"]').val();
+				localStorage[textName] = $('textarea[name="'+textName+'"]').val();
+			},
+			true);
+		}
 	//$("textarea:first", document.forms[2]).focus();
 	//$("input[type='text']:first", document.forms[2]).focus();
 }

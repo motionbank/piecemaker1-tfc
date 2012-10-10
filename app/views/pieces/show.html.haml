@@ -15,9 +15,17 @@ events,
 = link_to 'Capture',:controller => 'capture', :action => 'present', :id => @piece
 |
 = link_to 'Edit', {:action => 'edit', :id => @piece},:class => 'get'
+|
+= link_to 'Event List',:controller => 'events',:action => 'list', :id => @piece
 %br/
 %br/
-
+.piecesshowbox
+  %strong
+    Cast:
+  .pieceshow
+    - @piece.performer_list.each do |user|
+      = user
+      %br/
 .piecesshowbox
   %strong
     = @piece.events.select{|x| x.is_draft?}.length
@@ -74,7 +82,7 @@ events,
     %th Tag Type
     %th{:colspan => "2"} Actions
   - @piece.tags.each do |tag|
-    %tr{:class => "<%= cycle('row-1','row-2') %>"}
+    %tr{:class =>cycle('row-1','row-2')}
       %td 
         = tag.name
       %td 

@@ -3,10 +3,11 @@ $("#form_div").hide();
 $("#form_div").html('');
 $("#listing-<%= @event.id -%>").replaceWith("<%= escape_javascript(render(:partial => 'listing_span', :locals =>{:event => @event})) -%>");
 <%- else -%>
-
-<%- unless @incremental -%>
 $("#form_div").hide();
 $("#form_div").html('');
+<%- unless @unlock -%>
+localStorage.removeItem('event[title]');
+localStorage.removeItem('event[description]');
 <%- end -%>
 
 
@@ -40,8 +41,6 @@ $("#sort_<%= @event.id -%>").replaceWith("<%= escape_javascript(render(:partial 
 	$("#dvd_quick").html('<%= raw video_quick_link -%>')
 
 <%- end -%>
-<%- unless @incremental -%>
 $(".hdble").show();
-<%- end -%>
 flashMessage('<%= @flash_message || '' -%>');
 <%- end -%>

@@ -11,7 +11,7 @@ module EventsHelper
   
 
   def events_performers(event)
-    events_performers = event.performers[0] == 'Everyone' ? current_piece.performers.map{|x| x.login}.sort : event.performers
+    events_performers = event.performers[0] == 'Everyone' ? current_piece.performer_list : event.performers
   end
   # def put_date(event)
   #   event.happened_at.at_midnight.strftime("%Y %m %d")

@@ -473,15 +473,12 @@ class CaptureController < ApplicationController
   def mod_ev
     #puts up the modify form
     @viewer = params[:viewer] && params[:viewer] == 'true.js' ? true : false
-    @create = false
-    @original_event = Event.find(params[:id]) 
-    if(@original_event.locked_by)
+    @event = Event.find(params[:id]) 
+    if(@event.locked_by)
       partial_name = 'locked'
     else
-      @event = @original_event.create_draft
-      @original_event.lock(current_user.login)
-      @original_event.save
-      @modify = true
+      @event.lock(current_user.login)
+      @event.save
       partial_name = 'event_form'
     end
     respond_to do |format|
@@ -517,6 +514,7 @@ class CaptureController < ApplicationController
   def unlock
     @event.unlock
     @event.save
+    @unlock = true;
     respond_to do |format|
       format.html { redirect_to :controller => 'capture', :action => "present", :id => session[:pieceid] }
       format.js {render :action => 'modi_ev', :layout => false} 
@@ -608,19 +606,9 @@ class CaptureController < ApplicationController
     #actually changes the event and saves it
       @after_id = params[:aid] #needed to tell jquery where to insert event
       @create = true if params[:create] == 'true'
-      draft = Event.find(params[:id]) #gets draft event
-      @event = draft.get_original.do_event_changes(params,current_user)
-      if @create
-        @event.modified_by = current_user.login
-        @event.state = 'normal'
-      else
-        draft.destroy #gets rid of draft
-      end
+      @event = Event.find(params[:id]).do_event_changes(params,current_user)
+      @event.state = 'normal' if @create #is this necessarey anymore?
       if @event.save
-        if params[:media_edit] == 'true'
-          @event.check_for_reposition
-          @event.save
-        end
         @dvd_quick = video_in? ? '' : 'insert' 
         @flash_message = "Successfully #{@create ? 'created': 'edited'} event id: #{@event.id}"
         @truncate = :less unless @truncate == :none
@@ -632,16 +620,6 @@ class CaptureController < ApplicationController
         render :action => 'event_form'
       end
   end
-  
-  def incremental_mod_ev #???
-    @incremental = true
-    @event = Event.find(params[:id])
-    @event.do_event_changes(params,current_user,true)
-    @event.save
-    respond_to do |format|
-      format.js {render :text => '', :layout => false}
-    end
-  end
     
   def tag_with_title #???
     @event.tag_with_title
@@ -652,12 +630,9 @@ class CaptureController < ApplicationController
   end
 
   def cancel_modify #OK
-    draft_event = Event.find(params[:id])
-    @event = draft_event.get_original
-    draft_event.destroy
+    @event = Event.find(params[:id])
     @event.unlock
     @event.save
-    @incremental = false
     respond_to do |format|
       format.html {redirect_to :action => 'present', :id => @event.piece_id }
       format.js {render :action => 'modi_ev', :layout => false}

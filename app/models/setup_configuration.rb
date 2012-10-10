@@ -37,9 +37,7 @@ class SetupConfiguration
     {
       'group_admin'         => %w[group_admin],
       'advanced_actions'   => %w[group_admin manager user],
-      'normal_actions'       => %w[group_admin user],
-      'normal_actions'       => %w[group_admin user],
-      'normal_actions' => %w[group_admin user],
+      'normal_actions'       => %w[group_admin manager user],
       'highlight'           => %w[group_admin manager user],
       'view_dev_notes'      => %w[group_admin]
     }

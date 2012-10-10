@@ -28,7 +28,6 @@ GEM
     activesupport (3.2.2)
       i18n (~> 0.6)
       multi_json (~> 1.0)
-    acts-as-list (0.1.2)
     ancestry (1.2.5)
       activerecord (>= 2.2.2)
     annotate (2.5.0)
@@ -192,7 +191,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  acts-as-list
   ancestry
   annotate (>= 2.5.0)
   aws-s3

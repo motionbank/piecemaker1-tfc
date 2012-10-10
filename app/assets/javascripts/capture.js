@@ -756,7 +756,7 @@ $(function(){
     }
     if($(this).attr('class') == 'cancel_mod'){
     	$('.formhide').hide();
-      $("form.timer").stopTime('increment');
+      $("form.timer").stopTime('backup');
 			ajaxFunction($(this),$(this).attr("href")+'.js')
       $(".hdble").show();
       return false;
@@ -784,23 +784,13 @@ $(function(){
 	});
 	
   // this is work in progress
-$('#form_div form').live('click', function(){
-	if( $(this).hasClass('timer') && userHasClicked == false ){
-		userHasClicked = true;
-		var theUrl = '/capture/incremental_mod_ev/'+$(this).attr("id");
-		$(this).everyTime(30000,'increment',function (){
-			ajaxFunction($(this),theUrl)
-			},
-			true);
-	};
-});
 
 $('.form_div input').live('click', function(){
 	if($(this).attr('type') == 'submit' && $(this).parent().hasClass('ajax')){
 		$('.formhide').hide(); 
 		var theUrl = $(this).parent().attr('action');
 		if($(this).parent().hasClass('timer')){
-		 	$("form.timer").stopTime('increment');
+		 	$("form.timer").stopTime('backup');
 		}
 		ajaxFunction($(this).parent(),theUrl)
 		return false;

@@ -10,6 +10,7 @@ Piecemaker::Application.routes.draw do
     match '/capture/rate/:rating/:id.:format' => 'capture#rate'
     match '/viewer/rate/:rating/:id.:format' => 'viewer#rate'
     match '/capture/rate_video/:rating/:id.:format' => 'capture#rate_video'
+    match '/capture/new_event/:event_type/:piece_id.:format' => 'capture#new_event'
     match '/video_upload/:id1/:id2' => 'video#new'
     match '/video_viewer/:piece_id/:id' => 'viewer#viewer'
     match '/add_annotation/:piece_id/:id/:time.:format' => 'viewer#add_annotation'

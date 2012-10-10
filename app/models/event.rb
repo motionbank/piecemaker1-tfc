@@ -150,16 +150,16 @@ class Event < ActiveRecord::Base
     nn
   end
 
-  def do_event_changes(params,current_user,incremental = false)
+  def do_event_changes(params,current_user)
     params[:event][:inherits_title] ||= false
-    self.process_tags(params[:tags]) unless incremental
+    self.process_tags(params[:tags])
     params[:event][:performers] = params[:performers] || []
     params[:event][:description] ||= ''
     self.attributes = (params[:event])
     self.unlock
     self.get_performers_from_description
     self.add_title_from_tag(params)
-    self.modified_by = current_user.login unless incremental
+    self.modified_by = current_user.login
     self
   end
 
@@ -355,7 +355,7 @@ class Event < ActiveRecord::Base
     self.title = ''
     self.created_by = current_user.login
     if save
-      make_draft(id.to_s)
+      #make_draft(id.to_s)
       set_video_time_info
       save       
     end
@@ -408,7 +408,7 @@ class Event < ActiveRecord::Base
     return false unless performers
     return true if performers[0] == 'Everyone'
     return false unless performers.length > 4
-    piece.performers.collect{|x| x.login.downcase}.sort == performers.collect{|x| x.downcase}.sort
+    piece.performer_list == performers.collect{|x| x.downcase}.sort
   end
   
   
@@ -515,10 +515,10 @@ class Event < ActiveRecord::Base
 
 
   def get_performers_from_description #tested
-    all_performers = self.piece.performers.map{|x| x.login}
+    all_performers = piece.performer_list
     all_performers = all_performers.reject{|x| [nil,''].include?(x)}
-    low_desc =  self.description ? self.description.downcase : ''
-    low_title = self.title ? self.title.downcase : ''
+    low_desc =  description ? description.downcase : ''
+    low_title = title ? title.downcase : ''
     all_performers.each do |performer|
       search_term = /\b#{performer.downcase}\b/
       if performers && !performers.include?(performer)&&(low_desc =~ search_term || low_title =~ search_term)

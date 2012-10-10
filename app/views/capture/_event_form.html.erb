@@ -2,7 +2,7 @@
 viewer
 <% end -%>
 <div id = 'updater' class = 'update'style = 'display:none'>Updating...</div>
-<span style = 'font-weight:bold;font-size:1.6em'><%=h @event.event_type.humanize %></span>&nbsp;&nbsp; draft id:<%= @event.id %>&nbsp;&nbsp;original id: <%= @original_event.id if @original_event  %>&nbsp;&nbsp;happened_at: <%= @original_event.happened_at if @original_event %> <br />
+<span style = 'font-weight:bold;font-size:1.6em'><%=h @event.event_type.humanize %></span>&nbsp;&nbsp;happened_at: <%= @event.happened_at %> <br />
 
 <%= form_tag({:action => 'modi_ev',:id => @event},:class => 'ajax timer',:id => @event.id) do -%>
 
