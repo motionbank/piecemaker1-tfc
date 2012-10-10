@@ -28,23 +28,6 @@ events,
       %br/
 .piecesshowbox
   %strong
-    = @piece.events.select{|x| x.is_draft?}.length
-    Drafts:
-  - if user_has_right?('group_admin')
-    = link_to 'Destroy All', :action =>  'destroy_drafts', :id => @piece
-  %br/
-  .pieceshow
-    - @piece.events.select{|x| x.is_draft?}.sort_by{|x| x.happened_at}.each_with_index do |draft,index|
-      =link_to "#{draft.id}",:controller => 'pieces',:action => 'normalfy_event',:id => draft.id
-      =link_to "view",:controller => 'events',:action => 'show',:id => draft.id,:came_from => @came_from
-      %br/
-      = draft.title
-      %br/
-      = truncate draft.description, :length => 20
-      %br/
-      %br/
-.piecesshowbox
-  %strong
     = @piece.events.select{|x| x.is_deleted?}.length
     Trash:
   = link_to 'View',:controller => 'capture', :action => 'present', :id => @piece, :filter_type => 'trash'

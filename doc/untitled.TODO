@@ -7,7 +7,6 @@ Uploader:
 Model:
  ☐ 
  UI:
-   ☐ jquery plugin that stores form in local data until it can update server-- no need for making drafts etc.
    ☐
  ☐ check document lists
  ☐ fix s3 paths for assets photos etc

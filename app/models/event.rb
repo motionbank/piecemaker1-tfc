@@ -264,16 +264,6 @@ class Event < ActiveRecord::Base
     end
   end
   
-  def make_draft(id_string = '') #tested
-    self.state = "draft_of:#{id_string.to_s}" 
-  end
-  
-  def is_draft? #tested
-    if self.state
-    self.state[0..8] == 'draft_of:'
-    end
-  end
-  
   def make_normal #tested
     self.state = 'normal'
   end
@@ -291,15 +281,8 @@ class Event < ActiveRecord::Base
     self.locked = locker_name
   end
   
-  def draft_original #tested
-    return nil unless self.is_draft?
-    orig_id = self.state
-    orig_id.slice!(0..8)
-    orig_id.to_i
-  end
-  
   def is_active? #needs a test
-    !self.is_deleted? && !self.is_draft?
+    !self.is_deleted?
   end
   def is_deleted? #tested
     self.state == 'deleted'
@@ -320,24 +303,6 @@ class Event < ActiveRecord::Base
     self.undelet
   end
 
-  
-  def create_draft #tested
-    new_event = self.dup
-    new_event.make_draft(self.id)
-    self.tags.each do |tag|
-      new_event.tags << tag
-    end
-    new_event.save!
-    new_event
-  end
-  def get_original#tested
-    if self.is_draft?
-      original = Event.find(self.draft_original)
-    else
-      self
-    end
-  end
-
   def set_attributes_from_params(params,current_user,current_piece)
     last_scene = current_user.inherit_cast ?  current_piece.latest_scene : nil
     after = params[:after] ? params[:after].gsub('.js','').to_i : nil
@@ -355,22 +320,12 @@ class Event < ActiveRecord::Base
     self.title = ''
     self.created_by = current_user.login
     if save
-      #make_draft(id.to_s)
       set_video_time_info
       save       
     end
     after_event
   end
 
-  def self.update_original_from_draft(draft)
-    original = draft.get_original
-    original.title = draft.title
-    original.performers = draft.performers
-    original.description = draft.description
-    original.event_type = draft.event_type
-    original.video_id = draft.video_id
-    original
-  end
   def joined_performers(joiner)
     if performers
       performers.join(joiner)

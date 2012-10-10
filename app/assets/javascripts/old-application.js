@@ -112,11 +112,11 @@ function loadFormDiv(data,isSide){
 			var titleName = "event[title]"
 			var title = localStorage.getItem(titleName);
 			var description = localStorage.getItem(textName);
-			if(title){
+			if(title && $('input[name="'+titleName+'"]').length > 0){
 				alert('Refilling Title with recovered data.');
 				$('input[name="'+titleName+'"]').val(title)
 			}
-			if(description){
+			if(description && $('textarea[name="'+textName+'"]').length > 0){
 				alert('Refilling Description with recovered data.');
 				$('textarea[name="'+textName+'"]').val(description)
 			}

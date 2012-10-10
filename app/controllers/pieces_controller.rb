@@ -2,7 +2,7 @@ class PiecesController < ApplicationController
   
   layout  "standard", :except => :printme
   before_filter :set_defaults
-  before_filter :get_piece_from_params, :only => [:edit, :list_tags, :destroy, :update, :destroy_drafts]
+  before_filter :get_piece_from_params, :only => [:edit, :list_tags, :destroy, :update]
 
   
   def get_piece_from_params
@@ -78,12 +78,6 @@ class PiecesController < ApplicationController
     event.make_normal
     event.save
     redirect_to :action => 'show', :id => event.piece_id
-  end
-  def destroy_drafts
-    @piece.events.each do |ev|
-      ev.destroy if ev.is_draft?
-    end
-    redirect_to :action => 'show', :id => @piece.id
   end
 
   def empty_trash

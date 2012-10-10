@@ -476,6 +476,7 @@ class CaptureController < ApplicationController
     @event = Event.find(params[:id]) 
     if(@event.locked_by)
       partial_name = 'locked'
+      @unlock = true
     else
       @event.lock(current_user.login)
       @event.save
@@ -517,7 +518,7 @@ class CaptureController < ApplicationController
     @unlock = true;
     respond_to do |format|
       format.html { redirect_to :controller => 'capture', :action => "present", :id => session[:pieceid] }
-      format.js {render :action => 'modi_ev', :layout => false} 
+      format.js {render :partial => 'event_form', :layout => false} 
     end
   end
 
