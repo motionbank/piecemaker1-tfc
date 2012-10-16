@@ -83,24 +83,6 @@ class Event < ActiveRecord::Base
   delegate :recorded_at,:fn_arch,:fn_local,:fn_s3, :to => :video, :prefix => true
   delegate :tags, :to => :piece, :prefix => true
 
-  def self.get_notes
-    notes = Note.all
-    notes.each do |note|
-      if note.event
-        Event.create(
-          :parent_id => note.event_id,
-          :description => note.note,
-          :created_by => note.created_by,
-          :modified_by => note.created_by,
-          :created_at => note.created_at,
-          :piece_id => note.event.piece_id,
-          :performers => [],
-          :event_type => 'note',
-          :title => 'Note'
-        )
-      end
-    end
-  end
   def viewable?
     true#is_uploaded
   end
@@ -115,7 +97,7 @@ class Event < ActiveRecord::Base
     video.viewable?
   end
   def tag_list #tested
-    self.tags.collect{|x| x.name}.join(',')
+    tag_names.join(',')
   end
   
   def tag_names #tested
@@ -201,14 +183,6 @@ class Event < ActiveRecord::Base
       new_tag = self.get_tag_or_create(params_tag)
       self.add_tag(new_tag)   
     end
-    #now i have to get rid of tags which aren't in the params list
-      # self.tags(true).each do |tag|
-      #   unless params_array.include?(tag.name)
-      #     self.tags(true).delete(tag)
-      #     logger.info {"************#{tag.name}  #{tag.events.first.title}"}
-      #     tag.destroy if tag.events(true).length == 0
-      #   end
-      # end
   end
   
   def performer_picked?#tested
@@ -288,45 +262,26 @@ class Event < ActiveRecord::Base
     self.state == 'deleted'
   end
   
-  def delet #tested
-    self.state = 'deleted'
-    self.save
-  end
-  def undelet #tested
-    self.state = 'normal'
-    self.save
-  end
   def make_deleted #tested
-      self.delet
+    self.state = 'deleted'
+    save
   end
   def make_undeleted #tested
-    self.undelet
+    self.state = 'normal'
+    save
   end
 
   def set_attributes_from_params(params,current_user,current_piece)
     last_scene = current_user.inherit_cast ?  current_piece.latest_scene : nil
-    after = params[:after] ? params[:after].gsub('.js','').to_i : nil
-    if after ## new stuff for insert at
-      logger.info {'************' + after.to_s}
-      after_event = Event.find(after)
-      self.happened_at = after_event.happened_at + 1
-    else
-      self.happened_at = Time.now
-      after_event = nil
-    end
     self.piece_id = current_piece.id
     self.performers = last_scene ? last_scene.performers : []
-    self.event_type = params[:id]
+    self.event_type = params[:event_type]
     self.title = ''
     self.created_by = current_user.login
-    if save
-      set_video_time_info
-      save       
-    end
-    after_event
+    set_video_time_info 
   end
 
-  def joined_performers(joiner)
+  def joined_performers(joiner=', ')
     if performers
       performers.join(joiner)
     else
@@ -340,24 +295,12 @@ class Event < ActiveRecord::Base
   end
 
   def set_video_time_info
-      video = piece.videos.select{|x| x.happened_at < happened_at}.last
+      return nil unless piece_id
+      video = Piece.find(piece_id).videos.select{|x| x.happened_at < happened_at}.last
       return nil unless video
-      return nil if video.dur && video.recorded_at + video.dur < happened_at
-      
+      return nil if video.dur && video.recorded_at + video.dur < happened_at      
       self.video_id = video.id
   end
-  def unhide #tested
-    self.state = 'normal'
-    self.save
-  end
-  def hide #tested
-    self.state = 'hidden'
-    self.save
-  end
-  def is_hidden? #tested
-    self.state == 'hidden'
-  end
-
 
   def has_everyone? #tested
     return false unless performers
@@ -365,8 +308,6 @@ class Event < ActiveRecord::Base
     return false unless performers.length > 4
     piece.performer_list == performers.collect{|x| x.downcase}.sort
   end
-  
-  
   
   def toggle_highlight! #tested
     self.update_attribute(:highlighted, !self.highlighted)
@@ -460,17 +401,15 @@ class Event < ActiveRecord::Base
   def check_for_reposition #tested
     vid = in_which_video
     if vid
-      return if vid.id == video_id
       video_id = vid.id
     else
-      return if !video_id
       video_id = nil
     end
   end
 
 
   def get_performers_from_description #tested
-    all_performers = piece.performer_list
+    all_performers = Piece.find(piece_id).performer_list
     all_performers = all_performers.reject{|x| [nil,''].include?(x)}
     low_desc =  description ? description.downcase : ''
     low_title = title ? title.downcase : ''

@@ -164,7 +164,7 @@ class CaptureController < ApplicationController
   def add_event_to_video
     @create = true
     @video = Event.find(params[:id])
-    @event = @video.subjects.create(
+    @event = @video.subjects.new(
     :happened_at => @video.happened_at + 2,
     :created_by => current_user.login,
     :modified_by => current_user.login,
@@ -275,14 +275,12 @@ class CaptureController < ApplicationController
  #
 
   def delete_event
-    if request.post?
       @event.make_deleted
       @event.save
       respond_to do |format|
         format.html {redirect_to :action => 'present'}
-        format.js {render :text => "", :layout => false} 
+        format.js {render :text => "jQuery('#event-'+#{@event.id}).remove();", :layout => false} 
       end
-    end
   end
   def undelete_event
       @event.make_undeleted
@@ -370,9 +368,20 @@ class CaptureController < ApplicationController
     end
   end
   def new_event
-    #@events = Event.find_all_by_piece_id(session[:pieceid], :order => 'position')
     @create = true
     @event = Event.new
+    if params[:after_id]
+      after_event = Event.find(params[:after_id].to_i)
+      @event.event_type = params[:event_type]
+      @event.happened_at = after_event.happened_at + 1
+    else
+      @event.happened_at = Time.now
+      after_event = nil
+    end
+
+
+    #@events = Event.find_all_by_piece_id(session[:pieceid], :order => 'position')
+
     @after_event = @event.set_attributes_from_params(params,current_user,current_piece)
     respond_to do |format|
       format.html {render :action => 'event_form'}
@@ -449,7 +458,7 @@ class CaptureController < ApplicationController
     sub.destroy
     respond_to do |format|
       format.html { redirect_to :controller => 'capture', :action => "present", :id => session[:pieceid] }
-      format.js {render :text => "#{sub.id}", :layout => false} 
+      format.js {render :text => "$('#event-'+#{sub.id}).remove();", :layout => false} 
     end
   end
   def cancel_new_ev
@@ -462,11 +471,7 @@ class CaptureController < ApplicationController
     end
   end
   def cancel_new_vid
-    #video = Video.find(params[:id])
-    #current_piece.recordings.delete(video)
-    #video.destroy
-    render :text => '$("#form_div").hide();$("#form_div").html('');
-    $(".hdble").show();'
+    render :text => 'clearFormDiv("");'
   end
 
 
@@ -524,9 +529,7 @@ class CaptureController < ApplicationController
 
 
   def new_auto_video_in
-    @text = "Start"
     @player = true
-    @dvd_quick = 'out'
     if video_in?
       respond_to do |format|
         format.html {redirect_to :action => 'present', :id => session[:pieceid]}
@@ -534,8 +537,8 @@ class CaptureController < ApplicationController
       end
     else
       piece = Piece.find(session[:pieceid])
-      @create = true
-      @video = Event.new  
+      @video = Event.new
+      @video.event_type = 'video'
       @video.set_video_title(piece)
       Video.prepare_recording() if true
       respond_to do |format|
@@ -547,12 +550,10 @@ class CaptureController < ApplicationController
 
   def confirm_video_in
     @after_id = params[:aid] #needed to tell jquery where to insert event
-    @create = true if params[:create] == 'true'
     @video = Event.new(params[:video])
     @video.happened_at = Time.now
     @video.created_by = current_user.login
     @video.modified_by = current_user.login
-    @video.event_type = 'video'
     @video.performers = []
     @video.save
     if params[:quick_take] && params[:quick_take] == 'true'
@@ -570,7 +571,6 @@ class CaptureController < ApplicationController
         )
     end
     current_piece.events << @video
-    @dvd_quick = 'out'
     @truncate = :less unless @truncate == :none
     result = Video.start_recording() if SetupConfiguration.use_auto_video?
 
@@ -581,9 +581,7 @@ class CaptureController < ApplicationController
   end
   def confirm_video_out
     @after_id = params[:aid] #needed to tell jquery where to insert event
-    @create = true if params[:create] == 'true'
     @video = Event.find_by_id(params[:id])
-    @dvd_quick = 'insert'
     @video.dur = Time.now - @video.happened_at
     @video.save
     @truncate = :less unless @truncate == :none
@@ -607,10 +605,12 @@ class CaptureController < ApplicationController
     #actually changes the event and saves it
       @after_id = params[:aid] #needed to tell jquery where to insert event
       @create = true if params[:create] == 'true'
-      @event = Event.find(params[:id]).do_event_changes(params,current_user)
-      @event.state = 'normal' if @create #is this necessarey anymore?
+      if @create
+        @event = Event.new.do_event_changes(params,current_user)
+      else
+        @event = Event.find(params[:id]).do_event_changes(params,current_user)
+      end
       if @event.save
-        @dvd_quick = video_in? ? '' : 'insert' 
         @flash_message = "Successfully #{@create ? 'created': 'edited'} event id: #{@event.id}"
         @truncate = :less unless @truncate == :none
         respond_to do |format|

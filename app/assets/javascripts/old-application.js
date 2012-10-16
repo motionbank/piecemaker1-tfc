@@ -91,9 +91,11 @@ function toHex(color){
 function clearStorage(keyName){
 	localStorage.removeItem(keyName)
 }
-function clearFormDiv(){
-	$('#form_div').html('');
-	$('#form_div').hide();
+function clearFormDiv(messageForFlash){
+	$("#form_div").hide();
+	$("#form_div").html('');
+	$(".hdble").show();
+	flashMessage(messageForFlash);
 }
 function loadFormDiv(data,isSide){
 	userHasClicked = false;
@@ -107,6 +109,7 @@ function loadFormDiv(data,isSide){
 	$('#form_div').show();
 	$("#form_div textarea:first").focus();
 	$("#form_div input[type='text']:first").focus();
+	$(".hdble").hide();
 	if(typeof(Storage) !== "undefined") {
 			var textName = "event[description]"
 			var titleName = "event[title]"

@@ -1,5 +1,2 @@
-$("#form_div").hide();
-$("#form_div").html('');
-$("#sort_<%= @event.id -%>").replaceWith("<%= escape_javascript(render(:partial => 'one_event', :locals => {:event => @event})) -%>");
-
-$(".hdble").show();
+clearFormDiv('');
+$("#event-<%= @event.id -%>").replaceWith("<%= escape_javascript(render(:partial => 'one_event', :locals => {:event => @event})) -%>");

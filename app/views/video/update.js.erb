@@ -1,4 +1,2 @@
-$("#form_div").hide();
-$("#form_div").html('');
+clearFormDiv('<%= @flash_message || '' -%>');
 $("#video_info_div").replaceWith("<%= escape_javascript(render(:partial => 'video_info_div', :locals =>{:video => @video})) -%>");
-flashMessage('<%= @flash_message || '' -%>');

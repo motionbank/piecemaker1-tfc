@@ -1,8 +1,4 @@
-$("#form_div").hide();
-$("#form_div").html('');
+clearFormDiv('<%= @flash_message || '' -%>');
 $('#events_presentation').append("<%= j render(:partial => 'video_block',:locals =>{:video => @video, :piece_id => current_piece.id}) -%>");
-var lastEvent = $(".fi:last");
 $("#dvd_quick").html('<%= raw video_quick_link(@video) -%>');
-$(".hdble").show();
-flashMessage('<%= @flash_message || '' -%>');
 updateVideoTime();

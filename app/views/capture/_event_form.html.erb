@@ -1,7 +1,3 @@
-<%- if @viewer -%>
-viewer
-<% end -%>
-<div id = 'updater' class = 'update'style = 'display:none'>Updating...</div>
 <span style = 'font-weight:bold;font-size:1.6em'><%=h @event.event_type.humanize %></span>&nbsp;&nbsp;happened_at: <%= @event.happened_at %> <br />
 
 <%= form_tag({:action => 'modi_ev',:id => @event},:class => 'ajax timer',:id => @event.id) do -%>
@@ -42,6 +38,7 @@ Dur: <input id="event_dur" name="event[dur]" size="10" type="text" value = "<%= 
 
 
 <%= hidden_field_tag('aid', @after_event.id) if @after_event -%>
+<%= hidden_field_tag('event[piece_id]', @event.piece_id) -%>
 <%= hidden_field_tag('viewer', 'true') if @viewer -%>
 <%= hidden_field_tag('create', 'true') if @create -%>
 

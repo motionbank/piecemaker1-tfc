@@ -46,17 +46,17 @@
   font-size: .96em;
   color: #000; }
 
-.men {
+.menu-link {
   float: right;
   margin-left: 1em;
   font-size: 1em;
   line-height: 1.5em;
   text-align: right; }
 
-.summ {
+.sevdm {
   float: none; }
 
-.men span {
+.menu-link span {
   font-size: 16px;
   color: #f66; }
 
@@ -64,19 +64,19 @@
   font-size: 16px;
   color: #f66; }
 
-.menn ul {
+.menu-box ul {
   list-style: none;
   margin-left: -30px;
   line-height: 18px; }
 
-.menn a {
+.menu-box a {
   color: #ccc;
   text-decoration: none; }
 
-.menn a:hover {
+.menu-box a:hover {
   color: #ff0; }
 
-.menn {
+.menu-box {
   position: absolute;
   top: 200px;
   left: 200px;
@@ -86,12 +86,7 @@
   padding: 3px;
   z-index: 1000; }
 
-.menid {
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  font-family: courier;
-  color: #ccc; }
+
 
 .menclose {
   position: absolute;
@@ -464,7 +459,7 @@ div.css-panes {
   color: #00c;
   text-decoration: underline; }
 
-.men a {
+.menu-link a {
   display: inline;
   padding: 2px;
   background: #55b;
@@ -472,7 +467,7 @@ div.css-panes {
   text-decoration: none;
   font-size: 11px; }
 
-.men a:hover {
+.menu-link a:hover {
   background: #99c; }
 
 .small a {

@@ -3,7 +3,7 @@
 
 <%= link_to event.video_start_time.to_time_string, {},:class => 'go_to bolda', :id => "go-#{event.video_start_time.to_s}"  %>
 <%- if user_has_right?('normal_actions') -%>
-<%= raw display_menu_link(event,'viewermen','','div',true)%> 
+<%= raw display_menu_link(event,'vevdm','','div',true)%> 
 <%= link_to "set in","/events/move_from_viewer/#{event.id}",:class => 'ajx', 'data-confirm' => 'Move Event Start to Current Play Position?'  %>
 <%= link_to "set out","/events/set_out/#{event.id}",:class => 'ajx', 'data-confirm' => 'Move Event End to Current Play Position?' %>
 <%= event.dur %>
@@ -16,7 +16,7 @@
 <div class = 'one-listing sb <%= "sub-#{event.event_type}" %>'>
 <%= link_to sub.video_start_time.to_time_string, {},:class => 'bolda go_to', :id => "go-#{sub.video_start_time.to_s}" %>
 <%= link_to "set in","/sub_scene/move_from_viewer/#{sub.id}",:class => 'ajx' ,'data-confirm' => 'Move Sub Scene Start to Current Play Position?'  %>
-<%= raw display_menu_link(sub,'viewersmen','','span',false) %>
+<%= raw display_menu_link(sub,'vsevdm','','span',false) %>
 <br />
 <b><%= sub.title %></b><br /><%= sub.description %>
 </div>

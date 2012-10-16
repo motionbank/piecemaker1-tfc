@@ -23,4 +23,5 @@
 //= require jquery.dataTables
 //= require old-application
 //= require capture
+//= require drop-down
 //= require s3_upload

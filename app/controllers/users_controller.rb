@@ -20,7 +20,7 @@ class UsersController < ApplicationController
       format.html {redirect_to :controller => 'capture',
         :action => "present",
         :id => session[:pieceid]}
-      format.js {render :text => "clearFormDiv(); flashMessage('#{flash[:notice]}');", :layout => false} 
+      format.js {render :text => "clearFormDiv('#{flash[:notice]}')", :layout => false} 
     end
   end
   

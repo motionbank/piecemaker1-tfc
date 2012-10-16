@@ -255,20 +255,6 @@ function updateVideoTime(){
 		$('#vitime').html(data);
     });
 };
-function captureShortcutsEnabled(){
-	if($('#quick').data('shortcut') == 'enabled'){
-		return true;
-	}else{
-		return false;
-	}
-};
-function viewerShortcutsEnabled(){
-	if($('#mark').data('shortcut') == 'enabled'){
-		return true;
-	}else{
-		return false;
-	}
-};
 
 $(function(){
 	$('.pretty').dataTable({
@@ -312,7 +298,7 @@ $(function(){
 		$('.videoshow').html('Hide');
 	});
 	//code for keyboard shortcuts in capture
-	if(captureShortcutsEnabled()){ 
+	if($('#quick').data('shortcut') == 'enabled'){ 
 		$(document).bind('keydown', 'Ctrl+n', function(){
 			getFunction('/capture/new_event/scene.js')
 			return false;
@@ -339,22 +325,10 @@ $(function(){
 					}
 				}
 				return false;
-		});
-
-		$(document).bind('keydown', 'Ctrl+r', function(){
-			if($('#vidreload').hasClass('vrel')){
-				$(".hdble").hide();
-				if(confirm('Reload Video?')){
-					ajaxFunction(jQuery(this),$('#vidreload').attr('href')+'.js')
-				}else{
-					$(".hdble").show();
-				}
-				return false;
-			}
 		});		
 	};
 	//code for keyboard shortcuts in viewer
-	if(viewerShortcutsEnabled()){
+	if($('#mark').data('shortcut') == 'enabled'){
 		$(document).bind('keydown', 'Ctrl+v', function(){
 			var vidid = $('#mark').data('vidid')
 			var pieceid = $('#mark').data('pieceid')
@@ -426,11 +400,16 @@ $(function(){
 
 	
 
-//start main click events
+	//start main click events
+
 
   $('#body a').live('click', function(event){
 		var theUrl = $(this).attr('href')+'.js';
-		
+		if($(this).hasClass('pause')){
+			var player = $f('rtmpPlayer')
+				player.pause();
+			}
+
 		// if($(this).hasClass('tabby')){
 		// 	alert('tabby');
 		// 	return false;
@@ -454,14 +433,7 @@ $(function(){
 					return false;
 			};
 
-			if($(this).hasClass('pause')){
-				var player = $f('rtmpPlayer')
-				player.pause();
-				getFunction(theUrl,true);
-			}else{
-				getFunction(theUrl,false);
-			}
-
+			getFunction(theUrl,false);
 			$(".hdble").hide();
 			return false;
 		}//if class get
@@ -524,7 +496,7 @@ $(function(){
 			if(confirm('Are you sure you wish to delete this event?')){
 				var y = $(this).attr('id');
 		    $.post(theUrl, "_method=post", function(data) {
-					jQuery('#sort_'+y).remove();
+					jQuery('#event-'+y).remove();
 		    });
 			}
 				return false;
@@ -563,7 +535,7 @@ $(function(){
 			var x = $(this).attr('href')
 			address = '/capture/more_description/'+x+'.js';
 			$.get(address, function(data) {
-				$('#sort_'+x).replaceWith(data);
+				$('#event-'+x).replaceWith(data);
 		  });
 			return false;
 		}
@@ -571,7 +543,7 @@ $(function(){
 			var x = $(this).attr('href')
 			address = '/capture/less_description/'+x+'.js';
 			$.get(address, function(data) {
-				$('#sort_'+x).replaceWith(data);
+				$('#event-'+x).replaceWith(data);
 		  });
 			return false;
 		}
@@ -592,145 +564,7 @@ $(function(){
   });
 // end first live block   body a
 
-	$('.menclose').live('click', function(){
-		$('#capmenlst').html('');
-		$(this).parent().hide();
-		$('.removable').remove();
-	});
-	
-	
 
-
-
-// start drop down menu stuff click on menu link displays proper menu
-	$('.men').live('click', function(event){
-		// put little drop down menu
- 		var id = $(this).attr('id').replace('m-','')
-		// calculate position and move all menus to the right place
-		$('.removable').remove();
-		$('.menn').hide();
-		var difference = ($(window).scrollTop() + $(window).height()) - event.pageY
-		if(difference < 260){
-			top_pos = event.pageY - (260 - difference);
-		}else{
-			top_pos = event.pageY;
-		}
-		$('.menn').css('top',top_pos + 'px');
-		$('.menn').css('left',event.pageX-150 + 'px');  
-//
-// evm event menu
-// vim video menu
-// sum subscene menu
-// eviewer event in viewer
-// esviewer subscene in viewer
-
-    if($(this).hasClass('evmm')){ // its an event menu in capture
-      $('.evm').attr('id','m'+id);
-		  $('.evm').show();
-		  $('#menid').html('<a class = "ignore" href = "/events/edit/'+id+'?return=capture">'+id+'</a>');
-		
-    }else if($(this).hasClass('vvim')){ //its a video menu in capture
-			var pieceId = $(this).parents('#events_presentation').data('pieceid')
-			$('#vmenid').html('<a class = "ignore" href = "/video/edit/'+id+'?return=capture">'+id+'</a>');
-			$('.vim').attr('id','m'+id);
-			$('.vim').show();
-			$.get('/capture/fill_video_menu/'+id+'?pieceid='+pieceId,function(data){
-				$('#vidmenlist').append(data);
-			});
-			
-    }else if($(this).hasClass('summ')){ //its a subscene menu in capture
-			$('#smenid').html('<a class = "ignore" href = "/sub_scene/edit/'+id+'?return=capture">'+id+'</a>');
-			$('.sum').attr('id','m'+id);
-			$('.sum').show();
-			
-		}else if(($(this).hasClass('viewermen'))){ // its an event menu in viewer
-      $('.eviewer').attr('id','m'+id);
-			$('.eviewer').show();
-			
-    }else if(($(this).hasClass('viewersmen'))){// its a subscene menun inviewer
-				$('.esviewer').attr('id','m'+id);
-				$('.esviewer').show();
-	  }else{
-			alert('oops');
-		}
-		return false;
-	});
-
-
-
-
-
-
-
-
-// click in menu does the right thing	
-	$('.menn a').live('click', function(){
-		if($(this).hasClass('ignore')){return}
-		var side = false
-		var returnTo = 'capture'
-		var plainUrl = $(this).attr('href');
-		var theDiv = $(this).parents('.menn')
-    var theDiv2 = $(this).parent()
-		if(theDiv.hasClass('evm') || theDiv2.attr("id") == 'menid'){
-			var id = theDiv.attr('id').replace('m','')
-		}else if(theDiv.hasClass('vim') || theDiv2.attr("id") == 'vmenid'){
-			var id = theDiv.attr('id').replace('m','')
-		}else if(theDiv.hasClass('sum') || theDiv2.attr("id") == 'smenid'){
-			var id = theDiv.attr('id').replace('m','')
-		}else if(theDiv2.parent().attr("id") == 'eviewlist'){
-			var id = theDiv.attr('id').replace('m','');
-			// var player = $f('rtmpPlayer')
-			// player.pause();
-			side = true
-		}else if(theDiv2.parent().attr("id") == 'viewsubmenlist'){
-			var id = theDiv.attr('id').replace('m','');
-			// var player = $f('rtmpPlayer')
-			// player.pause();
-			side = true
-		}else{
-			alert('oops')
-			return false;
-		}
-		var urlWithId = plainUrl+id+'.js';
-
-		if($(this).hasClass('mendel')){
-			if(confirm('Are you sure you wish to delete this event?')){
-				$.post(urlWithId, "_method=post", function(data) {
-					jQuery('#sort_'+id).remove();
-				});
-				$(".hdble").show();
-			}
-		}else if($(this).hasClass('mendelsub')){
-			if(confirm('Are you sure you wish to delete this sub event?')){
-				$.post(urlWithId, "_method=post", function(data) {
-					jQuery('#sus-'+id).remove();
-				});
-				$(".hdble").show();
-			}
-		}else if($(this).hasClass('menhi')){
-			ajaxFunction($(this),urlWithId);
-		}else if($(this).hasClass('menhisub')){
-			if(confirm('Are you sure you wish to convert this event into a Sub Scene? Certain information will be lost!')){
-				ajaxFunction($(this),urlWithId);
-			}
-
-		}else if($(this).hasClass('mensubpr')){
-			if(confirm('Are you sure you wish to convert this Sub Scene into an Event?')){
-					ajaxFunction($(this),urlWithId);
-			}
-
-		}else if($(this).hasClass('menred')){
-			window.location($(this).attr('href'))
-		}else{
-			$.get(urlWithId, "_method=post", function(data) {
-		    loadFormDiv(data,side);
-		    });
-				$(".hdble").hide();
-		}
-		$('.menn').hide();
-    $('.removable').remove();
-		return false;
-	});
 		
 		
 	// various buttons in form div

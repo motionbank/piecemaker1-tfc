@@ -1,6 +1,6 @@
-<div id="sort_<%= event.id -%>"class="sm fi ev<%= highlighted_class(event) -%> type<%= event.event_type  -%>" >
+<div id="event-<%= event.id.to_s -%>"class="sm fi ev<%= highlighted_class(event) -%> type<%= event.event_type  -%>" >
 <%= raw display_title(event, @terms)%>
-<%= raw display_menu_link(event,'evmm','','div',true) unless event.is_deleted? %>
+<%= raw display_menu_link(event,'evdm','','div',true) unless event.is_deleted? %>
 <%= raw display_vid_info(event)%>
 <%= raw display_creation_info(event)%>
 <%= raw display_performers(event,@terms)%>

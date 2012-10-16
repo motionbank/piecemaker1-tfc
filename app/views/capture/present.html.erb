@@ -1,5 +1,3 @@
-
-
 <div id='events_presentation' data-pieceid='<%= current_piece.id %>'>
 <%= render :partial => 'present_header' %>
 
@@ -38,30 +36,9 @@
 </div>
 
 <%- content_for :menus do  -%>
-<div id = 'event-menu' class = 'menn evm' style='display:none'>
-  <div id = 'menid'></div>
-  <div class = 'menclose'></div>
-  <div id='menin'>
-    <br />
-    <%= raw put_menu %>
-  </div>
-</div>
-<div id = 'video-menu' class = 'menn vim' style='display:none'>
-  <div id = 'vmenid'></div>
-  <div class = 'menclose'></div>
-  <div id='vmenin'>
-    <br />
-    <%= raw put_v_menu %>
-  </div>
-</div>
-<div id = 'sub-scene-menu' class = 'menn sum' style='display:none'>
-  <div id = 'smenid'></div>
-  <div class = 'menclose'></div>
-  <div id='smenin'>
-    <br />
-    <%= raw put_s_menu %>
-  </div>
-</div>
+<%= render :partial => '/capture/event_drop_down' -%>
+<%= render :partial => '/capture/sub_event_drop_down' -%>
+<%= render :partial => '/capture/video_drop_down' -%>
 <%- end -%>
 
 

@@ -1,5 +1,5 @@
 <%= @event.id %> <%= @event.title %> <br />
-<%- form_for :event, :url => {:action => :do_move,:id => @event} do |f| -%>
+<%= form_for :event, :url => {:action => :do_move,:id => @event} do |f| -%>
 After Event id: <%= text_field_tag :after,'', :size => 7 -%>
 <%= submit_tag 'Submit' %> <%= link_to "Cancel",{ :controller => 'capture', :action => 'present', :id => @event.piece_id}, :class => 'cancel' %>
 <%- end -%>

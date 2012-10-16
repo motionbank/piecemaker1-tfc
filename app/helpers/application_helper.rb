@@ -121,54 +121,13 @@ module ApplicationHelper
     "<input type='checkbox' class = 'check-all #{name.gsub(']','').gsub('[','')}' name=''/>Select / De-select All"
   end
 
-  def put_menu
-    text = "<ul id = \"\">"
-    text << "<li><a  href=\"/capture/mod_ev/\">Edit</a></li>"
-    text << "<li><a class=\"mendel\" href=\"/capture/delete_event/\">Delete</a></li>"
-    text << "<li><a  href=\"/capture/new_note/\">New Note</a></li>"
-    text << "</ul>"
-    text << "<ul id = \"capmenlss\">"
-    if user_has_right?('highlight')
-      text << "<li><a class=\"menhi\" href=\"/capture/toggle_highlight/\">Highlight ON/OFF</a></li>"
-    end
-    if true
-      text << "<li><a class=\"menhi\" href=\"/capture/toggle_user_highlight/\">Personal Mark On/Off</a></li>"
-      text << "<li><a class=\"menhi\" href=\"/capture/rate/0/\">Rate 0</a> <a class=\"menhi\" href=\"/capture/rate/1/\">1</a> <a class=\"menhi\" href=\"/capture/rate/2/\">2</a> <a class=\"menhi\" href=\"/capture/rate/3/\">3</a> <a class=\"menhi\" href=\"/capture/rate/4/\">4</a> <a class=\"menhi\" href=\"/capture/rate/5/\">5</a></li>"
-      text << "<li><a class=\"menhi\" href=\"/capture/tag_with_title/\">Tag With Title</a></li>"
-    end
-    if user_has_right?('advanced_actions')
-      text << "<li><a  href=\"/capture/new_event/scene?after=\">Insert Event After</a></li>"
-      text << "<li><a class=\"menhisub\" href=\"/capture/convert_to_sub_scene/\">Convert to Subscene</a></li>"
-      text << "<li><a  href=\"/capture/move_event/\">Move Event</a></li>"
-    end
-    text << "</ul>"
-  end
 
-
-  def put_v_menu
-    text = "<ul id = \"vidmenlist\">"
-    text << "<li><a class=\"menhi\" href=\"/capture/rate_video/0/\">Rate 0</a> <a class=\"menhi\" href=\"/capture/rate_video/1/\">1</a> <a class=\"menhi\" href=\"/capture/rate_video/2/\">2</a> <a class=\"menhi\" href=\"/capture/rate_video/3/\">3</a> <a class=\"menhi\" href=\"/capture/rate_video/4/\">4</a> <a class=\"menhi\" href=\"/capture/rate_video/5/\">5</a></li>"
-    text << "<li><a class=\"mened\" href=\"/capture/add_event_to_video/\">Add Event</a></li>"
-    text << "</ul>"
-  end
-  def put_viewer_menu
-    text = "<ul id = \"eviewlist\">"
-    text << "<li><a class = 'get pause' href='/viewer/edit_annotation/'>Edit</a></li>"
-    text << "<li><a class=\"menhi\" href=\"/viewer/rate/0/\">Rate 0</a> <a class=\"menhi\" href=\"/viewer/rate/1/\">1</a> <a class=\"menhi\" href=\"/viewer/rate/2/\">2</a> <a class=\"menhi\" href=\"/viewer/rate/3/\">3</a> <a class=\"menhi\" href=\"/viewer/rate/4/\">4</a> <a class=\"menhi\" href=\"/viewer/rate/5/\">5</a></li>"
-    text << "</ul>"
-  end
   def put_viewer_sub_menu
     text = "<ul id = \"viewsubmenlist\">"
     text << "<li><a class='get pause' href='/sub_scene/edit_sub_annotation/' >Edit</a></li>"
     text << "</ul>"
   end
-  def put_s_menu
-    text = "<ul id = \"submenlist\">"
-    text << "<li><a class=\"mened\" href=\"/capture/edit_sub_scene/\">Edit</a></li>"
-    text << "<li><a class=\"mendelsub\" href=\"/capture/delete_sub_scene/\">Delete</a></li>"
-    text << "<li><a class=\"mensubpr\" href=\"/capture/promote_to_scene/\">Promote</a></li>"
-    text << "</ul>"
-  end
+
 
   def menu_first_level(title, &block)
   content = with_output_buffer(&block)
@@ -210,34 +169,23 @@ module ApplicationHelper
     content_tag :p, string    
   end
   
-  def display_menu_link(item,css_class,size = '',tag = 'div', rate = false)
+  def display_menu_link(item,menu_name,size = '',tag = 'div', rate = false)
     return '' unless user_has_right?('normal_actions')
-    text = "<#{tag} class = 'men #{css_class} #{size}' id = 'm-#{item.id}'>"
-    text << ' <a href="" data-action="alert">MENU...</a>'
+    text = "<#{tag} class = 'menu-link #{size}'>"
+    text << " <a href='' data-id='#{item.id.to_s}' data-menuName='#{menu_name}'>MENU...</a>"
     text << display_rating(item) if rate
     text << "</#{tag}>"
   end
   def display_video_menu(video)
-    #display_menu_link(video,'men vvim')
-    text = "<div class='men vvim'id='m-#{video.id}'>"
-    #text << 'hi'
+    text = "<div id = 'm-#{video.id}'class='menu-link'>"
     video.rating.times do
       text << '<span>* </span>'
     end
-    text << ' <a href=''>MENU...</a>'
+    text << " <a href='' data-id='#{video.id.to_s}' data-menuName='vidm'>MENU...</a>"
     text << "</div>"
     text
   end
   
-  def display_viewer_subsc_menu(sub_scene)
-    if user_has_right?('normal_actions')
-    text = "<span class='men summ viewersmen small' id='s-#{sub_scene.id}'>"
-    text << "<a href=''>MENU...</a>"
-    text << "</span>"
-    else
-      ''
-    end
-  end
   
   def piece_select_with_none
     start = [['None', '']]
@@ -660,41 +608,6 @@ module ApplicationHelper
       text = ''
     end
   end
-  def display_subscenes(event,search = nil)
-    text = ''
-    if event.sub_scenes.length > 0
-      v = event.video
-    event.sub_scenes.each do |ss|
-      extra_class = v && v.duration && ss.happened_at > v.recorded_at + v.duration ? 'sm warning' : "sm sub-#{event.event_type}"
-      text << "<div class = '#{extra_class}' id = 'sus-#{ss.id.to_s}'>"
-      text << '<span style = "font-weight:bold">'
-      if v
-        start_time = ss.happened_at - v.recorded_at
-        if event.video_viewable?
-          text << put_see_video_link_around_time(event,start_time)
-        else
-          text << start_time.to_time_string
-        end
-      else
-        text << '-'
-      end
-      text << '&nbsp;&nbsp;'
-      ss.description ||= ''
-      if search
-        ss.title = highlight(ss.title,search,found_text_replacement_string)
-        ss.description = highlight(ss.description,search,found_text_replacement_string)
-      end
-      text << "#{ss.title}"
-      text << '</span><br />&nbsp;&nbsp;'
-      text << ss.description
-      text << display_menu_link(ss,'summ','small','span',false)
-      text << '</div>'
-      
-    end
-    end
-    text
-  end
-
   
   def display_performers(event,search = nil)
     if event.performers && event.performers.length
@@ -865,7 +778,7 @@ def display_children(event,search = nil)
       v = event.video
     event.children.each do |ss|
       extra_class = v && v.dur && ss.happened_at > v.happened_at + v.dur ? 'sm warning' : "sm sub-#{event.event_type}"
-      text << "<div class = '#{extra_class}' id = 'sus-#{ss.id.to_s}'>"
+      text << "<div class = '#{extra_class}' id = 'event-#{ss.id.to_s}'>"
       text << '<span style = "font-weight:bold">'
       if v
         start_time = ss.happened_at - v.happened_at
@@ -886,7 +799,7 @@ def display_children(event,search = nil)
       text << "#{ss.title}"
       text << '</span><br />&nbsp;&nbsp;'
       text << ss.description
-      text << display_menu_link(ss,'summ','small','span',false)
+      text << display_menu_link(ss,'sevdm','small','span',false)
       text << '</div>'
       
     end

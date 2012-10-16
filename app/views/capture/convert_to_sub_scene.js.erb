@@ -1,6 +1,7 @@
 <%- if @event -%>
-$("#sort_<%= @event.id -%>").replaceWith("<%= escape_javascript(render(:partial => 'one_event', :locals => {:event => @event})) -%>");
-$("#sort_<%= params[:id] -%>").remove();
+$("#event-<%= params[:id] -%>").remove();
+$("#event-<%= @event.id -%>").replaceWith("<%= escape_javascript(render(:partial => 'one_event', :locals => {:event => @event})) -%>");
+//$("#event-<%= @event.id -%>").replaceWith('wow')
 <%- else -%>
 alert("I can't convert this Scene into a Sub Scene");
 <%- end -%>

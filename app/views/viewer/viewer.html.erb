@@ -52,22 +52,8 @@ window.onload = function() {
 <%= render 'video_info_div',:video => @video %>
 <%- end -%>
 <%- content_for :menus do -%>
-<div class = 'menn eviewer' style='display:none'>
-  <div id = 'menid'></div>
-  <div class = 'menclose'></div>
-  <div id='menin'>
-    <br />
-    <%= raw put_viewer_menu %>
-  </div>
-</div>
-<div class = 'menn esviewer' style='display:none'>
-  <div id = 'menid'></div>
-  <div class = 'menclose'></div>
-  <div id='menin'>
-    <br />
-    <%= put_viewer_sub_menu %>
-  </div>
-</div>
+  <%= render :partial => 'event_drop_down' %>
+  <%= render :partial => 'sub_event_drop_down' %>
 <%- end -%>
 
   <div class = 'vidlinks' id = "mark" data-shortcut = 'enabled' data-vidid = "<%= @video.id %>" data-pieceid = "<%= @piece.id %>">

@@ -53,7 +53,7 @@ margin-top:2px;
 	line-height:1.5em;
 	text-align:right;
 }
-.summ{
+.sevdm{
 	float:none;
 }
 
@@ -66,19 +66,19 @@ margin-top:2px;
 	font-size:16px;
 	color:#f66
 }
-.menn ul{
+.menu-box ul{
 	list-style:none;
 	margin-left:-30px;
 	line-height:18px;
 }
-.menn a{
+.menu-box a{
 	color:#ccc;
 	text-decoration:none;
 }
-.menn a:hover{
+.menu-box a:hover{
 	color:#ff0;
 }
-.menn{
+.menu-box{
 	position:absolute;
 	top:200px;
 	left:200px;
@@ -89,13 +89,6 @@ margin-top:2px;
 	z-index:1000;
 }
 
-.menid{
-	position:absolute;
-	top:3px;
-	left:3px;
-	font-family:courier;
-	color:#ccc;
-}
 .menclose{
 	position:absolute;
 	top:3px;
