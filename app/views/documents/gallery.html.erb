@@ -1,6 +1,0 @@
-<h3>Gallery for: <%= @piece.title %></h3>
-Click on a photo to enlarge it.
-<%- @documents.each do |document| -%>
-<img src = 'http://s3.amazonaws.com/piecemaker_dev/<%= document.doc_file_name %>' width ="200">
-<%= document.doc_file_name %><br />
-<% end -%>

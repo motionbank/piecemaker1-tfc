@@ -1,4 +1,4 @@
-<div id='events_presentation' data-pieceid='<%= current_piece.id %>'>
+<div id='events_presentation' data-pieceid='<%= current_piece.id %>' data-truncate ='<%= current_user.truncate %>'>
 <%= render :partial => 'present_header' %>
 
 <%- dates = [] -%>
@@ -7,7 +7,7 @@
 <%- i = 0 -%>
 
 <%- while i <= index -%>
-<%- if @events[i].happened_at.at_midnight > next_date -%>   
+<%- if @events[i].happened_at.at_midnight > next_date -%>
   <%- next_date =  @events[i].happened_at.at_midnight -%>
   <%- dates <<  next_date -%>
   <div style = "color:#d00;font-size:20px;margin-left:-25px" id= "dat-<%= (dates.length-1).to_s  %>" >
@@ -36,9 +36,23 @@
 </div>
 
 <%- content_for :menus do  -%>
-<%= render :partial => '/capture/event_drop_down' -%>
-<%= render :partial => '/capture/sub_event_drop_down' -%>
-<%= render :partial => '/capture/video_drop_down' -%>
+<script type="text/html" id="evdm">
+  <%= render :partial => '/capture/event_drop_down' -%>
+</script>
+<script type="text/html" id="sevdm">
+  <%= render :partial => '/capture/sub_event_drop_down' -%>
+</script>
+<script type="text/html" id="vidm">
+  <%= render :partial => '/capture/video_drop_down' -%>
+</script>
+
+<div id = 'drop' class = 'menu-box' style='display:none'>
+  <div id = 'show-id'></div>
+  <div class = 'menclose'></div>
+  <br />
+  <ul id = 'drop-down-list' class = "dropdown">
+  </ul>
+</div>
 <%- end -%>
 
 
@@ -47,21 +61,27 @@
 <%- if user_has_right?('normal_actions') -%>
 <div id="quick" data-shortcut = 'enabled'>
 <span class = 'hdble'>
-  <%= form_tag :action => 'present', :id => session[:piecid], :filter_type => 'text' do %>
+  <%= form_tag :action => 'present', :id => current_piece.id, :filter_type => 'text' do %>
   <%= text_field_tag 'search', '',:size => 20 %>
-  <%= submit_tag 'Search' %><%= link_to 'Show All', :action => 'present', :id => session[:piecid] %>
+  <%= submit_tag 'Search' %><%= link_to 'Show All', :action => 'present', :id => current_piece.id %>
   <%- end %><br />
-<span class="short-cut">N </span><%= link_to('New Scene',{:action => 'new_event',:id => 'scene'}, :class => 'get sprep')-%><br />
-<span class="short-cut">M </span><%= link_to('New Marker',{:action => 'new_marker',:id => 'marker'}, :class => 'marker mprep', :id => 'marker')-%><br />
-<span class="short-cut">S </span><%= link_to('New Sub Scene',{:action => 'new_sub_scene'}, :class => 'get ssprep')-%>
+<span class="short-cut">N </span>
+<%= link_to('New Scene', new_event_url(:piece_id => current_piece.id, :event_type => 'scene'), :class => 'jsc get-form sprep', :id => 'quick-scene')-%>
+<br />
+<span class="short-cut">S </span>
+<%= link_to('New Sub Scene',new_sub_scene_url(:piece_id => current_piece.id), :class => 'jsc get-form ssprep' , :id => 'quick-sub')-%>
 <%- if user_has_right?('normal_actions') -%>
+<br /><br /><span id='dvd_quick'><%= raw video_quick_link %></span>
+<% end -%>
 <br /><br />
-<span id='dvd_quick'><%= raw video_quick_link %></span>
-<% end -%><br /><br />
 </span>
-<%= link_to "Open Scratchpad",{:controller => 'capture',:action => 'open_scratchpad'},:class => 'get-sc' %>
+<%= link_to "Open Scratchpad",{:controller => 'capture',:action => 'open_scratchpad'},:class => 'jsc get-sc' %>
 <br />
 <a class = 'collapse'>Collapse </a><a class = 'expand'>Expand</a>
+<%- if current_user.truncate == 'more' -%>
+<br />
+<a class = 'truncate'>"Less" All </a><a class = 'untruncate'>"More" All</a>
+<%- end -%>
 <br /><br /><br />
 <div id = "dates">
 <%- dates.each_with_index do |date,index| -%>

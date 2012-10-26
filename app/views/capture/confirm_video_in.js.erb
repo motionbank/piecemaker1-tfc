@@ -1,4 +1,4 @@
 clearFormDiv('<%= @flash_message || '' -%>');
 $('#events_presentation').append("<%= j render(:partial => 'video_block',:locals =>{:video => @video, :piece_id => current_piece.id}) -%>");
 $("#dvd_quick").html('<%= raw video_quick_link(@video) -%>');
-updateVideoTime();
+updateVideoTime(<%= @video.piece_id-%>);

@@ -144,7 +144,7 @@
 	margin-right:3px;
 	margin-bottom:3px;
 	padding:2px;}
-	
+
 .typesound_cue {
   background: #ccf;
   left: -1%;
@@ -470,6 +470,9 @@ div.css-panes {
 .menu-link a:hover {
   background: #99c; }
 
+#show-id{
+  color:#fcc
+}
 .small a {
   padding: 0px;
   background: none;

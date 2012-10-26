@@ -20,8 +20,11 @@
 //= require jquery-tools
 //= require jquery-menubox
 //= require jquery-periodical
+//= require jquery-jtruncate
 //= require jquery.dataTables
-//= require old-application
+//= require piecemaker
 //= require capture
+//= require viewer
 //= require drop-down
 //= require s3_upload
+//= require mustache

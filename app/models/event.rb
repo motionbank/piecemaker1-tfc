@@ -35,7 +35,7 @@ class Event < ActiveRecord::Base
   require 's3_paths'
   include S3Paths
 
-  
+
   def self.event_types
     %w[dev_notes discussion headline light_cue performance_notes scene sound_cue marker video sub_scene note]
   end
@@ -48,7 +48,7 @@ class Event < ActiveRecord::Base
   end
   #acts_as_audited
   #before_create :check_for_everyone
-  #before_update :check_for_everyone, :except => 'unlock'              
+  #before_update :check_for_everyone, :except => 'unlock'
   #has_many :sub_scenes, :dependent => :destroy, :order => 'happened_at'
 
   #has_many :notes, :dependent => :destroy
@@ -64,7 +64,7 @@ class Event < ActiveRecord::Base
   has_many :children, :class_name => "Event", :foreign_key => "parent_id", :order => 'happened_at', :conditions => "event_type != 'note'"
   has_many :notes, :class_name => "Event", :foreign_key => 'parent_id', :order => 'happened_at', :conditions => "event_type = 'note'"
   belongs_to :parent, :class_name => "Event"
-  
+
   scope :contains, lambda{|quer| {:conditions => ['title LIKE ? OR description LIKE ? OR performers LIKE ?', "%#{quer}%","%#{quer}%","%#{quer}%"],:include => :notes}}
   scope :highlighted, :conditions => "highlighted = '1'"
   scope :in_piece, lambda{|piece_id| {:conditions => ['piece_id = ?', "#{piece_id}"]}}
@@ -73,13 +73,14 @@ class Event < ActiveRecord::Base
   scope :created_today, :conditions => "happened_at >= '#{Time.zone.now.at_midnight}'"
   scope :deleted, :conditions => "state = 'deleted'"
   scope :normal, :conditions => "state = 'normal'"
-  scope :locked, :conditions => "locked != 'none'"
+  scope :lokked, :conditions => ["locked != ?", 'none']
+  scope :not_video, :conditions => ["event_type != ?", 'video']
   scope :sub_events, :conditions => "event_type != 'note'"
 
   Event.event_types.each do |type|
     scope type+'s', :conditions => "event_type = '#{type}'"
   end
-  
+
   delegate :recorded_at,:fn_arch,:fn_local,:fn_s3, :to => :video, :prefix => true
   delegate :tags, :to => :piece, :prefix => true
 
@@ -99,7 +100,7 @@ class Event < ActiveRecord::Base
   def tag_list #tested
     tag_names.join(',')
   end
-  
+
   def tag_names #tested
     tags.collect{|x| x.name.downcase}
   end
@@ -114,12 +115,12 @@ class Event < ActiveRecord::Base
   def self.parse_tagstring(tag_params)#tested
     params_array = tag_params.present? ? tag_params.split(',').map{|x| x.strip} : []
   end
-  
+
   def process_tags(tag_params)#tested
-    params_array = Event.parse_tagstring(tag_params)    
+    params_array = Event.parse_tagstring(tag_params)
     self.do_tag_process(params_array)
   end
-  
+
   def get_tag_or_create(new_tag_name,title = nil)#tesed
     #Tag.where("name = ? and piece_id = ?",new_tag_name, piece_id)
     unless nn = Tag.where("name = ? and piece_id = ?",new_tag_name, piece_id).first
@@ -145,7 +146,7 @@ class Event < ActiveRecord::Base
     self
   end
 
-  
+
   def add_title_from_tag(params)
     if params[:tag_title] && params[:tag_title] != 'select a title from this list'
       self.title = params[:tag_title]
@@ -174,30 +175,30 @@ class Event < ActiveRecord::Base
   end
 
   def remove_tag
-    
+
   end
 
   def do_tag_process(params_array)#tested
     self.tags.clear
     params_array.each do |params_tag|
       new_tag = self.get_tag_or_create(params_tag)
-      self.add_tag(new_tag)   
+      self.add_tag(new_tag)
     end
   end
-  
+
   def performer_picked?#tested
     !self.tag_names.select{|x| x.include?('likes!')}.empty?
   end
-  
+
   def add_liker(user)#tested
     new_tag = self.get_tag_or_create("#{user}Likes!")
     self.add_tag(new_tag)
   end
-  
+
   def needs_performers_field? #tested
     ['scene'].include?(self.event_type)
   end
-  
+
   def tag_with_title #tested
     new_tag = self.get_tag_or_create(self.title,true)
     self.add_tag(new_tag)
@@ -205,7 +206,7 @@ class Event < ActiveRecord::Base
       event.add_tag(new_tag)
     end
   end
-  
+
   def self.pad_number(num) #tested
     string = ''
     if num < 100
@@ -229,7 +230,7 @@ class Event < ActiveRecord::Base
       Piecemaker.config.no_video_string
     end
   end
-  
+
   def video_uploaded? #tested
     if self.video
       self.video.is_uploaded
@@ -237,11 +238,11 @@ class Event < ActiveRecord::Base
       false
     end
   end
-  
+
   def make_normal #tested
     self.state = 'normal'
   end
-  
+
   def locked?
     locked != 'none'
   end
@@ -254,14 +255,14 @@ class Event < ActiveRecord::Base
   def lock(locker_name)
     self.locked = locker_name
   end
-  
+
   def is_active? #needs a test
     !self.is_deleted?
   end
   def is_deleted? #tested
     self.state == 'deleted'
   end
-  
+
   def make_deleted #tested
     self.state = 'deleted'
     save
@@ -278,7 +279,7 @@ class Event < ActiveRecord::Base
     self.event_type = params[:event_type]
     self.title = ''
     self.created_by = current_user.login
-    set_video_time_info 
+    set_video_time_info
   end
 
   def joined_performers(joiner=', ')
@@ -298,7 +299,7 @@ class Event < ActiveRecord::Base
       return nil unless piece_id
       video = Piece.find(piece_id).videos.select{|x| x.happened_at < happened_at}.last
       return nil unless video
-      return nil if video.dur && video.recorded_at + video.dur < happened_at      
+      return nil if video.dur && video.recorded_at + video.dur < happened_at
       self.video_id = video.id
   end
 
@@ -308,12 +309,12 @@ class Event < ActiveRecord::Base
     return false unless performers.length > 4
     piece.performer_list == performers.collect{|x| x.downcase}.sort
   end
-  
+
   def toggle_highlight! #tested
     self.update_attribute(:highlighted, !self.highlighted)
     self
   end
-  
+
   def performer_everyone? #tested
     if self.performers && !self.performers.empty?
       self.performers[0] == 'Everyone'
@@ -321,7 +322,7 @@ class Event < ActiveRecord::Base
       false
     end
   end
-  
+
   def performer_exclusive?(list_of_names)#tested
     if self.performers && !self.performers.empty?
       list_of_names.collect{|x| x.downcase} == self.performers.collect{|x| x.downcase}.sort
@@ -329,7 +330,7 @@ class Event < ActiveRecord::Base
       return false
     end
   end
-  
+
   def performer_non_exclusive?(list_of_names)#tested
     list_of_names = list_of_names.map{|x| x.downcase}.sort
     if self.performers && !self.performers.empty?
@@ -339,7 +340,7 @@ class Event < ActiveRecord::Base
       return false
     end
   end
-  
+
   def performer_non_exclusive_with_everyone?(list_of_names)#tested
     list_of_names = list_of_names.map{|x| x.downcase}.sort
     if self.performers && !self.performers.empty?
@@ -349,7 +350,7 @@ class Event < ActiveRecord::Base
       return false
     end
   end
-  
+
   def performer_semi_exclusive?(list_of_names)#tested #should return events in which any combination of the searched for performers are in but not other performers
     list_of_names = list_of_names.map{|x| x.downcase}.sort
     if self.performers && !self.performers.empty?
@@ -367,7 +368,7 @@ class Event < ActiveRecord::Base
       return false
     end
   end
-  
+
   def latest_scene #tested
     scenes = Event.where("piece_id = ? AND event_type = 'scene'",piece_id).order("happened_at")
     scenes.reject!{|x| !x.is_active?}
@@ -428,7 +429,7 @@ class Event < ActiveRecord::Base
     self.happened_at = time
     self.save
   end
-  def self.create_annotation(params,current_user,video,piece_id)
+  def self.create_annotation(params,current_user)
     event = create(
     :title => params[:event][:title],
     :event_type => params[:event][:event_type],
@@ -437,7 +438,7 @@ class Event < ActiveRecord::Base
     :video_id => params[:vid_id],
     :description => params[:event][:description],
     :modified_by => current_user.login,
-    :piece_id => piece_id,
+    :piece_id => params[:event][:piece_id],
     :created_by => current_user.login
     )
     event.get_performers_from_description
@@ -459,7 +460,7 @@ class Event < ActiveRecord::Base
       child.parent_id = previous_scene.id
       child.save
     end
-    self  
+    self
   end
     def promote_to_scene
     siblings = parent.children.select{|x| x.happened_at > happened_at}
@@ -547,14 +548,14 @@ class Event < ActiveRecord::Base
   end
   def next_video
     x = Event.where("piece_id = '#{piece_id}' AND event_type = 'video' AND happened_at > :start_time AND happened_at < :end_time", {:start_time => happened_at, :end_time => (happened_at + 1.day).at_midnight}).order('happened_at')
-    next_video = x.any? ? x.last : nil 
+    next_video = x.any? ? x.last : nil
   end
   def self.fix
     num = 0
     x = Event.where("title LIKE '%bluebox%'")
     x.each do |vid|
       if vid.subjects.length == 0
-        vid.destroy  
+        vid.destroy
       end
     end
     num
@@ -583,19 +584,19 @@ class Event < ActiveRecord::Base
       self.dur += 60
       save
       id
-    elsif next_video # 5 seconds before next video of day. 
-      self.dur = next_video.happened_at - happened_at 
+    elsif next_video # 5 seconds before next video of day.
+      self.dur = next_video.happened_at - happened_at
       self.dur -= 5
       save
       id
     else # 2 hours or end of day whichever comes first. too bad if session lasts after midnight
       end_of_day = (happened_at + 1.day).at_midnight
-      time_left = (end_of_day - happened_at) - 1 
+      time_left = (end_of_day - happened_at) - 1
       self.dur = 7200 >=  time_left ? time_left : 7200
       save
       id
     end
-    
+
   end
   protected
 
@@ -604,7 +605,7 @@ class Event < ActiveRecord::Base
       self.performers = ['Everyone'] if self.has_everyone?
     end
   end
-  
+
 end
 
 

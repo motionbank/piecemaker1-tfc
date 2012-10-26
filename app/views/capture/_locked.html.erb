@@ -1,7 +1,7 @@
 <h3>Warning: You can't edit this because it's locked by <%= @event.locked_by %>.</h3>
 
 <%- if  (user_has_right?('group_admin') || current_user.login == @event.created_by) -%>
-  <a class='dged'href='/capture/unlock/<%= @event.id %> '>Click to Unlock</a> <b>This may overwrite changes made by <%= @event.locked_by %>.</b>
+  <a class='dged'href='/capture/unlock/<%= @event.id %>'>Click to Unlock</a> <b>This may overwrite changes made by <%= @event.locked_by %>.</b>
 <%- end -%>
 <br /><br />
 <%= link_to 'Cancel',{:action => 'present', :id => current_piece.id}, :class => 'cancel'%>

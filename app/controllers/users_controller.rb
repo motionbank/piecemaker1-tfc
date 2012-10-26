@@ -7,25 +7,25 @@ class UsersController < ApplicationController
   def new
     @user = User.new
   end
-  
-###################from pieces 
+
+###################from pieces
   def pref
     render :layout => false
   end
   def store_prefs
     set_time_zone
     current_user.store_from_params(params)
-    flash[:notice] = 'New Preferences Stored'
+    flash[:notice] = 'New Preferences Stored. Reload page to see changes.'
     respond_to do |format|
       format.html {redirect_to :controller => 'capture',
         :action => "present",
-        :id => session[:pieceid]}
-      format.js {render :text => "clearFormDiv('#{flash[:notice]}')", :layout => false} 
+        :id => params[:piece_id]}
+      format.js {render :text => "clearFormDiv('#{flash[:notice]}')", :layout => false}
     end
   end
-  
-############################ 
-  
+
+############################
+
   def create
       #logout_keeping_session!
       params[:user][:is_performer] ||= false
@@ -45,11 +45,11 @@ class UsersController < ApplicationController
         render :action => 'new'
       end
   end
-  
+
   def edit
       @user = User.find(params[:id])
   end
-  
+
   def destroy
       id = params[:id]
       if id && user = User.find(id)
@@ -86,5 +86,5 @@ class UsersController < ApplicationController
       end
   end
 
-  
+
 end

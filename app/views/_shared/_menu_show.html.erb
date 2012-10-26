@@ -1,23 +1,23 @@
 <li><a>Show</a>
 	<ul>
-	  <li><%= link_to 'All Events', :controller => "capture", :action => 'present', :id => session[:pieceid], :filter_type => 'none' -%></li>
-	  <li><%= link_to('Find Performer',{:controller => 'capture', :action => 'search_by_performer', :id => session[:pieceid]},:class => "get") -%></li>
-    <li><%= link_to('Text Search',{:controller => 'capture', :action => 'search_by_text', :id => session[:pieceid]}, :class => "get") -%></li>
-	  <li><%= link_to 'Last 100', :controller => "capture", :action => 'present', :id => session[:pieceid], :filter_type => 'tail' -%></li>
-    <li><%= link_to 'Today\'s Events Only', :controller => "capture", :action => 'present', :id => session[:pieceid], :filter_type => 'today_only' -%></li>
-    <li><%= link_to('Date Range',{:controller => 'capture', :action => 'date_range', :id => session[:pieceid]},:class => "get") -%></li>
-    <li><%= link_to 'Only Highlighted', :controller => "capture", :action => 'present', :id => session[:pieceid], :filter_type => 'highlighted' -%></li>
-    <li><%= link_to "Highlighted by #{current_user.login}" , :controller => "capture", :action => 'present', :id => session[:pieceid], :filter_type => 'user_highlighted' -%></li>
-    <li><%= link_to('Tag Search',{:controller => 'capture', :action => 'search_by_tag', :id => session[:pieceid]}, :class => "get") -%></li>
-    <li><%= link_to('Video Search',{:controller => 'capture', :action => 'search_by_video', :id => session[:pieceid]}, :class => "get")-%></li>
+	  <li><%= link_to 'All Events', :controller => "capture", :action => 'present', :id => current_piece.id, :filter_type => 'none' -%></li>
+	  <li><%= link_to('Find Performer',{:controller => 'capture', :action => 'search_by_performer', :id => current_piece.id},:class => "get") -%></li>
+    <li><%= link_to('Text Search',{:controller => 'capture', :action => 'search_by_text', :id => current_piece.id}, :class => "get") -%></li>
+	  <li><%= link_to 'Last 100', :controller => "capture", :action => 'present', :id => current_piece.id, :filter_type => 'tail' -%></li>
+    <li><%= link_to 'Today\'s Events Only', :controller => "capture", :action => 'present', :id => current_piece.id, :filter_type => 'today_only' -%></li>
+    <li><%= link_to('Date Range',{:controller => 'capture', :action => 'date_range', :id => current_piece.id},:class => "get") -%></li>
+    <li><%= link_to 'Only Highlighted', :controller => "capture", :action => 'present', :id => current_piece.id, :filter_type => 'highlighted' -%></li>
+    <li><%= link_to "Highlighted by #{current_user.login}" , :controller => "capture", :action => 'present', :id => current_piece.id, :filter_type => 'user_highlighted' -%></li>
+    <li><%= link_to('Tag Search',{:controller => 'capture', :action => 'search_by_tag', :id => current_piece.id}, :class => "get") -%></li>
+    <li><%= link_to('Video Search',{:controller => 'capture', :action => 'search_by_video', :id => current_piece.id}, :class => "get")-%></li>
     <%- menu_second_level('View by Rating',"Rating") do -%>
-    <li><%= link_to('1 or Higher', :controller => 'capture', :action => 'present', :id => session[:pieceid], :filter_type => "rating",:rating => 0)-%></li>
-    <li><%= link_to('2 or Higher', :controller => 'capture', :action => 'present', :id => session[:pieceid], :filter_type => "rating",:rating => 1)-%></li>
-    <li><%= link_to('3 or Higher', :controller => 'capture', :action => 'present', :id => session[:pieceid], :filter_type => "rating",:rating => 2)-%></li>
-    <li><%= link_to('4 or Higher', :controller => 'capture', :action => 'present', :id => session[:pieceid], :filter_type => "rating",:rating => 3)-%></li>
-    <li><%= link_to('5', :controller => 'capture', :action => 'present', :id => session[:pieceid], :filter_type => "rating",:rating => 4)-%></li>
+    <li><%= link_to('1 or Higher', :controller => 'capture', :action => 'present', :id => current_piece.id, :filter_type => "rating",:rating => 0)-%></li>
+    <li><%= link_to('2 or Higher', :controller => 'capture', :action => 'present', :id => current_piece.id, :filter_type => "rating",:rating => 1)-%></li>
+    <li><%= link_to('3 or Higher', :controller => 'capture', :action => 'present', :id => current_piece.id, :filter_type => "rating",:rating => 2)-%></li>
+    <li><%= link_to('4 or Higher', :controller => 'capture', :action => 'present', :id => current_piece.id, :filter_type => "rating",:rating => 3)-%></li>
+    <li><%= link_to('5', :controller => 'capture', :action => 'present', :id => current_piece.id, :filter_type => "rating",:rating => 4)-%></li>
     <%- end %>
-    <li><%= link_to 'Last 50 Spanning Pieces', :controller => "capture", :action => 'present', :id => session[:pieceid], :filter_type => 'span', :span_count => '50' -%></li>
-    <li><%= link_to('Trash', :controller => 'capture', :action => 'present', :id => session[:pieceid], :filter_type => 'trash')-%></li>
+    <li><%= link_to 'Last 50 Spanning Pieces', :controller => "capture", :action => 'present', :id => current_piece.id, :filter_type => 'span', :span_count => '50' -%></li>
+    <li><%= link_to('Trash', :controller => 'capture', :action => 'present', :id => current_piece.id, :filter_type => 'trash')-%></li>
 	</ul>
 </li>

@@ -7,7 +7,7 @@
 <%= content_for :quick do -%>
 <div id="quick" data-shortcut = 'enabled'>
   <span class="short-cut">ctrl-M </span>
-  <a class = 'marker mprep' id ='marker' href = '/capture/mark_from_marker_list/<%= @piece.id %>?user=<%= current_user.login %>'>New Marker</a>
+  <a class = 'dg mprep' id ='marker' href = '/capture/mark_from_marker_list/<%= @piece.id %>?user=<%= current_user.login %>'>New Marker</a>
   <br />
 </div>
 <%- end -%>

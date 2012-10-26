@@ -82,7 +82,7 @@ class Piece < ActiveRecord::Base
   def remove_performer(peformer) #tested
     performers.delete(peformer)
   end
-  
+
   def date_list #tested
     dates = Array.new
     self.events.each do |event|
@@ -93,7 +93,7 @@ class Piece < ActiveRecord::Base
     dates
   end
   def recurring_titles
-    
+
   end
 
 end

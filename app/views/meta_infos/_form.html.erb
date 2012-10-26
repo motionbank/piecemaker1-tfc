@@ -1,6 +1,7 @@
 <%= error_messages_for @meta_info %>
 
 <!--[form:meta_info]-->
+<%= hidden_field_tag('meta_info[piece_id]', current_piece.id ) -%>
 
 <p><label for="meta_info_title">Title</label><br/>
 <%= text_field 'meta_info', 'title'  %></p>

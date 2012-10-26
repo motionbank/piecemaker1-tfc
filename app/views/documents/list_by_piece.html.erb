@@ -12,7 +12,7 @@
     <th>S3 OK?</th>
     <th colspan = '3'>Actions</th>
   </tr>
-  
+
 <% for document in @documents %>
 <tr class = "<%= cycle('row-1','row-2') %>">
   <td><%=h document.id %></td>
@@ -77,4 +77,4 @@
 </div>
 <%- end -%>
 <br />
-<%= link_to 'Back to Capture', :controller => 'capture', :action => 'present', :id => session[:pieceid] -%>
+<%= link_to 'Back to Capture', :controller => 'capture', :action => 'present', :id => @piece.id -%>

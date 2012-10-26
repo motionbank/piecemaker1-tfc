@@ -1,67 +1,152 @@
 $(function(){
 
-  $('.menclose').live('click', function(){
-    $('.menu-box').hide();
-    $('.removable').remove();
-  });
-  
-  // this make the drop down menu drop down
-  // 
-  $('.menu-link a').live('click', function(event){
-    var id = $(this).data('id');
-    $("#main").data('event-id', id);
-    $('.show-id').html('<span style = "color:#fcc">'+id+'</span>');
 
-    // calculate position and move all menus to the right place
-    $('.removable').remove();
-    $('.menu-box').hide();
-    var difference = ($(window).scrollTop() + $(window).height()) - event.pageY
-    if(difference < 260){
-      top_pos = event.pageY - (260 - difference);
-    }else{
-      top_pos = event.pageY;
-    }
-    $('.menu-box').css('top',top_pos + 'px');
-    $('.menu-box').css('left',event.pageX-150 + 'px');
+// any link with class jsc will pass through here
+// other classes will determine further actions
+$('#body a.jsc').live('click', function(){
 
-    // evdm vidm sevdm vevdm vsevdm
-    //decide which menu to drop down
-    $("#"+$(this).data('menuName')).show();
-    if($(this).data('menuName') == 'vidm'){
-      var pieceId = $(this).parents('#events_presentation').data('pieceid')
-      $.get('/capture/fill_video_menu/'+id+'?pieceid='+pieceId,function(data){
-        $('#video-dropdown').append(data);
-      });
-    }
-    return false;
-  });
-
-// click in menu does the right thing 
-  $('.dropdown a').live('click', function(){
     if($(this).hasClass('ignore')){return}
-    var id = $("#main").data('event-id');
+    if($(this).parents().hasClass('menu-link')){
+      DropMenu($(this),event)
+      return false
+    }
     var side = $(this).hasClass('pause') ? true : false
-    var urlWithId = $(this).attr('href') + id + '.js';
+    var theUrl = $(this).attr('href')+ '.js';
 
       // main decisions
     if($(this).data('confirmation') ){ //actions with confirmations
       if(confirm($(this).data('confirmation')) ){
-        ajaxFunction($(this),urlWithId);
+        postFunction(theUrl);
         $(".hdble").show();
       }else{
-        alert('cancelled 79')
+        alert('cancelled 22')
       }
     }else if($(this).hasClass('get-form')){ //actions which put up a form
-      $.get(urlWithId, "_method=post", function(data) {
+      $.get(theUrl, function(data) {
         loadFormDiv(data,side);
         });
+    }else if($(this).hasClass('get-sc')){ //actions which put up a form
+      $.get(theUrl, function(data){
+        $('#scratchpad').html(data);
+        $('#scratchpad').show();
+      });
     }else{ //highlight or rating actions which just act and update
-      ajaxFunction($(this),urlWithId);
+      postFunction(theUrl);
     }
 
     $('.menu-box').hide();
     $('.removable').remove();
     return false;
   });
+
+
+
+//   $('#body a').live('click', function(event){
+
+
+//    var theUrl = $(this).attr('href')+'.js';
+//    if($(this).hasClass('pause')){
+//      var player = $f('rtmpPlayer')
+//        player.pause();
+//      }
+
+//    if($(this).hasClass('get')){
+
+//      if($(this).hasClass('vout')){
+//        if(confirm('Do you wish to stop the video?')){
+//          ajaxFunction($(this),$('#vidinout').attr('href')+'.js')
+//        }
+//        $(".hdble").hide();
+//          return false;
+//      };
+
+//      getFunction(theUrl,false);
+//      return false;
+//    }//if class get
+
+
+//    if($(this).hasClass('dg')){
+//      ajaxFunction($(this),theUrl)
+//      return false;
+//    }
+
+//    if($(this).hasClass('ajx')){
+//      var player = $f('rtmpPlayer')
+//      player.pause();
+//      time = Math.round(player.getTime());
+//      if(confirm($(this).data('confirm'))){
+//        ajaxFunction($(this),$(this).attr('href')+'?time='+time+'.js')
+//      }
+//      return false;
+//    }
+
+//    if($(this).hasClass('go_to')){
+//      var player = $f('rtmpPlayer')
+//      var seekto = $(this).attr('id').replace('go-','') - 0
+//      player.seek(seekto);
+//      return false;
+//    }
+
+
+//    if($(this).hasClass('dgdelp')){
+//      if(confirm('Are you sure you wish to delete this photo?')){
+//        var y = $(this).attr('id');
+//                $.post(theUrl, "_method=post", function(data) {
+//                    jQuery('#ph-'+y).remove();
+//                });
+//      }
+//      return false;
+//    }
+//    if($(this).hasClass('dged')){
+//      $.get(theUrl, "_method=post", function(data) {
+//        loadFormDiv(data,false);
+//        });
+//        return false;
+//    }
+
+//    if($(this).attr('class')=='more'){
+//      var x = $(this).attr('href')
+//      address = '/capture/more_description/'+x+'.js';
+//      $.get(address, function(data) {
+//        $('#event-'+x).replaceWith(data);
+//      });
+//      return false;
+//    }
+//    if($(this).attr('class')=='less'){
+//      var x = $(this).attr('href')
+//      address = '/capture/less_description/'+x+'.js';
+//      $.get(address, function(data) {
+//        $('#event-'+x).replaceWith(data);
+//      });
+//      return false;
+//    }
+
+//    if($(this).attr('class') == 'photo-link'){
+//      var x = $(this).attr('href');
+//      var y = '<img src = "'+x+'" width ="700"></img>'
+//      $('#ph').css("top",(event.pageY -200 + 'px'))
+//      $('#ph').css("left",('0px'))
+//      $('#ph1').html(y)
+//      $("#ph").show();
+//      return false;
+//    }
+//    if($(this).attr('class') == 'photo-link-close'){
+//      $("#ph").hide();
+//      return false;
+//    }
+//   });
+// // end first live block   body a
+
+
+
+
+
+
+
+
+
+
+
+
 
 });

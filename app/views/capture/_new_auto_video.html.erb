@@ -5,11 +5,12 @@
 <h3><%= 'Video Start' %></h3>
 <%= form_tag({:action => 'confirm_video_in',:id => @video},:class => 'ajax') do -%>
 
-Video Name: 
+Video Name:
 <%= text_field_tag 'video[title]',@video.title, :size => 30 %>
 <%= hidden_field_tag('quick_take', 'true') if params[:quick_take] -%>
-<%= hidden_field_tag('event[event_type]', @video.event_type ) -%>
+<%= hidden_field_tag('video[event_type]', @video.event_type ) -%>
+<%= hidden_field_tag('video[piece_id]', @piece.id ) -%>
 <br /><br />
-<%= submit_tag "#{@text} Video" %> <%= link_to 'Cancel',{:action => 'cancel_new_vid', :id => @video.id}, :class => 'cancel_mod' %>
+<%= submit_tag "Start Video" %> <%= link_to 'Cancel',{:action => 'cancel_new_vid', :id => @video.id}, :class => 'cancel' %>
 <%- end %>
 <br />

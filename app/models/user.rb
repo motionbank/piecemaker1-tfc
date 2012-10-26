@@ -30,11 +30,11 @@
 class User < ActiveRecord::Base
   has_secure_password
   has_many :messages
-  
-  
+
+
   has_and_belongs_to_many :events, :order => :happened_at, :include => [:sub_scenes,:tags,:notes,:video,:users]
-  
-  
+
+
   validates_presence_of     :login
   validates_length_of       :login,    :within => 3..40
   validates_uniqueness_of   :login,    :case_sensitive => false, :message => ' - There can\'t be two users with the same Username.'
@@ -44,7 +44,7 @@ class User < ActiveRecord::Base
   attr_accessible :login, :email, :password, :password_confirmation, :is_performer, :role_name, :scratchpad,:short_name, :first_name,:last_name
 
   before_create { generate_token(:remember_token) }
-  
+
   def self.set_performer
     all.each do |u|
       u.is_performer = u.performer
@@ -79,14 +79,14 @@ class User < ActiveRecord::Base
     self.truncate = params[:truncate] == 'true' ? 'more': 'none'
     save
   end
-  
-  
+
+
   def generate_token(column)
     begin
       self[column] = SecureRandom.urlsafe_base64
     end while User.exists?(column => self[column])
   end
-  
+
   protected
 
 

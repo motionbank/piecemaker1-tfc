@@ -1,28 +1,22 @@
-<div id = 'evdm' class = 'menu-box' style='display:none'>
-  <div class = 'show-id'></div>
-  <div class = 'menclose'></div>
-  <br />
-  <ul class = "dropdown">
-    <li><a href="/capture/mod_ev/" class='get-form'>Edit</a></li>
-    <li><a href="/capture/delete_event/" data-confirmation = 'Are you sure you wish to delete this Event?'>Delete</a></li>
-    <li><a href="/capture/new_note/" class='get-form'>New Note</a></li>
+
+    <li><a href="/capture/mod_ev/{{id}}" class='jsc get-form'>Edit</a></li>
+    <li><a href="/capture/delete_event/{{id}}" class = 'jsc' data-confirmation = 'Are you sure you wish to delete this Event?'>Delete</a></li>
+    <li><a href="/capture/new_note/{{id}}" class='jsc get-form'>New Note</a></li>
     <%- if user_has_right?('highlight') -%>
-    <li><a href="/capture/toggle_highlight/">Highlight ON/OFF</a></li>
-    <li><a href="/capture/toggle_user_highlight/">Personal Mark On/Off</a></li>
+    <li><a href="/capture/toggle_highlight/{{id}}" class = 'jsc'>Highlight ON/OFF</a></li>
+    <li><a href="/capture/toggle_user_highlight/{{id}}" class = 'jsc'>Personal Mark On/Off</a></li>
     <li>
-      <a href="/capture/rate/0/">Rate 0</a>
-      <a href="/capture/rate/1/">1</a>
-      <a href="/capture/rate/2/">2</a>
-      <a href="/capture/rate/3/">3</a>
-      <a href="/capture/rate/4/">4</a>
-      <a href="/capture/rate/5/">5</a>
+      <a class = 'jsc'href="/capture/rate/0/{{id}}">Rate 0</a>
+      <a class = 'jsc'href="/capture/rate/1/{{id}}">1</a>
+      <a class = 'jsc'href="/capture/rate/2/{{id}}">2</a>
+      <a class = 'jsc'href="/capture/rate/3/{{id}}">3</a>
+      <a class = 'jsc'href="/capture/rate/4/{{id}}">4</a>
+      <a class = 'jsc'href="/capture/rate/5/{{id}}">5</a>
     </li>
-    <li><a href="/capture/tag_with_title/">Tag With Title</a></li>
+    <li><a class = 'jsc'href="/capture/tag_with_title/{{id}}">Tag With Title</a></li>
     <%- end -%>
-    <%- if user_has_right?('advanced_actions') -%>  
-    <li><a href="/capture/new_event_after/scene/" class='get-form'>Insert Event After</a></li>
-    <li><a href="/capture/convert_to_sub_scene/">Convert to Subscene</a></li>
-    <li><a href="/capture/move_event/" class='get-form'>Move Event</a></li>
+    <%- if user_has_right?('advanced_actions') -%>
+    <li><a href="/capture/new_event_after/{{thePieceId}}/scene/{{id}}" class='jsc get-form'>Insert Event After</a></li>
+    <li><a href="/capture/convert_to_sub_scene/{{id}}" class = 'jsc'>Convert to Subscene</a></li>
+    <li><a href="/capture/move_event/{{id}}" class='jsc get-form'>Move Event</a></li>
     <%- end -%>
-  </ul>
-</div>

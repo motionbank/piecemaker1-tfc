@@ -1,5 +1,5 @@
 class DocumentsController < ApplicationController
-  
+
   layout "standard"
   before_filter :get_document_by_params_and_redirect_wrong, :only => [:show,:edit,:update,:destroy]
 
@@ -14,7 +14,7 @@ class DocumentsController < ApplicationController
     redirect_non_admins('group_admin') and return
     @documents = Document.all
   end
-  
+
   def list_by_piece
     @piece = set_current_piece(params[:id])
     @documents = @piece.documents.sort_by{|x| x.doc_file_name}
@@ -26,34 +26,30 @@ class DocumentsController < ApplicationController
   end
 
   def new
+    set_current_piece(params[:id])
     @document = Document.new
     @document.piece_id = params[:id]
     @document.save
-    piece = Piece.find(params[:id])
     @prefix = @document.s3_prefix
-    unless(piece)
+    unless(current_piece)
       flash[:notice] = 'You can\'t upload a document unless a piece is chosen.'
       redirect_to pieces_url
     end
     respond_to do |format|
       format.html {render :action => 'new', :layout => 'standard'}
-      format.js {render :action => 'new.html.erb', :layout => false} 
+      format.js {render :action => 'new.html.erb', :layout => false}
     end
   end
-  
-  def gallery
-    @piece = Piece.find_by_id(session[:pieceid])
-    @documents = @piece.documents.select{|x| x.doc_content_type == 'image/jpeg'}
-  end
+
   def cancel_new
-    
+
     if @doc = Document.find(params[:id]) and !@doc.doc_file_size
       piece_id = @doc.piece_id
       @doc.destroy
     end
     respond_to do |format|
       format.html {redirect_to :action => 'list_by_piece', :id => piece_id }
-      format.js {render :action => 'cancel_new',:layout => false} 
+      format.js {render :action => 'cancel_new',:layout => false}
     end
   end
   def create

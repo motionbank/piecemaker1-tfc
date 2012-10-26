@@ -1,6 +1,5 @@
 class HomeController < ApplicationController
   layout 'standard'
-  #before_filter :unset_current_piece
   def welcome
     @title = 'Welcome to Piecemaker '
     if current_user

@@ -7,7 +7,7 @@
   <% end %>
   <th colspan = '3'>Actions</th>
   </tr>
-  
+
 <% for meta_info in @meta_infos %>
   <tr>
   <% for column in MetaInfo.content_columns %>
@@ -20,6 +20,6 @@
 <% end %>
 </table>
 <br />
-<%= link_to 'New Meta Info', :action => 'new' %><br /><br />
+<%= link_to 'New Meta Info', :action => 'new', :id => current_piece.id %><br /><br />
 
-<%= link_to "Back to #{current_piece.title}",:controller => 'capture', :action => 'present', :id => session[:pieceid] %>
+<%= link_to "Back to #{current_piece.title}",:controller => 'capture', :action => 'present', :id => current_piece.id %>

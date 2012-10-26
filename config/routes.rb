@@ -1,5 +1,5 @@
 Piecemaker::Application.routes.draw do
-    
+
     match '/pref.:format' => 'users#pref', :as => :pref
     resources :users
     resources :usersessions
@@ -10,9 +10,11 @@ Piecemaker::Application.routes.draw do
     match '/capture/rate/:rating/:id.:format' => 'capture#rate'
     match '/viewer/rate/:rating/:id.:format' => 'viewer#rate'
     match '/capture/rate_video/:rating/:id.:format' => 'capture#rate_video'
-    match '/capture/new_event/:event_type.:format' => 'capture#new_event'
-    match '/capture/new_event_after/:event_type/:after_id.:format' => 'capture#new_event'
-    match '/video_upload/:id1/:id2' => 'video#new'
+    match '/capture/new_event/:piece_id/:event_type.:format' => 'capture#new_event'
+    match '/capture/new_sub_scene/:piece_id.:format' => 'capture#new_sub_scene'
+    match '/capture/new_event_after/:piece_id/:event_type/:after_id.:format' => 'capture#new_event'
+    match '/capture/new_auto_video_in/:piece_id.:format' => 'capture#new_auto_video_in'
+    match '/video_upload/:id/:piece_id' => 'video#new'
     match '/video_viewer/:piece_id/:id' => 'viewer#viewer'
     match '/add_annotation/:piece_id/:id/:time.:format' => 'viewer#add_annotation'
     match '/add_sub_annotation/:piece_id/:id/:time.:format' => 'viewer#add_sub_annotation'
@@ -24,7 +26,7 @@ Piecemaker::Application.routes.draw do
     match ':controller/service.wsdl' => '#wsdl'
     match '/:controller(/:action(/:id))'
     match ':controller/:action.:format' => '#index'
-  
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -35,6 +37,8 @@ Piecemaker::Application.routes.draw do
   # Sample of named route:
   #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
   # This route can be invoked with purchase_url(:id => product.id)
+  match '/capture/new_event/:piece_id/:event_type' => 'capture#new_event', :as => :new_event
+  match '/capture/new_sub_scene/:piece_id' => 'capture#new_sub_scene', :as => :new_sub_scene
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products

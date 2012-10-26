@@ -24,6 +24,6 @@
 <%= hidden_field_tag('create_scene', 'true') %>
 <%- end -%>
 <!--[eoform:notes]-->
-<%= submit_tag "Save" %><%= link_to("Cancel",{:action => 'present', :id => session[:pieceid] },:class => 'cancel') -%>
+<%= submit_tag "Save", :class => 'formhide' %><%= link_to("Cancel",{:action => 'present', :id => @latest_event.piece_id },:class => 'cancel') -%>
 <%- end -%>
 <br />

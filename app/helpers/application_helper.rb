@@ -42,52 +42,6 @@ module ApplicationHelper
   end
 
 
-  def recursive_send(item,message)
-    methods = message.split('.')
-    methods.each do |method|
-      return '<span style = "color:#a00">???</span>' unless item
-      item = item.send(method)
-      
-    end
-    item
-  end
-  def color_picker(model,attribute)
-    # this works in conjunction with the javascript in application.js
-    table = <<-END_OF_STRING
-    <table id = 'colorpicker'>
-        <tr>
-        <td style="background:#e9f;"></td>
-        <td style="background:#f4c;"></td>
-        <td style="background:#a6f;"></td>
-        <td style="background:#9c0;"></td>
-        </tr>                       
-        <tr>                        
-        <td style="background:#66f;"></td>
-        <td style="background:#6f6;"></td>
-        <td style="background:#fa0;"></td>
-        <td style="background:#33f;"></td>
-        </tr>                       
-        <tr>                        
-        <td style="background:#c99;"></td>
-        <td style="background:#9c9;"></td>
-        <td style="background:#6cc;"></td>
-        <td style="background:#fc3;"></td>
-        </tr>                       
-        <tr>                        
-        <td style="background:#ccc;"></td>
-        <td style="background:#a6f;"></td>
-        <td style="background:#9c0;"></td>
-        <td style="background:#777;"></td>    
-        </tr>
-    </table>
-    END_OF_STRING
-    colorstring = eval("#{model}.#{attribute}")
-    text = "&nbsp;Color:<div id='color-display' style='background:##{colorstring}'></div>"
-    text << text_field_tag(attribute, colorstring, :size => 6, :id => 'div_class')
-    text << '<br />'
-    text << table
-  end
-
   def checklist(model,collection,fields,checked_collection=[],checked_field=nil,show_check_all = true,reset_number = 8)
     #this works in conjunction with the javascript in application.js
     checked_ids = checked_field ? checked_collection.map{|x| eval("x.#{checked_field}")} : checked_collection
@@ -133,17 +87,17 @@ module ApplicationHelper
   content = with_output_buffer(&block)
   menu_open_first_level(title) + content + menu_close_first_level
   end
-  
+
   def menu_open_first_level(title)
     html = raw "<li><a>" + title + '</a>' + "<ul>\n"#opens list of menu items
   end
   def menu_close_first_level
     html = raw "</ul></li>\n"
   end
-  
+
   def menu_second_level(tip, title, &block)
     content = with_output_buffer(&block)
-    menu_open_second_level(tip, title) + content + menu_close_second_level 
+    menu_open_second_level(tip, title) + content + menu_close_second_level
   end
 
   def menu_open_second_level(tip, title)
@@ -151,7 +105,7 @@ module ApplicationHelper
     html2 = raw "<ul class = 'right'>\n" #opens second level list
     html = html + html2
   end
-  
+
   def menu_close_second_level
     html =  raw "</ul>\n</li>"
   end
@@ -166,13 +120,13 @@ module ApplicationHelper
     string << select_minute(duration_hash[:minutes], :prefix => prefix)
     string << 'Seconds: '
     string << select_second(duration_hash[:seconds], :prefix => prefix)
-    content_tag :p, string    
+    content_tag :p, string
   end
-  
+
   def display_menu_link(item,menu_name,size = '',tag = 'div', rate = false)
     return '' unless user_has_right?('normal_actions')
     text = "<#{tag} class = 'menu-link #{size}'>"
-    text << " <a href='' data-id='#{item.id.to_s}' data-menuName='#{menu_name}'>MENU...</a>"
+    text << " <a class = 'jsc'href='' data-id='#{item.id.to_s}' data-menuName='#{menu_name}'>MENU...</a>"
     text << display_rating(item) if rate
     text << "</#{tag}>"
   end
@@ -181,25 +135,25 @@ module ApplicationHelper
     video.rating.times do
       text << '<span>* </span>'
     end
-    text << " <a href='' data-id='#{video.id.to_s}' data-menuName='vidm'>MENU...</a>"
+    text << " <a class='jsc'href=''data-id='#{video.id.to_s}' data-menuName='vidm'>MENU...</a>"
     text << "</div>"
     text
   end
-  
-  
+
+
   def piece_select_with_none
     start = [['None', '']]
     start += Pieces.all.map{|x| [x.title,x.id]}
   end
-  
+
   def put_role_select(selected)
    roleids = Hash.new
    SetupConfiguration.roles.each do |role|
      roleids[role] = role
    end
-    text = "Role: "+select_tag('user[role_name]', options_for_select(roleids,selected))+'<br /><br />'  
+    text = "Role: "+select_tag('user[role_name]', options_for_select(roleids,selected))+'<br /><br />'
   end
-  
+
   def demo_mode
     session[:demo_mode]
   end
@@ -219,7 +173,7 @@ module ApplicationHelper
     thumb_path = "http://s3.amazonaws.com/#{s3_bucket}/#{photo.s3_path(style)}"
     "<a class= 'photo-link'style='padding:0px; background:none;color:#f00;text-decoration:underline;'href = '#{full_path}'><img src = '#{thumb_path}' width ='200'></a>"
   end
-  
+
   def put_photo_caption(photo)
     text = '<br />'
     unless photo.has_thumb
@@ -229,7 +183,7 @@ module ApplicationHelper
       text << link_to('delete',{:action => 'delete_from_gallery',:id => photo.id},:class => 'dgdelp',:id => photo.id)
     end
   end
-  
+
   def s3_swf_upload_tag_new(options = {})
     buttonWidth             = options[:buttonWidth]  || 100
     buttonHeight            = options[:buttonHeight] || 30
@@ -244,21 +198,21 @@ module ApplicationHelper
   	buttonUpPath            = options[:buttonUpPath] || '/swfs/s3_up_button.gif'
   	buttonOverPath          = options[:buttonOverPath] || '/swfs/s3_over_button.gif'
   	buttonDownPath          = options[:buttonDownPath] || '/swfs/s3_down_button.gif'
-  	                                 
-  	onFileAdd							  = options[:onFileAdd] || false		
+
+  	onFileAdd							  = options[:onFileAdd] || false
   	onFileRemove						= options[:onFileRemove] || false
-  	onFileSizeLimitReached 	= options[:onFileSizeLimitReached] || false	
-  	onFileNotInQueue				= options[:onFileNotInQueue] || false	
-  	                                 
+  	onFileSizeLimitReached 	= options[:onFileSizeLimitReached] || false
+  	onFileNotInQueue				= options[:onFileNotInQueue] || false
+
   	onQueueChange						= options[:onQueueChange] || false
   	onQueueClear						= options[:onQueueClear] || false
   	onQueueSizeLimitReached	= options[:onQueueSizeLimitReached] || false
   	onQueueEmpty						= options[:onQueueEmpty] || false
-  	                                 
+
   	onUploadingStop					= options[:onUploadingStop] || false
   	onUploadingStart				= options[:onUploadingStart] || false
   	onUploadingFinish				= options[:onUploadingFinish] || false
-  	                                 
+
   	onSignatureOpen					= options[:onSignatureOpen] || false
   	onSignatureProgress			= options[:onSignatureProgress] || false
   	onSignatureHttpStatus		= options[:onSignatureHttpStatus] || false
@@ -266,7 +220,7 @@ module ApplicationHelper
   	onSignatureSecurityError= options[:onSignatureSecurityError] || false
   	onSignatureIOError			= options[:onSignatureIOError] || false
   	onSignatureXMLError			= options[:onSignatureXMLError] || false
-  	                                 
+
   	onUploadOpen						= options[:onUploadOpen] || false
   	onUploadProgress				= options[:onUploadProgress] || false
   	onUploadHttpStatus			= options[:onUploadHttpStatus] || false
@@ -274,10 +228,10 @@ module ApplicationHelper
   	onUploadIOError					= options[:onUploadIOError] || false
   	onUploadSecurityError		= options[:onUploadSecurityError] || false
   	onUploadError						= options[:onUploadError] || false
-  	
-    @include_s3_upload ||= false 
+
+    @include_s3_upload ||= false
     @count ||= 1
-    
+
     out = ''
 
     if !@include_s3_upload
@@ -300,7 +254,7 @@ module ApplicationHelper
     out << "buttonUpPath: '#{buttonUpPath}',\n" if buttonUpPath
     out << "buttonOverPath: '#{buttonOverPath}',\n" if buttonOverPath
     out << "buttonDownPath: '#{buttonDownPath}',\n" if buttonDownPath
-    
+
     out << %(onFileAdd: function(file){
               #{onFileAdd}
             },) if onFileAdd
@@ -313,7 +267,7 @@ module ApplicationHelper
     out << %(onFileNotInQueue: function(file){
               #{onFileNotInQueue}
             },) if onFileNotInQueue
-            
+
     out << %(onQueueChange: function(queue){
               #{onQueueChange}
             },) if onQueueChange
@@ -326,7 +280,7 @@ module ApplicationHelper
     out << %(onQueueClear: function(queue){
               #{onQueueClear}
             },) if onQueueClear
-            
+
     out << %(onUploadingStart: function(){
               #{onUploadingStart}
             },) if onUploadingStart
@@ -336,7 +290,7 @@ module ApplicationHelper
     out << %(onUploadingFinish: function(){
               #{onUploadingFinish}
             },) if onUploadingFinish
-            
+
     out << %(onSignatureOpen: function(file,event){
               #{onSignatureOpen}
             },) if onSignatureOpen
@@ -358,7 +312,7 @@ module ApplicationHelper
     out << %(onSignatureXMLError: function(file,error_message){
               #{onSignatureXMLError}
             },) if onSignatureXMLError
-            
+
     out << %(onUploadError: function(upload_options,error){
               #{onUploadError}
             },) if onUploadError
@@ -381,21 +335,21 @@ module ApplicationHelper
               #{onUploadComplete}
             },) if onUploadComplete
     # This closes out the object (no comma)
-    out << "foo: 'bar'"              
+    out << "foo: 'bar'"
     out << "});\n"
     out << "</script>\n"
     out << "<div id=\"s3_swf_#{@count}\">\n"
     out << "Please <a href=\"http://www.adobe.com/go/getflashplayer\">Update</a> your Flash Player to Flash v#{flashVersion} or higher...\n"
     out << "</div>\n"
-    
+
     @count += 1
     out
   end
-  
-  
-  
-  
-  
+
+
+
+
+
   def s3_swf_upload_tag(options = {})
     height     = options[:height] || 40
     width      = options[:width]  || 500
@@ -404,7 +358,7 @@ module ApplicationHelper
     selected   = options[:selected]  || ''
     canceled   = options[:canceled] || ''
     prefix     = options[:prefix] || ''
-    upload     = options[:upload] || 'Upload' 
+    upload     = options[:upload] || 'Upload'
     initial_message    = options[:initial_message] || 'Select file to upload...'
     do_checks = options[:do_checks] || "0"
 
@@ -414,13 +368,13 @@ module ApplicationHelper
 
     prefix = prefix + "/" unless prefix.blank?
 
-    @include_s3_upload ||= false 
+    @include_s3_upload ||= false
     @count ||= 1
-    
+
     out = ""
 
     if !@include_s3_upload
-      #out << '<script type="text/javascript" src="/assets/s3_upload.js"></script>' 
+      #out << '<script type="text/javascript" src="/assets/s3_upload.js"></script>'
       @include_s3_upload = true
     end
 
@@ -452,14 +406,14 @@ module ApplicationHelper
       <a href="#uploadform#{@count}" onclick="s3_swf#{@count}.upload('#{prefix}')">#{upload}</a>
       </div>
     )
-    
+
     @count += 1
     out
 
   end
-  
-  
-  
+
+
+
   def my_tags(texti) #tested
     if texti
       output = ''
@@ -468,7 +422,7 @@ module ApplicationHelper
       texti = texti.gsub(/~\*(.*?)\*~/,'<i>\1</i>')
       texti = texti.gsub(/\*(.*?)\*/,'<strong>\1</strong>')
       texti = texti.gsub(/~(.*?)~/,'<b>\1</b>')
-      output << texti      
+      output << texti
       output
     else
       ''
@@ -481,7 +435,7 @@ module ApplicationHelper
     alltypes = current_piece.event_types
     alltypes.each do |x|
       types << [x.humanize,x]
-    end 
+    end
     return options_for_select(types,event.event_type)
   end
   def cancel_path #tested
@@ -492,7 +446,7 @@ module ApplicationHelper
    videos = [['no media','']]
    videos += current_piece.videos.map{|x| [x.title,x.title]}
   end
- 
+
   def options_for_video_search
     options = "<option value='no_dvd'>No Video</option>"
     options += options_from_collection_for_select(current_piece.videos, "id", "title")
@@ -533,7 +487,7 @@ module ApplicationHelper
     st << time.to_time_string
     st << "</b>"
     st << "</a>"
-    
+
   end
 
   def display_vid_info(event)
@@ -566,7 +520,6 @@ module ApplicationHelper
   end
 
 
-
   def display_rating(event)
     text = ''
     if event.rating > 0
@@ -578,37 +531,20 @@ module ApplicationHelper
     end
     text
   end
-  def more_string(event)
-    length = event.description.length - truncate_length
-    string = '&nbsp;&nbsp;<a class = "more" href="'
-    string << "#{event.id}"
-    string << '">'+length.to_s+' More</a>'
-  end
-  def less_string(event)
-    string = '&nbsp;&nbsp;<a class = "less" href="'
-    string << "#{event.id}"
-    string << '">Less...</a>'
-  end
+
 
   def display_description(event,search = nil)
     if (event.description)
       text = "<div class='sm evdes'>"
-      
-      tt = case @truncate
-        when :more then my_tags(truncate(event.description,:length => truncate_length, :omission => more_string(event)))
-        when :less then event.description.length > truncate_length ? my_tags(event.description) + less_string(event) : my_tags(event.description)
-        else  my_tags(event.description)
-        end
-      if search
-        tt = highlight(tt,search,found_text_replacement_string)
-      end
+      tt = my_tags(event.description)
+      tt = highlight(tt,search,found_text_replacement_string) if search
       text << tt
       text << '</div>'
     else
       text = ''
     end
   end
-  
+
   def display_performers(event,search = nil)
     if event.performers && event.performers.length
       text = "<div class='evpe'>"
@@ -617,14 +553,14 @@ module ApplicationHelper
     else
       text = ''
     end
-    
+
   end
 
   def display_edit_links(event)
     link_display = "<div class='evedlnk'>"
     link_display << put_undelete_link(event)
     link_display << '</div>'
-    link_display    
+    link_display
   end
 
   def display_tags(event)
@@ -632,20 +568,20 @@ module ApplicationHelper
     if non_title_tags.length > 0
       string = '<div class = "tag">'
       non_title_tags.each_with_index do |tag, index|
-        string << ' <a style = "background:none;color:#fff;" href ="/capture/present?filter_type=tag&taggs='+tag.name+'">'+tag.name+'</a>'
+        string << ' <a style = "background:none;color:#fff;" href ="/capture/present/'+event.piece_id.to_s+'?filter_type=tag&taggs='+tag.name+'">'+tag.name+'</a>'
         if index < non_title_tags.length-1
           string << ','
         end
       end
     string << '</div>'
-    end    
+    end
   end
-  
+
   def put_undelete_link(event)
-   "<a class='dg'id= '#{event.id}'href='/capture/undelete_event/#{event.id}'>Undelete</a>&nbsp;<a class='dgdele'id= '#{event.id}'href='/capture/destroy_event/#{event.id}'>Destroy Forever</a>&nbsp;"  
+   "<a class='jsc'id= '#{event.id}'href='/capture/undelete_event/#{event.id}'>Undelete</a>&nbsp;<a class = 'jsc'data-confirmation='Are you sure you wish to delete this event forever?'id= '#{event.id}'href='/capture/destroy_event/#{event.id}'>Destroy Forever</a>&nbsp;"
   end
-  
-  
+
+
   def display_note_creation_info(event)
     info = event.created_at.strftime("%d/%m - %H:%M") +' by ' + event.created_by
   end
@@ -653,17 +589,16 @@ module ApplicationHelper
     text = ''
     text << note.description + '&nbsp;&nbsp;--'
     text << "<span class = 'noteinfo'>#{note.created_by} @ #{note.created_at.strftime("%d/%m - %H:%M")}:</span>&nbsp;&nbsp;"
-    
+
     text << raw(display_note_edit_links(note))
     text
   end
   def display_note_edit_links(note)
     note_edit_link = ''
     if note.created_by == current_user.login || user_has_right?('advanced_actions')
-      
-      note_edit_link << "<a class='dged' href='/capture/edit_note/#{note.id}'ajt='#note_note#{note.id}'>Edit</a>&nbsp;"
-      note_edit_link << "<a class='dgdeln'id='n-#{note.id}' href='/capture/delete_note/#{note.id}'>Delete</a>&nbsp;"
-      #note_edit_link << "<a class='dged''href='/capture/new_photo/#{note.id}'>Photo</a>"
+
+      note_edit_link << "<a class='jsc get-form' href='/capture/edit_note/#{note.id}'ajt='#note_note#{note.id}'>Edit</a>&nbsp;"
+      note_edit_link << "<a class='jsc' data-confirmation = 'Are you sure you want to delete this note?'id='n-#{note.id}' href='/capture/delete_note/#{note.id}'>Delete</a>&nbsp;"
     end
     note_edit_link
   end
@@ -683,15 +618,15 @@ module ApplicationHelper
     options_for_select(title_taglist(event))
   end
 
-  
+
   def inherit_check_or_select(event)
       text = "<select id = 'title-taggs' name ='tag_title'>"
       text <<  title_tag_select_options(event)
       text << '</select>'
   end
-  
 
-  
+
+
   def put_rtf_string(events)
     string = '{\rtf1\ansi\ansicpg1252\cocoartf949\cocoasubrtf350
     {\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\froman\fcharset0 Times-Roman;}{\colortbl;\red255\green255\blue255;}'
@@ -736,14 +671,15 @@ module ApplicationHelper
     text = ''
     if video_in?
       vvid = video ? video.id.to_s : video_in?.id.to_s
-      text << '<span class="short-cut">I </span><a id = "vidinout" class = "get hdble vout" href = "/capture/confirm_video_out/'+vvid+'">Stop Video</a>'
+      text << '<span class="short-cut">I </span><a data-confirmation="Stop the Video?@piece = Piece.find(params[:piece_id])
+      set_current_piece(@piece.id)"id = "vidinout" class = "jsc hdble vout" href = "/capture/confirm_video_out/'+vvid+'">Stop Video</a>'
     else
-      text << '<span class="short-cut">I </span><a id = "vidinout" class = "get hdble vprep" href = "/capture/new_auto_video_in">Prepare Video</a>'
-      text << '<br /><span class="short-cut">B </span><a id = "vidinout" class = "get hdble vprep" href = "/capture/new_auto_video_in?quick_take=true">Prep. Vid & Scene</a>'
+      text << '<span class="short-cut">I </span><a id = "vidinout" class = "jsc get-form hdble vprep" href = "/capture/new_auto_video_in/'+current_piece.id.to_s+'">Prepare Video</a>'
+      #text << '<br /><span class="short-cut">B </span><a id = "vidinout" class = "get hdble vprep" href = "/capture/new_auto_video_in/'+current_piece.id.to_s+'?quick_take=true">Prep. Vid & Scene</a>'
     end
     text
   end
-  
+
   def mini_minute(time)
     hourmin = time.divmod(3600)
     minsec = hourmin[1].divmod(60)
@@ -757,7 +693,7 @@ module ApplicationHelper
     timestring << minsec[1].to_s+'s'
     timestring
   end
-  
+
   def put_date(date,i)
     '<div id = "dat-'+i.to_s+'" style = "color:#d00;font-size:20px;margin-left:-25px">' + date.strftime("%A %d %b %Y")+'</div>'
   end
@@ -799,15 +735,15 @@ def display_children(event,search = nil)
       text << "#{ss.title}"
       text << '</span><br />&nbsp;&nbsp;'
       text << ss.description
-      text << display_menu_link(ss,'sevdm','small','span',false)
+      text << display_menu_link(ss,'sevdm','small sevdm','span',false)
       text << '</div>'
-      
+
     end
     end
     text
   end
 
 
-  
+
 end
 #, onFailure:function(transport) {alert(“Error communicating with the server: ” + transport.responseText.stripTags());}

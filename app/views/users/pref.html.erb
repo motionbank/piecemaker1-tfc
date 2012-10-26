@@ -1,10 +1,7 @@
 <h1>Set Preferences for <%= current_user.login %></h1>
 <%= form_tag({:controller => 'users', :action => 'store_prefs'}, :class => 'ajax') do %>
 
-	<%= hidden_field_tag(:piece_num, session[:pieceid] )  %>
- <%#= Page Refresh:  %>  
-   <%#= select_tag(:refresh_rate, options_for_select(['Never','15','30','60'],@refresh.to_s)) %>
-   <%#= Seconds&nbsp;&nbsp; %>
+	<%= hidden_field_tag(:piece_id, params[:piece_id] )  %>
   Display Notes:
   <%= radio_button_tag 'noteshow', 'on', current_user.notes_on %>On
   <%= radio_button_tag 'noteshow', 'off', !current_user.notes_on %>Off
@@ -16,7 +13,7 @@
   Inherit Cast From Previous Event: <%= check_box_tag 'inherit_cast', 'true', current_user.inherit_cast %>&nbsp;&nbsp;
   Truncate Long Descriptions: <%= check_box_tag 'truncate', 'true', (current_user.truncate == 'more') %>
 <br /><br /><br />
-  <%= submit_tag "Save Preferences" %>
+  <%= submit_tag "Save Preferences", :class => 'formhide' %>
 <% end %>
 
 <br />

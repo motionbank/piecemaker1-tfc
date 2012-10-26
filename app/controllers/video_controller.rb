@@ -1,11 +1,13 @@
 class VideoController < ApplicationController
   layout 'standard'
-  before_filter :get_video_from_params, :only => [:delete, :delete_all]
+  before_filter :get_video_from_params, :only => [:delete, :delete_all, :new]
   def get_video_from_params
       @video = Event.find(params[:id])
       @piece = @video.piece
   end
-  
+  def new
+
+  end
   def edit
     @event = Event.find(params[:id])
     render :layout => false
@@ -14,7 +16,7 @@ class VideoController < ApplicationController
     @video = Event.find(params[:id])
     @video.update_attributes(params[:event])
     respond_to do |format|
-      format.js {render :partial => 'update_index', :layout => false;} 
+      format.js {render :partial => 'update_index', :layout => false;}
     end
   end
   def index

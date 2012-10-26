@@ -1,41 +1,34 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-  <meta name="keywords" content="piecemaker,forsythe,dance,theater" />
-  <link rel="shortcut icon" href="/favicon.ico" />
-  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-  <title><%= @title %></title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
-  
-  <%#= stylesheet_link_merged 'capture_package' %>
-  <%#= stylesheet_link_tag('print', :media => :print) %>
-	<%#= javascript_include_merged 'capture_package' %>
-	<%= raw yield_authenticity_token %>
-	<%= yield :js %>
-
-</head>
-<body id = "body">
-<div id = 'piecemaker_header'>
-<%= render :partial => '_shared/header' %>
-<%= yield :present_header %>
-<div class ="message" <%= "style='display:none'" unless flash[:notice] || flash[:searched_for] -%>>
-<%= flash[:notice] %>&nbsp;&nbsp;&nbsp;<%= flash[:searched_for] %>
-</div>
-<div class ="error" <%= "style='display:none'" unless flash[:error]-%>>
-<%= flash[:error] %>
-</div>
-
-</div>
-<div id = "main" class = 'main'>
-<%= yield  %>
-</div>
-<%= yield :quick -%>
-<%= yield :jump -%>
-<div  style='display:none' id = "form_div" class = 'form_div'></div>
-<div  style='top:20px;width:600px;margin-left:-300px;display:none' id = "scratchpad" class = 'form_div'></div>
-<%= yield :menus %>
-</body>
+<html>
+  <head>
+    <meta name="keywords" content="piecemaker,forsythe,dance,theater" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <meta "charset=UTF-8" >
+    <title><%= @title %></title>
+    <%= stylesheet_link_tag    "application", :media => "all" %>
+    <%= javascript_include_tag "application" %>
+  	<%= raw yield_authenticity_token %>
+  	<%= yield :js %>
+  </head>
+  <body id = "body">
+  <div id = 'piecemaker_header'>
+    <%= render :partial => '_shared/header' %>
+    <%= yield :present_header %>
+    <div class ="message" <%= raw "style='display:none'" unless flash[:notice] || flash[:searched_for] -%>>
+      <%= flash[:notice] %>&nbsp;&nbsp;&nbsp;<%= flash[:searched_for] %>
+    </div>
+    <div class ="error" <%= raw "style='display:none'" -%>>
+      <%= flash[:error] %>
+    </div>
+  </div>
+  <div id = "main" class = 'main'>
+    <%= yield  %>
+  </div>
+  <%= yield :quick -%>
+  <%= yield :jump -%>
+  <div  style='display:none' id = "form_div" class = 'form_div'></div>
+  <div  style='top:20px;width:600px;margin-left:-300px;display:none' id = "scratchpad" class = 'form_div'></div>
+  <%= yield :menus %>
+  </body>
 </html>

@@ -1,7 +1,7 @@
 = content_tag :h2, @piece.title
 
-%h3 
-  Title: 
+%h3
+  Title:
   =@piece.title
   &nbsp;&nbsp;&nbsp;Short Name:
   =@piece.short_name || 'none'
@@ -43,7 +43,7 @@ events,
   %strong Locked:
   %br/
   .pieceshow
-    - @piece.events.locked.each_with_index do |locked,index|
+    - @piece.events.lokked.each_with_index do |locked,index|
       = index.to_s + ': ' + locked.title
       %br/
       =link_to "#{locked.id}", "/pieces/unlock_event/#{locked.id}"
@@ -66,11 +66,11 @@ events,
     %th{:colspan => "2"} Actions
   - @piece.tags.each do |tag|
     %tr{:class =>cycle('row-1','row-2')}
-      %td 
+      %td
         = tag.name
-      %td 
+      %td
         = tag.tag_type
-      %td 
+      %td
         = link_to 'Edit', :controller => 'pieces', :action => 'edit_tag', :id => tag.id
-      %td 
+      %td
         = link_to 'Destroy',{ :controller => 'pieces', :action => 'destroy_tag', :id => tag.id,:came_from => @came_from + '?tab=l4'}, :confirm => 'Are you sure?', :method => :post

@@ -3,13 +3,17 @@ class ViewerController < ApplicationController
     skip_before_filter :verify_authenticity_token
     before_filter :get_video_from_params, :only => [:edit, :show, :update, :connect_event_and_video, :upload_one, :update_from_viewer]
 
+    def get_video_from_params
+      @video = Event.find(params[:id])
+      @piece = @video.piece
+  end
 
     def viewer
       @video = Event.find(params[:id])
       @event = Event.find(params[:event_id]) if params[:event_id]
       @piece = Piece.find(params[:piece_id]) if params[:piece_id]
       @ur = request.host
-      
+
       if SetupConfiguration.app_is_local? && @video.online?
         @flow_type = 'local_plain'
       elsif @video.is_uploaded
@@ -30,8 +34,8 @@ class ViewerController < ApplicationController
 
     def prepare_params
       params[:video][:piece_id] = params[:piece_id].present? ? params[:piece_id] : nil
-      params[:video][:is_uploaded] = params[:video][:is_uploaded].present? ? params[:video][:is_uploaded] : nil
-      params[:video][:meta_data] = params[:video][:meta_data].present? ? params[:video][:meta_data] : nil
+      params[:video][:state] = params[:video][:state].present? ? 'uploaded' : 'normal'
+      params[:video][:description] = params[:video][:description].present? ? params[:video][:description] : ''
     end
 
     def edit_from_viewer
@@ -45,24 +49,23 @@ class ViewerController < ApplicationController
       prepare_params
       @video.attributes = params[:video]
       @video.save
-      flash[:notice] = "Updated #{@video.title}"
-      @flash_message = flash[:notice]
+      text = "Updated #{@video.title}"
       respond_to do |format|
-        format.html {redirect_to params[:came_from]}
-        format.js {render :layout => false}
+        format.html {flash[:notice] = text ; redirect_to params[:came_from]}
+        format.js {render :text => "clearFormDiv('hi');", :layout => false}
       end
     end
 
-    
+
 
     def edit
-      @return_to = params[:from]  
+      @return_to = params[:from]
     end
     def show
       @return_to = params[:from]
     end
 
-    
+
     def new
       @video = Video.find(params[:id1])
       @piece = Piece.find(params[:id2])
@@ -80,18 +83,18 @@ class ViewerController < ApplicationController
     :happened_at => @video.recorded_at + time)
       respond_to do |format|
       format.html {render :action => 'annot_form'}
-      format.js {render :action => 'sub_annot_form',:layout => false} 
+      format.js {render :action => 'sub_annot_form',:layout => false}
       end
   end
   def create_sub_annotation
-    
+
     event = Event.find(params[:id])
     subscene = SubScene.create(params[:sub_scene])
     event.sub_scenes << subscene
     @video = Video.find(event.video_id, :include => [{:events => :sub_scenes}])
     respond_to do |format|
       format.html {render :action => ''}
-      format.js {render :partial => 'new_annot',:layout => false} 
+      format.js {render :partial => 'new_annot',:layout => false}
     end
   end
   def add_annotation
@@ -104,25 +107,25 @@ class ViewerController < ApplicationController
     @event.event_type = 'scene'
     @event.happened_at = @video.happened_at + time
     @event.performers = []
-    
+
     respond_to do |format|
       format.html {render :action => 'annot_form'}
-      format.js {render :partial => 'annot_form',:layout => false} 
+      format.js {render :partial => 'annot_form',:layout => false}
     end
   end
   def create_annotation
     params[:performers] ||= []
     @video = Event.find(params[:vid_id])
-    @event = Event.create_annotation(params,current_user,@video,session[:pieceid])
+    @event = Event.create_annotation(params,current_user)
     @event.save
     respond_to do |format|
       format.html {render :action => ''}
-      format.js {render :partial => 'new_annot',:layout => false} 
+      format.js {render :partial => 'new_annot',:layout => false}
     end
   end
   def add_marker
-    
-    @video = Video.find(params[:id])
+
+    @video = Event.find(params[:id])
     set_current_piece(params[:piece_id].gsub('.js','').to_i)
     time = params[:time].gsub('.js','').to_i
     @event = Event.create(
@@ -138,10 +141,10 @@ class ViewerController < ApplicationController
     )
     respond_to do |format|
       format.html {render :action => ''}
-      format.js {render :partial => 'new_annot',:layout => false} 
+      format.js {render :partial => 'new_annot',:layout => false}
     end
   end
-  
+
   def move_from_viewer
     @event = Event.find(params[:id])
     time = params[:time].gsub('.js','')
@@ -176,7 +179,7 @@ class ViewerController < ApplicationController
     @modify = true
     respond_to do |format|
       format.html
-      format.js {render :partial => 'annot_form', :layout => false} 
+      format.js {render :partial => 'annot_form', :layout => false}
     end
   end
   def rate
@@ -185,18 +188,18 @@ class ViewerController < ApplicationController
     @event.save
     @video = @event.video
     respond_to do |format|
-      format.html { redirect_to :action => "present", :id => session[:pieceid] }
-      format.js {render :partial => 'new_annot', :layout => false} 
+      format.html { redirect_to :action => "present", :id => @event.piece_id }
+      format.js {render :partial => 'new_annot', :layout => false}
     end
   end
   def update_annotation
     event = Event.find(params[:id])
-    event.do_event_changes(params,current_user) 
+    event.do_event_changes(params,current_user)
     event.save
     @video = event.video
     respond_to do |format|
       format.html
-      format.js {render :partial => 'new_annot', :layout => false} 
+      format.js {render :partial => 'new_annot', :layout => false}
     end
   end
 

@@ -8,9 +8,9 @@ class ApplicationController < ActionController::Base
 
     # Pick a unique cookie name to distinguish our session data from others'
     #session :session_key => '_piecemaker_session_id'
-    
+
     before_filter :login_required, :except => [:login, :welcome, :documentation, :contact,:update_vid_time,:mark_from_marker_list]
-    
+
     before_filter :set_defaults, :except => [:authorize,:update_vid_time,:fill_video_menu,:fill_extra_menu,:quick_marker,:mark_from_marker_list]
     before_filter :catch_came_from
 
@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
   #   @cu ||= User.find(1)
   # end
 
-  
+
   def logged_in?
     !!current_user
   end
@@ -55,9 +55,9 @@ class ApplicationController < ActionController::Base
       end
     end
   end
-  
-  
-  
+
+
+
   helper_method :current_user,:login_required,:authorized?,:logged_in?
 #################
 
@@ -73,7 +73,7 @@ class ApplicationController < ActionController::Base
     def redirect_non_admins(right = 'group_admin',destination = pieces_url)
       unless user_has_right?(right)
         flash[:notice] = "You can't do that!"
-        redirect_to destination 
+        redirect_to destination
       end
     end
     def s3_bucket
@@ -103,28 +103,15 @@ class ApplicationController < ActionController::Base
 
     def set_current_piece(id)
       return false unless id
-      current_piece = Piece.find_by_id(id)
-      if current_piece
-        session[:pieceid] = current_piece.id
-        cookies[:current_piece_id] = {:value => current_piece.id, :expires => 2.weeks.from_now}
-        cookies[:current_piece_title] = {:value => current_piece.title, :expires => 2.weeks.from_now}
-      end  
-      current_piece
+      @current_piece = Piece.find_by_id(id)
     end
 
     def current_piece
-      if session[:pieceid]
-        @current_piece ||= set_current_piece(session[:pieceid])
-      else
-        @current_piece = nil
-      end
       @current_piece
     end
+
     def unset_current_piece
       @current_piece = nil
-      session[:pieceid] = nil
-      cookies[:current_piece_id] = nil
-      cookies[:current_piece_title] = nil
     end
 
     def set_defaults
@@ -194,5 +181,5 @@ class ApplicationController < ActionController::Base
 
 
 
-  
+
 end

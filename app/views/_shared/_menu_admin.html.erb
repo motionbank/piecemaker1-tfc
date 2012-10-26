@@ -1,9 +1,9 @@
 <%= menu_first_level('Admin') do -%>
 <%= menu_second_level('Your Stuff',"#{current_user.login}") do -%>
     <li><%= link_to "#{current_user.messages.length} Messages", :controller => "message",:action => 'index', :id => current_user.id -%></li>
-    <li><%= link_to 'Settings', '/pref' , :class => 'get' -%></li>
+    <li><%= link_to 'Settings', "/pref" , :class => 'jsc get-form' -%></li>
 <%- end -%>
-<li><%= link_to 'Main Admin', :controller => "administration", :action => 'main' -%></li>  
+<li><%= link_to 'Main Admin', :controller => "administration", :action => 'main' -%></li>
 <%- if user_has_right?('group_admin') -%>
 
     <li><%= link_to "Users", :controller => "users" -%></li>
@@ -11,14 +11,14 @@
     <li><%= link_to 'List S3', :controller => "administration", :action => 'list_s3' -%></li>
 
     <%= menu_second_level('Last 50','Last 50') do -%>
-    
+
       <li><%= link_to 'Events', :controller => "events", :action => 'list',:id => nil -%></li>
       <li><%= link_to 'Event Trash', :controller => "events", :action => 'list_trash',:id => nil -%></li>
       <li><%= link_to 'Videos', :controller => "video", :action => 'index' -%></li>
       <li><%= link_to 'Photos', :controller => "photos", :action => 'index',:id => nil -%></li>
       <li><%= link_to 'Notes', :controller => "notes", :action => 'list' -%></li>
       <li><%= link_to 'Documents', :controller => "documents", :action => 'list' -%></li>
-      <li><%= link_to 'Messages', :controller => "message", :action => 'list_all' -%></li> 
+      <li><%= link_to 'Messages', :controller => "message", :action => 'list_all' -%></li>
     <%- end -%>
     <% end %>
 <%- end -%>

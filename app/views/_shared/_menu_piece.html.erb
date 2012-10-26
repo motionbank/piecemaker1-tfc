@@ -1,18 +1,18 @@
 <%= menu_first_level('Pieces') do -%>
   <%- if cookies[:current_piece_id] -%>
-    <li><%= link_to 'Capture '+cookies[:current_piece_title], :controller => :capture, :action => :present, :id => cookies[:current_piece_id] %></li>
+    <li><%= link_to 'Capture '+cookies[:current_piece_title],{ :controller => :capture, :action => :present, :id => cookies[:current_piece_id] }, :class => 'ignore' %></li>
   <% end %>
 <%- @pieces.reject! {|x| !x.is_active} -%>
-  <%- if @pieces.length > 0-%> 
+  <%- if @pieces.length > 0-%>
     <%= menu_second_level('Show Piece Details','Open Piece') do -%>
       <%- @pieces.sort_by{|x| x.title}.each do |piece| -%>
-      <li><%= link_to piece.title, :controller => :capture, :action => :present, :id => piece.id %></li>
+      <li><%= link_to piece.title,{ :controller => :capture, :action => :present, :id => piece.id }, :class => 'ignore' %></li>
       <%- end -%>
     <%- end -%>
   <%- end -%>
-  <li><%= link_to 'List Pieces', pieces_url -%></li>	 
+  <li><%= link_to 'List Pieces', pieces_url, :class => 'ignore'  -%></li>
   <%- if user_has_right?('normal_actions') -%>
-   <li><%= link_to 'New Piece', :controller => 'pieces', :action => 'new' -%></li>
+   <li><%= link_to 'New Piece',{ :controller => 'pieces', :action => 'new'}, :class => 'ignore' -%></li>
   <%- end -%>
 
 <%- end -%>

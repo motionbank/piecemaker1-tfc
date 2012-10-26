@@ -245,17 +245,6 @@ color:#fff;
 	width:22px;
 	height:22px;
 }
-#colorpicker{
-	margin-top:3px;
-	border:thin solid #ccc;
-	z-index: 1000;
-}
-#colorpicker tr td{
-	height:0px;
-	width:0px;
-	border-width:1px;
-	padding:8px;
-}
 
 #jump{
 	position:fixed;top:240px;width:100px;left:10px;height:360px;overflow:scroll;

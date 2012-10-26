@@ -1,10 +1,10 @@
 class CaptureController < ApplicationController
   layout 'standard', :except => [:do_present, :cheap_rtf]
   #
-  # present makes the main page
+  # prent makes the main page
   #
   before_filter :get_event_from_params, :only => [:rate, :delete_event, :undelete_event, :destroy_event, :move_event, :unlock, :tag_with_title, :more_description, :less_description, :do_move,:toggle_user_highlight]
-  
+
   def get_event_from_params
     @event = Event.find(params[:id])
   end
@@ -13,31 +13,31 @@ class CaptureController < ApplicationController
     params[:performer_filter] = 'true'
     respond_to do |format|
       format.html
-      format.js {render :action => 'search_by_performer',:layout => false} 
+      format.js {render :action => 'search_by_performer',:layout => false}
     end
   end
   def search_by_tag
     respond_to do |format|
       format.html
-      format.js {render :action => 'search_by_tag',:layout => false} 
+      format.js {render :action => 'search_by_tag',:layout => false}
     end
   end
   def search_by_text
     respond_to do |format|
       format.html
-      format.js {render :action => 'search_by_text',:layout => false} 
+      format.js {render :action => 'search_by_text',:layout => false}
     end
   end
   def search_by_video
     respond_to do |format|
       format.html
-      format.js {render :action => 'search_by_video',:layout => false} 
+      format.js {render :action => 'search_by_video',:layout => false}
     end
-  end  
+  end
   def date_range
     respond_to do |format|
       format.html
-      format.js {render :action => 'date_range',:layout => false} 
+      format.js {render :action => 'date_range',:layout => false}
     end
   end
 
@@ -48,11 +48,9 @@ class CaptureController < ApplicationController
   def filter_type
     @filter_type = params[:filter_type] || 'none'
   end
-  
+
   def present
-    if(params[:id])
-      session[:pieceid] = params[:id]
-    end
+    set_current_piece(params[:id])
     if(current_piece)
         @title = 'Capture: '+current_piece.title
         do_present
@@ -64,8 +62,8 @@ class CaptureController < ApplicationController
       redirect_to  pieces_url
     end
   end
-  
-  def get_events(piece_id = session[:pieceid])
+
+  def get_events(piece_id = current_piece.id)
     conditions = "(piece_id = #{piece_id}) AND (state = 'normal' OR state = 'uploaded')"
     conditions += "AND (event_type != 'dev_notes') " unless user_has_right?('view_dev_notes')
     conditions += "AND (event_type != 'marker')" unless current_user.markers_on
@@ -105,10 +103,10 @@ class CaptureController < ApplicationController
         @events = Tag.find_by_name(params[:taggs]).events.normal
         flash.now[:searched_for] = "Events with Tag: #{params[:taggs]}"
       when 'video'
-        video_id = params[:video] == 'no_dvd' ? nil : params[:video].to_i        
+        video_id = params[:video] == 'no_dvd' ? nil : params[:video].to_i
         @events = current_piece.events.normal.in_video(video_id)
         flash.now[:searched_for] = params[:video] == 'no_dvd' ? "Events without video" : "Events in video id: #{params[:video]}"
-      
+
       when 'text'
         events = current_piece.events.normal.contains(params[:search])#nd_with_index('my search query')
         # subscenes = current_piece.events.normal.select{|x| !x.sub_scenes.contains(params[:search]).empty? }.flatten
@@ -123,9 +121,9 @@ class CaptureController < ApplicationController
         hide_trash = false
         @events = current_piece.events.select{|x| x.is_deleted?}
       when 'rating'
-        @events = Event.where("piece_id = ? AND (state = 'normal') AND (rating > ?)",session[:pieceid],params[:rating].to_i).order('happened_at').includes([:video,:sub_scenes,:tags,:notes])
+        @events = Event.where("piece_id = ? AND (state = 'normal') AND (rating > ?)",current_piece.id,params[:rating].to_i).order('happened_at').includes([:video,:sub_scenes,:tags,:notes])
       when 'tail'
-        @events = Event.where("piece_id = ? AND (state = 'normal')",session[:pieceid]).order('happened_at DESC').includes([:video,:sub_scenes,:tags,:notes]).limit(100)
+        @events = Event.where("piece_id = ? AND (state = 'normal')",current_piece.id).order('happened_at DESC').includes([:video,:sub_scenes,:tags,:notes]).limit(100)
         vids = @events.map{|x| x.video}.uniq.compact
       when  'none'
         @events = get_events
@@ -139,17 +137,19 @@ class CaptureController < ApplicationController
   end
   def toggle_user_highlight #OK
     @event.toggle_user_highlight(current_user)
+    set_current_piece(@event.piece_id)
     respond_to do |format|
-      format.html { redirect_to :action => "present", :id => session[:pieceid] }
-      format.js {render :action => 'modi_ev', :layout => false} 
+      format.html { redirect_to :action => "present", :id => current_piece.id }
+      format.js {render :action => 'modi_ev', :layout => false}
     end
   end
   def rate #OK
     @event.rating = params[:rating].to_i
     @event.save
+    set_current_piece(@event.piece_id)
     respond_to do |format|
-      format.html { redirect_to :action => "present", :id => session[:pieceid] }
-      format.js {render :action => 'modi_ev', :layout => false} 
+      format.html { redirect_to :action => "present", :id => current_piece.id }
+      format.js {render :action => 'modi_ev', :layout => false}
     end
   end
   def rate_video #OK
@@ -157,28 +157,29 @@ class CaptureController < ApplicationController
     @video.rating = params[:rating].to_i
     @video.save
     respond_to do |format|
-      format.html { redirect_to :action => "present", :id => session[:pieceid] }
-      format.js {render :action => 'rate_video', :layout => false} 
+      format.html { redirect_to :action => "present", :id => @video.piece_id }
+      format.js {render :action => 'rate_video', :layout => false}
     end
   end
   def add_event_to_video
     @create = true
     @video = Event.find(params[:id])
+    set_current_piece(@video.piece_id)
     @event = @video.subjects.new(
     :happened_at => @video.happened_at + 2,
     :created_by => current_user.login,
     :modified_by => current_user.login,
     :performers => [],
     :event_type => 'scene',
-    :piece_id => session[:pieceid])
+    :piece_id => @video.piece_id)
     respond_to do |format|
-      format.html { redirect_to :action => "present", :id => session[:pieceid] }
-      format.js {render :partial => 'event_form', :layout => false} 
+      format.html { redirect_to :action => "present", :id => @video.piece_id }
+      format.js {render :partial => 'event_form', :layout => false}
     end
   end
 
  def update_vid_time
-    videos = Piece.find(session[:pieceid]).videos
+    videos = Piece.find(params[:id]).videos
     text = 'Video: '
    if videos.length > 0
      if videos.last.dur && videos.last.recorded_at + videos.last.dur < Time.now
@@ -193,16 +194,17 @@ class CaptureController < ApplicationController
    text << ' Click to Update'
    render :text => text
  end
- 
+
  def fill_video_menu
+  piece_id = params[:pieceid].gsub('.js','')
    video = Event.find(params[:id])
    text = ''
    if true#video.viewable?
-     text << "<li class = 'removable'><a class = 'ignore' href = '/video_viewer/#{params[:pieceid]}/#{params[:id]}'>Watch in Viewer</a></li>"
+     text << "<li class = 'removable'><a href = '/video_viewer/#{piece_id}/#{params[:id]}'>Watch in Viewer</a></li>"
    else
-     text << "<li style = 'color:#ccc' class = 'removable'>Video Not Viewable.</li>"
+     text << "<li style = 'color:#ccc'>Video Not Viewable.</li>"
    end
-   text << "<li class = 'removable'><a class = 'ignore' href = '/video_upload/#{params[:id]}/#{params[:pieceid]}'>Upload</a></li>"
+   text << "<li class = 'removable'><a href = '/video_upload/#{params[:id]}/#{piece_id}'>Upload</a></li>"
      render :text => text
  end
  #
@@ -223,16 +225,17 @@ class CaptureController < ApplicationController
       if @note.save
         respond_to do |format|
           format.html {redirect_to :action => 'present'}
-          format.js {render :action => 'new_note', :layout => false} 
+          format.js {render :action => 'new_note', :layout => false}
         end
       else
         render :controller => 'capture', :action => 'new_note'
       end
     else
       @note = Event.new
+      @event = Event.find(params[:id])
       respond_to do |format|
         format.html { render :partial => 'note_form', :layout => 'standard'}
-        format.js {render :partial => 'note_form', :layout => false} 
+        format.js {render :partial => 'note_form', :layout => false}
       end
     end
   end
@@ -240,18 +243,18 @@ class CaptureController < ApplicationController
 
   def edit_note #OK
     if request.post?
-      @note    = Event.find(params[:id])
+      @note = Event.find(params[:id])
       @note.description = params[:notes][:description]
       @note.save
       respond_to do |format|
         format.html {redirect_to :action => 'present'}
-        format.js {render :action => 'edit_note', :layout => false} 
+        format.js {render :action => 'edit_note', :layout => false}
       end
     else
       @note = Event.find(params[:id])
       respond_to do |format|
         format.html { render :partial => 'note_edit_form', :layout => 'standard'}
-        format.js {render :partial => 'note_edit_form', :layout => false} 
+        format.js {render :partial => 'note_edit_form', :layout => false}
       end
     end
   end
@@ -262,7 +265,7 @@ class CaptureController < ApplicationController
       @note.destroy
       respond_to do |format|
         format.html {redirect_to :action => 'present'}
-        format.js {render :text => "#{@note.id}" }
+        format.js {render :text => "jQuery('#note-#{@note.id}').remove()" }
       end
     else
       #renders the confirmation page 'delete_note.rhtml'
@@ -279,15 +282,16 @@ class CaptureController < ApplicationController
       @event.save
       respond_to do |format|
         format.html {redirect_to :action => 'present'}
-        format.js {render :text => "jQuery('#event-'+#{@event.id}).remove();", :layout => false} 
+        format.js {render :text => "jQuery('#event-'+#{@event.id}).remove();", :layout => false}
       end
   end
   def undelete_event
       @event.make_undeleted
       @event.save
+      set_current_piece(@event.piece_id)
       respond_to do |format|
         format.html {redirect_to :action => 'present'}
-        format.js {render :partial => 'undelete_event', :layout => false} 
+        format.js {render :partial => 'undelete_event', :layout => false}
       end
   end
   def destroy_event
@@ -295,79 +299,14 @@ class CaptureController < ApplicationController
       @event.destroy
       respond_to do |format|
         format.html {redirect_to :action => 'present'}
-        format.js {render :text => "", :layout => false} 
+        format.js {render :text => "$('#event-#{params[:id].to_s}').remove();", :layout => false}
       end
     end
   end
-  def quick_marker #from iphone
-    @piece = Piece.find(params[:id])
-    if request.post?
-      event = Event.new(
-      :happened_at => Time.now,
-      :created_by => current_user.login,
-      :event_type => 'marker',
-      :piece_id => params[:id],
-      :state => 'normal',
-      :title => 'marker'
-      )
-      event.set_video_time_info
-      event.save
-      flash[:notice] = 'Added Marker at ' + event.happened_at.strftime("%H:%M:%S")
-    end
-    respond_to do |format|
-      format.html {}
-      format.mobile {}
-      format.js {render :layout => false}
-    end
-  end
 
-  def marker_list
-    @piece = Piece.find(params[:id])
-    @markers = Event.find_all_by_piece_id(@piece.id,
-    :conditions => "event_type = 'marker' AND created_by = '#{current_user.login}'",
-    :order => 'happened_at DESC')
-    render :layout => 'marker'
-  end
-  def mark_from_marker_list
-    #@piece = Piece.find(params[:id])
-    #if request.post?
-    @event = Event.new(
-      :happened_at => Time.now,
-      :created_by => params[:user].gsub('.js',''),
-      :event_type => 'marker',
-      :piece_id => params[:id],
-      :state => 'normal',
-      :title => 'marker'
-    )
-    @event.save
-    #end
-    respond_to do |format|
-      format.js {render :layout => false}
-    end
-  end
-  def delete_marker_from_list
-    marker = Event.find(params[:id])
-    @marker_id = marker.id
-    marker.destroy
-    respond_to do |format|
-      format.js {render :layout => false}
-    end
-  end
-  def new_marker
-    @create = true
-    @event = Event.new
-    @after_event = @event.set_attributes_from_params(params,current_user,current_piece)
-    @event.event_type = 'marker'
-    @event.title = 'marker'
-    @event.state = 'normal'
-    @event.performers = nil
-    @event.save
-    respond_to do |format|
-      format.html {render :action => 'event_form'}
-      format.js {render :action => 'modi_ev',:layout => false} 
-    end
-  end
+
   def new_event
+    set_current_piece(params[:piece_id])
     @create = true
     @event = Event.new
     if params[:after_id]
@@ -380,19 +319,17 @@ class CaptureController < ApplicationController
     end
 
 
-    #@events = Event.find_all_by_piece_id(session[:pieceid], :order => 'position')
-
     @after_event = @event.set_attributes_from_params(params,current_user,current_piece)
     respond_to do |format|
       format.html {render :action => 'event_form'}
-      format.js {render :partial => 'event_form',:layout => false} 
+      format.js {render :partial => 'event_form',:layout => false}
     end
   end
   def new_sub_scene #OK
+    set_current_piece(params[:piece_id])
     @create_scene = false
     @action = 'create_sub_scene'
-    piece = Piece.find(session[:pieceid])
-    @latest_event = piece.root_events.normal.last
+    @latest_event = current_piece.root_events.not_video.normal.last
 
     if @latest_event
       if (@latest_event.video && @latest_event.video.dur && Time.now > @latest_event.video.recorded_at + @latest_event.video.duration) || !@latest_event.video && video_in?
@@ -402,17 +339,18 @@ class CaptureController < ApplicationController
       :happened_at => Time.now + 1)
       respond_to do |format|
         format.html {render :action => 'new_sub_scene'}
-        format.js {render :action => 'new_sub_scene',:layout => false} 
+        format.js {render :action => 'new_sub_scene',:layout => false}
       end
     else
       respond_to do |format|
-        format.html {redirect_to :action => 'present', :id => session[:pieceid]}
-        format.js {render :action => 'empty_sub_scene',:layout => false} 
+        format.html {redirect_to :action => 'present', :id => params[:piece_id]}
+        format.js {render :action => 'empty_sub_scene',:layout => false}
       end
     end
   end
   def create_sub_scene#OK except for parse performers....
     @event = Event.find(params[:sub_scene][:parent_id])
+    set_current_piece(@event.piece_id)
     if params[:create_scene] == 'true'
       @new_event = @event.dup
       @new_event.title << ' ...Continued...'
@@ -428,8 +366,8 @@ class CaptureController < ApplicationController
     sub_scene.save
     #sub_scene.parse_performers_and_give_to_parent
     respond_to do |format|
-      format.html { redirect_to :controller => 'capture', :action => "present", :id => session[:pieceid] }
-      format.js {render :action => 'modi_ev', :layout => false} 
+      format.html { redirect_to :controller => 'capture', :action => "present", :id => params[:sub_scene][:piece_id] }
+      format.js {render :action => 'modi_ev', :layout => false}
     end
   end
   def edit_sub_scene #OK
@@ -438,27 +376,28 @@ class CaptureController < ApplicationController
     @latest_event = @sub_scene.parent
     respond_to do |format|
       format.html {render :action => 'new_sub_scene'}
-      format.js {render :action => 'new_sub_scene',:layout => false} 
+      format.js {render :action => 'new_sub_scene',:layout => false}
     end
   end
   def update_sub_scene #OK
     sub = Event.find(params[:id])
+    set_current_piece(sub.piece_id)
     sub.update_attributes(params[:sub_scene])
     #sub.parse_performers_and_give_to_parent
     @event = sub.parent
     respond_to do |format|
-      format.html { redirect_to :controller => 'capture', :action => "present", :id => session[:pieceid] }
-      format.js {render :action => 'modi_ev', :layout => false} 
+      format.html { redirect_to :controller => 'capture', :action => "present", :id => sub.piece_id }
+      format.js {render :action => 'modi_ev', :layout => false}
     end
   end
   def delete_sub_scene #OK
     sub = Event.find(params[:id])
     id = sub.parent_id
     @event = Event.find(id)
-    sub.destroy
+    sub.make_deleted
     respond_to do |format|
-      format.html { redirect_to :controller => 'capture', :action => "present", :id => session[:pieceid] }
-      format.js {render :text => "$('#event-'+#{sub.id}).remove();", :layout => false} 
+      format.html { redirect_to :controller => 'capture', :action => "present", :id => @event.piece_id }
+      format.js {render :text => "$('#event-'+#{sub.id}).remove();", :layout => false}
     end
   end
   def cancel_new_ev
@@ -467,7 +406,7 @@ class CaptureController < ApplicationController
     end
     respond_to do |format|
       format.html {redirect_to :action => 'present', :id => @event.piece_id }
-      format.js {render :action => 'cancel_new_ev',:layout => false} 
+      format.js {render :action => 'cancel_new_ev',:layout => false}
     end
   end
   def cancel_new_vid
@@ -478,7 +417,8 @@ class CaptureController < ApplicationController
   def mod_ev
     #puts up the modify form
     @viewer = params[:viewer] && params[:viewer] == 'true.js' ? true : false
-    @event = Event.find(params[:id]) 
+    @event = Event.find(params[:id])
+    set_current_piece(@event.piece_id)
     if(@event.locked_by)
       partial_name = 'locked'
       @unlock = true
@@ -489,14 +429,14 @@ class CaptureController < ApplicationController
     end
     respond_to do |format|
       format.html
-      format.js {render :partial => partial_name, :layout => false} 
+      format.js {render :partial => partial_name, :layout => false}
     end
   end
 
   def move_event
     respond_to do |format|
       format.html
-      format.js {render  :layout => false} 
+      format.js {render  :layout => false}
     end
   end
 
@@ -510,11 +450,11 @@ class CaptureController < ApplicationController
           @event.set_video_time_info
           @event.save
           flash[:notice] = "Event id: #{@event.id} moved"
-        end      
+        end
       else
         flash[:notice] = "Target event: #{params[:after]} doesn't exist! Please choose move destination carefully."
       end
-    redirect_to :action => 'present', :id => session[:pieceid] 
+    redirect_to :action => 'present', :id => @event.piece_id
   end
 
   def unlock
@@ -522,33 +462,35 @@ class CaptureController < ApplicationController
     @event.save
     @unlock = true;
     respond_to do |format|
-      format.html { redirect_to :controller => 'capture', :action => "present", :id => session[:pieceid] }
-      format.js {render :partial => 'event_form', :layout => false} 
+      format.html { redirect_to :controller => 'capture', :action => "present", :id => @event.piece_id }
+      format.js {render :partial => 'event_form', :layout => false}
     end
   end
 
 
   def new_auto_video_in
     @player = true
+    @piece = Piece.find(params[:piece_id])
+    set_current_piece(@piece.id)
     if video_in?
       respond_to do |format|
-        format.html {redirect_to :action => 'present', :id => session[:pieceid]}
-        format.js {render :partial => 'warn_prepare', :layout => false} 
+        format.html {redirect_to :action => 'present', :id => params[:piece_id]}
+        format.js {render :partial => 'warn_prepare', :layout => false}
       end
     else
-      piece = Piece.find(session[:pieceid])
       @video = Event.new
       @video.event_type = 'video'
-      @video.set_video_title(piece)
+      @video.set_video_title(@piece)
       Video.prepare_recording() if true
       respond_to do |format|
         format.html
-        format.js {render :partial => 'new_auto_video', :layout => false} 
+        format.js {render :partial => 'new_auto_video', :layout => false}
       end
     end
   end
 
   def confirm_video_in
+    set_current_piece(params[:video][:piece_id])
     @after_id = params[:aid] #needed to tell jquery where to insert event
     @video = Event.new(params[:video])
     @video.happened_at = Time.now
@@ -557,12 +499,13 @@ class CaptureController < ApplicationController
     @video.performers = []
     @video.save
     if params[:quick_take] && params[:quick_take] == 'true'
+      piece = Piece.find(@video.piece_id)
       Event.create(
-        :piece_id => current_piece.id,
+        :piece_id => @video.piece_id,
         :video_id => @video.id,
         :performers => [],
         :event_type => 'performance_notes',
-        :title => "Performance of #{current_piece.title}",
+        :title => "Performance of #{piece.title}",
         :created_by => current_user.login,
         :modified_by => current_user.login,
         :happened_at => Time.now + 1,
@@ -570,23 +513,23 @@ class CaptureController < ApplicationController
         :description => ''
         )
     end
-    current_piece.events << @video
     @truncate = :less unless @truncate == :none
     result = Video.start_recording() if SetupConfiguration.use_auto_video?
 
     respond_to do |format|
-      format.html {redirect_to :action => 'present', :id => session[:pieceid] }
+      format.html {redirect_to :action => 'present', :id => @video.piece_id }
       format.js {render :action => 'confirm_video_in', :layout => false}
     end
   end
   def confirm_video_out
     @after_id = params[:aid] #needed to tell jquery where to insert event
     @video = Event.find_by_id(params[:id])
+    set_current_piece(@video.piece_id)
     @video.dur = Time.now - @video.happened_at
     @video.save
     @truncate = :less unless @truncate == :none
     result = Video.stop_recording(@video.title) if SetupConfiguration.use_auto_video?
-    
+
     flash[:notice] = 'result'
       if result && result != 'error'
         #@video.rename_quicktime_and_queue_processing(result)
@@ -596,20 +539,22 @@ class CaptureController < ApplicationController
       end
 
     respond_to do |format|
-      format.html {redirect_to :action => 'present', :id => session[:pieceid] }
+      format.html {redirect_to :action => 'present', :id => @video.piece_id }
       format.js {render :action => 'confirm_video_out', :layout => false}
     end
   end
-  
+
   def modi_ev #OK
     #actually changes the event and saves it
       @after_id = params[:aid] #needed to tell jquery where to insert event
       @create = true if params[:create] == 'true'
       if @create
         @event = Event.new.do_event_changes(params,current_user)
+        @event.created_by = current_user.login
       else
         @event = Event.find(params[:id]).do_event_changes(params,current_user)
       end
+      set_current_piece(@event.piece_id)
       if @event.save
         @flash_message = "Successfully #{@create ? 'created': 'edited'} event id: #{@event.id}"
         @truncate = :less unless @truncate == :none
@@ -621,17 +566,18 @@ class CaptureController < ApplicationController
         render :action => 'event_form'
       end
   end
-    
+
   def tag_with_title #???
     @event.tag_with_title
     respond_to do |format|
-      format.html {redirect_to :action => "present", :id => session[:pieceid] }
-      format.js {render :action => 'modi_ev', :layout => false} 
+      format.html {redirect_to :action => "present", :id => @event.piece_id }
+      format.js {render :action => 'modi_ev', :layout => false}
     end
   end
 
   def cancel_modify #OK
     @event = Event.find(params[:id])
+    set_current_piece(@event.piece_id)
     @event.unlock
     @event.save
     respond_to do |format|
@@ -642,14 +588,15 @@ class CaptureController < ApplicationController
 
  def toggle_highlight #OK
    @event = Event.find(params[:id]).toggle_highlight!
+   set_current_piece(@event.piece_id)
    respond_to do |format|
-     format.html { redirect_to :action => "present", :id => session[:pieceid] }
-     format.js {render :action => 'modi_ev', :layout => false} 
+     format.html { redirect_to :action => "present", :id => @event.piece_id }
+     format.js {render :action => 'modi_ev', :layout => false}
    end
  end
 
  def create_video #???
-   if @video = Video.find(params[:id])
+   if @video = Event.find(params[:id])
      @video.update_from_params(params)
    end
    redirect_to  :action => 'present', :id => params[:piece_id]
@@ -677,7 +624,7 @@ class CaptureController < ApplicationController
     if performer_names_from_params.length == 0 && search_type != 'everyone'
       return []
     end
-    
+
     case search_type #OK
       when 'exclusive' #exactly the searched for people and no others
         flash.now[:searched_for] = "Exclusive Search for : \"#{name_list}\""
@@ -697,33 +644,15 @@ class CaptureController < ApplicationController
       end
   end
 
-
-    def more_description #OK
-      set_current_piece(@event.piece_id)
-      @truncate = :less
-      respond_to do |format|
-        format.html {redirect_to :action => 'present', :id => @event.piece_id }
-        format.js {render :partial => 'one_event', :locals => {:event => @event}, :layout => false}
-      end
-    end
-    def less_description #OK
-      set_current_piece(@event.piece_id)
-      @truncate = :more
-      respond_to do |format|
-        format.html {redirect_to :action => 'present', :id => @event.piece_id }
-        format.js {render :partial => 'one_event', :locals => {:event => @event}, :layout => false}
-      end
-    end
-
     def cheap_rtf
-      @events = Event.where("pieceid = ?", session[:pieceid]).order('happened_at')
+      @events = Event.where("pieceid = ?", params[:id]).order('happened_at')
     end
 
     def open_scratchpad #OK
       @pad = current_user.scratchpad
       respond_to do |format|
         format.html
-        format.js {render :action => 'open_scratchpad', :layout => false} 
+        format.js {render :action => 'open_scratchpad', :layout => false}
       end
     end
     def update_scratchpad #OK
@@ -731,7 +660,7 @@ class CaptureController < ApplicationController
       current_user.save
       respond_to do |format|
         format.html
-        format.js {render :text => "$('#scratchpad').hide();$('.formhide').show();"} 
+        format.js {render :text => "$('#scratchpad').hide();$('.formhide').show();"}
       end
     end
     def promote_to_scene #OK
@@ -744,12 +673,10 @@ class CaptureController < ApplicationController
     def convert_to_sub_scene #OK
       event = Event.find(params[:id])
       ss = event.demote_to_sub_scene
-      if ss
-        @event = ss.parent
-      end
+      @event = ss.parent if ss
       respond_to do |format|
         format.html {redirect_to :action => 'present', :id => current_piece.id}
-        format.js {render :action => 'convert_to_sub_scene', :layout => false} 
+        format.js {render :action => 'convert_to_sub_scene', :layout => false}
       end
     end
 # from subscene controller

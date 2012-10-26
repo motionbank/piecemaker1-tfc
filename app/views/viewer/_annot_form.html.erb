@@ -11,7 +11,7 @@ New Annotation for: <%= @video.title %>
  </p>
 
  <%= hidden_field_tag 'event[happened_at]', @event.happened_at %>
-
+ <%= hidden_field_tag 'event[piece_id]', @video.piece_id %>
  <p>
  <label for="event_tags">Tags (separated by commas): </label>
  <input id="event_tags" name="tags" size="25" type="text" value = "<%= @event.tag_list %>"/>
@@ -26,7 +26,7 @@ New Annotation for: <%= @video.title %>
 
  <% if @event.needs_performers_field? -%>
  <label for="event_performers">Performers</label><br />
- <%= raw checklist('performers[]',current_piece.performers,['login'],events_performers(@event),nil,true,6) %> 
+ <%= raw checklist('performers[]',current_piece.performers,['login'],events_performers(@event),nil,true,6) %>
  <% end %>
 
 

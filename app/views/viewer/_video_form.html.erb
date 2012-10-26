@@ -9,7 +9,7 @@
 4<%= radio_button_tag 'video[rating]', '4' , @video.rating == 4 %>
 5<%= radio_button_tag 'video[rating]', '5' , @video.rating == 5 %>
 <br />
-<b>Recording started at:</b><%= text_field_tag 'video[recorded_at]',@video.recorded_at, :size => 30 %><br />
+<b>Recording started at:</b><%= text_field_tag 'video[happened_at]',@video.recorded_at, :size => 30 %>
 <span style = 'color:#c00'><br />Changing the recording starting time will affect all events times!</span>
 <br />
 <b>Duration:</b><%= text_field_tag 'video[dur]',@video.dur, :size => 10 %> Seconds<br />
@@ -17,6 +17,6 @@
 <%= text_area 'video', 'description',:size => '50x5' %>
 <br />
 <%= "Uploaded:" %>
-<%#= check_box_tag 'video[is_uploaded]', 'true', @video.state == 'uploaded' %>
+<%= check_box_tag 'video[state]', 'true', @video.state == 'uploaded' %>
 <br />
 <br />

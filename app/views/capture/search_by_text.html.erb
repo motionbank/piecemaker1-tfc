@@ -1,8 +1,8 @@
 <h2>Search</h2>
 A very loose search!
-<%= form_tag :action => 'present', :id => session[:piecid], :filter_type => 'text' do %>
+<%= form_tag :action => 'present', :id => current_piece.id, :filter_type => 'text' do %>
 <%= text_field_tag 'search', '',:size => 40 %><br />
 <%= submit_tag 'Search' %>
 <%- end %>
 <br />
-<%= link_to 'Cancel',{:action => 'present', :id => session[:pieceid]}, :class => 'cancel'%>
+<%= link_to 'Cancel',{:action => 'present', :id => current_piece.id}, :class => 'cancel'%>

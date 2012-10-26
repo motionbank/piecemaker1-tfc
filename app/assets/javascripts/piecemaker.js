@@ -2,29 +2,34 @@ jQuery.ajaxSetup({
 	'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")}
 });
 $(function(){
-	
-	
-	$('#jump a').live('click',function(){
-		var dvNumber = $(this).attr('id').replace('j','');
-		$.scrollTo('#vid_'+dvNumber);
-		$.scrollTo("-=100");
-		return false;
-	});
-	$('#documentation a').live('click',function(){
-		var href = $(this).attr('href').replace("#",'');
-		$.scrollTo('#'+href);
-		$.scrollTo("-=100");
+
+	 $('#form_div input:checkbox').live('click',function(){
+	 	 var modelName = $(this).attr('class').split(' ')[1]
+	 	 checkAll(this,'check_all_able',modelName);
+	 });
+	 $('#main input:checkbox').live('click',function(){
+	 	 var modelName = $(this).attr('class').split(' ')[1]
+	 	 checkAll(this,'check_all_able',modelName);
+	 });
+
+	// stops the automatic saving and submits ajax forms
+	$('form.ajax input:submit').live('click', function(){
+		disableFormElements();
+		if($(this).parent().hasClass('timer')){
+		 	$("form.timer").stopTime('backup');
+		}
+		ajaxFunction($(this).parent(),$(this).parent().attr('action'))
 		return false;
 	});
 
- $('#form_div input:checkbox').live('click',function(){
- 	 var modelName = $(this).attr('class').split(' ')[1]
- 	 checkAll(this,'check_all_able',modelName);
- });
- $('#main input:checkbox').live('click',function(){
- 	 var modelName = $(this).attr('class').split(' ')[1]
- 	 checkAll(this,'check_all_able',modelName);
- });
+
+
+});
+
+
+function disableFormElements(){
+	$('.formhide').hide();
+}
 
 function checkAll(el,cl,mn){
 	if($(el).hasClass('check-all')){
@@ -38,19 +43,10 @@ function checkAll(el,cl,mn){
 }
 
 
-	jQuery('#colorpicker td').live('click', function(){
-		//this changes the color field when using the color_picker helper in application_helper.rb
-		var color = jQuery(this).css('background-color');
-		jQuery('#div_class').attr('value',toHex(color));
-		jQuery('#color-display').css('background-color',color); 
-	});
-
-});
-
 function flashMessage(message){
 	if(message.length > 0){
 	$('.message').html(message);
-	$('.message').show();
+	$('.message').fadeIn(200).delay( 3000 ).fadeOut(200);
 	}else{
 		$('.message').hide();
 	}
@@ -67,29 +63,9 @@ function flashError(message){
 	}
 }
 
-
-
-function toHex(color){
-	if(color.match(/^rgb\(([0-9]|[1-9][0-9]|[1][0-9]{2}|[2][0-4][0-9]|[2][5][0-5]),[ ]{0,1}([0-9]|[1-9][0-9]|[1][0-9]{2}|[2][0-4][0-9]|[2][5][0-5]),[ ]{0,1}([0-9]|[1-9][0-9]|[1][0-9]{2}|[2][0-4][0-9]|[2][5][0-5])\)$/)){
-	      var c = ([parseInt(RegExp.$1),parseInt(RegExp.$2),parseInt(RegExp.$3)]);
-	      var pad = function(str){
-	            if(str.length < 2){
-	              for(var i = 0,len = 2 - str.length ; i<len ; i++){
-	                str = '0'+str;
-	              }
-	            }
-	            return str;
-	      }
-
-	      if(c.length == 3){
-	        var r = pad(c[0].toString(16)),g = pad(c[1].toString(16)),b= pad(c[2].toString(16));
-	        color = r + g + b;
-	      }
-	}
-	return color;
-}
 function clearStorage(keyName){
 	localStorage.removeItem(keyName)
+	alert('removed old-app57')
 }
 function clearFormDiv(messageForFlash){
 	$("#form_div").hide();

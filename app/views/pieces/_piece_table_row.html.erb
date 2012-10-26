@@ -2,7 +2,7 @@
             <td><%= piece.short_name %></td>
             <td><%= piece.id %></td>
             <td><%= piece.is_active %></td>
-            <%- if true -%>
             <td><a href="/pieces/show/<%= piece.id %>">Details</a></td>
+            <%- if user_has_right?('advanced_actions') -%>
             <td><%= link_to 'Delete',"/pieces/destroy/#{piece.id}",:confirm => 'Are you Sure?' %></td>
             <% end -%>

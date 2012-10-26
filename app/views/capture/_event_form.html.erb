@@ -1,4 +1,4 @@
-<span style = 'font-weight:bold;font-size:1.6em'><%=h @event.event_type.humanize %></span>&nbsp;&nbsp;happened_at: <%= @event.happened_at %> <br />
+<span style = 'font-weight:bold;font-size:1.6em'><%=h @event.event_type.humanize %></span><br />
 
 <%= form_tag({:action => 'modi_ev',:id => @event},:class => 'ajax timer',:id => @event.id) do -%>
 
@@ -33,7 +33,8 @@ Dur: <input id="event_dur" name="event[dur]" size="10" type="text" value = "<%= 
 
 <% if @event.needs_performers_field? -%>
 <label for="event_performers">Performers</label><br />
-<%= raw checklist('performers[]',@event.piece.performers,['login'],events_performers(@event)) %> 
+<%#=   model,collection,fields,checked_collection=[],checked_field=nil,show_check_all = true,reset_number = 8 %>
+<%= raw checklist('performers[]', @event.piece.performers, ['login'], events_performers(@event)) %>
 <% end %>
 
 

@@ -47,6 +47,7 @@ group :assets do
 end
 
 gem 'jquery-rails'
+gem 'mustache'
 
 
 # To use Jbuilder templates for JSON
