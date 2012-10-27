@@ -25,7 +25,7 @@ function cancelUpload(url,title){
 		url: url,
 		dataType: 'script'
 	})
-	flashError('There was an error uploading "'+title+'". Please try again.')
+	flashMessage('There was an error uploading "'+title+'". Please try again.','error')
 };
 // function goToTab(tabid){
 // 	$('.css-tabs li a').removeClass('current')

@@ -5,7 +5,7 @@
 <%- edates << [date.strftime("%D"),date.ago(-60*60*24)] -%>
 <%- end -%>
 <h3>Show Events Between Selected Days:</h3>
-<%= form_tag  :controller => 'capture', :action => 'present' , :filter_type => 'date_range' do %>
+<%= form_tag  :controller => 'capture', :action => 'present' ,:id => current_piece.id, :filter_type => 'date_range' do %>
 <%= hidden_field_tag(:date_range, 'true') %><br />
 Start Date: <%= select_tag("start_date", options_for_select(sdates)) %><br />
 End Date: <%= select_tag("end_date", options_for_select(edates)) %><br />

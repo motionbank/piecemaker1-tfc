@@ -1,7 +1,7 @@
 <div id = 'video_info_div'>
   <%- if user_has_right? 'group_admin' -%>
-  <p><%= link_to "Edit Video Information",{:controller => 'viewer',:action => 'edit_from_viewer',:id => video.id},:class => 'get pause' %></p>
-  <p><%= link_to "Scratchpad",{:controller => 'capture',:action => 'open_scratchpad'},:class => 'get-sc pause' %></p>
+  <p><%= link_to "Edit Video Information",{:controller => 'viewer',:action => 'edit_from_viewer',:id => video.id},:class => 'jsc get-form pause' %></p>
+  <p><%= link_to "Scratchpad",{:controller => 'capture',:action => 'open_scratchpad'},:class => 'jsc get-sc pause' %></p>
   <%- end -%>
   <div style = 'line-height:20px;font-size:14px;font-weight:bold'>
       Click on a name to turn on/off events.<br />

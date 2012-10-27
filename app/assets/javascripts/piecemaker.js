@@ -2,7 +2,6 @@ jQuery.ajaxSetup({
 	'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")}
 });
 $(function(){
-
 	 $('#form_div input:checkbox').live('click',function(){
 	 	 var modelName = $(this).attr('class').split(' ')[1]
 	 	 checkAll(this,'check_all_able',modelName);
@@ -42,24 +41,20 @@ function checkAll(el,cl,mn){
 	}
 }
 
-
 function flashMessage(message){
-	if(message.length > 0){
-	$('.message').html(message);
-	$('.message').fadeIn(200).delay( 3000 ).fadeOut(200);
-	}else{
-		$('.message').hide();
+	$('#message').css('background-color','#bfb');
+	$('#message').css('border-color','#0a0');
+	$('#message').css('color','#060');
+	if(arguments[1]){
+		$('#message').css('background-color','#faa');
+		$('#message').css('border-color','#900');
+		$('#message').css('color','#600');
 	}
-}
-function flashError(message){
 	if(message.length > 0){
-	$('.message').html(message);
-	$('.message').css('background-color','#faa');
-	$('.message').css('border-color','#900');
-	$('.message').css('color','#600');
-	$('.message').show();
+	$('#message').html(message);
+	$('#message').fadeIn(200).delay( 2500 ).fadeOut(200);
 	}else{
-		$('.message').hide();
+		$('#message').hide();
 	}
 }
 

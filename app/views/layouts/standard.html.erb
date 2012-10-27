@@ -15,10 +15,10 @@
   <div id = 'piecemaker_header'>
     <%= render :partial => '_shared/header' %>
     <%= yield :present_header %>
-    <div class ="message" <%= raw "style='display:none'" unless flash[:notice] || flash[:searched_for] -%>>
+    <div id ="message" <%= raw "style='display:none'" unless flash[:notice] || flash[:searched_for] -%>>
       <%= flash[:notice] %>&nbsp;&nbsp;&nbsp;<%= flash[:searched_for] %>
     </div>
-    <div class ="error" <%= raw "style='display:none'" -%>>
+    <div id ="error" <%= raw "style='display:none'" -%>>
       <%= flash[:error] %>
     </div>
   </div>

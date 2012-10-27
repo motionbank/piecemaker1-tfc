@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
   has_many :messages
 
 
-  has_and_belongs_to_many :events, :order => :happened_at, :include => [:sub_scenes,:tags,:notes,:video,:users]
+  has_and_belongs_to_many :events, :order => :happened_at, :include => [:children,:tags,:notes,:video,:users]
 
 
   validates_presence_of     :login

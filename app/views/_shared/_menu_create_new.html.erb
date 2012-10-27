@@ -4,12 +4,12 @@
   <%- Event.menu_event_types.each do |one_type| -%>
     <%- if one_type != 'dev_notes' || user_has_right?('view_dev_notes')-%>
   <li>
-    <%= link_to(one_type.titleize,{:action => 'new_event',:id => one_type}, :class => 'get')-%>
+    <%= link_to(one_type.titleize,new_event_url(:piece_id => current_piece.id, :event_type => one_type), :class => 'jsc get-form')-%>
   </li>
   <%- end %>
   <%- end -%>
   <li>
-    <%= link_to('Sub Scene',{:action => 'new_sub_scene'}, :class => 'get')-%>
+    <%= link_to('Sub Scene',new_sub_scene_url(:piece_id => current_piece.id), :class => 'jsc get-form')-%>
   </li>
 	</ul>
 </li>

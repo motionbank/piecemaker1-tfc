@@ -514,7 +514,7 @@ module ApplicationHelper
   def display_creation_info(event)
     by = event.created_by || '???'
     info = "<div class='sm evci'>"
-      info << event.happened_at.strftime("%d/%m %H:%M:%S") +' by ' + by + ' ' + linked_id(event)
+    info << event.happened_at.strftime("%d/%m %H:%M:%S") +' by ' + by + ' ' + linked_id(event)
 
     info << '</div>'
   end
@@ -671,8 +671,7 @@ module ApplicationHelper
     text = ''
     if video_in?
       vvid = video ? video.id.to_s : video_in?.id.to_s
-      text << '<span class="short-cut">I </span><a data-confirmation="Stop the Video?@piece = Piece.find(params[:piece_id])
-      set_current_piece(@piece.id)"id = "vidinout" class = "jsc hdble vout" href = "/capture/confirm_video_out/'+vvid+'">Stop Video</a>'
+      text << '<span class="short-cut">I </span><a data-confirmation="Stop the Video?"id = "vidinout" class = "jsc hdble vout" href = "/capture/confirm_video_out/'+vvid+'">Stop Video</a>'
     else
       text << '<span class="short-cut">I </span><a id = "vidinout" class = "jsc get-form hdble vprep" href = "/capture/new_auto_video_in/'+current_piece.id.to_s+'">Prepare Video</a>'
       #text << '<br /><span class="short-cut">B </span><a id = "vidinout" class = "get hdble vprep" href = "/capture/new_auto_video_in/'+current_piece.id.to_s+'?quick_take=true">Prep. Vid & Scene</a>'

@@ -52,7 +52,7 @@ class ViewerController < ApplicationController
       text = "Updated #{@video.title}"
       respond_to do |format|
         format.html {flash[:notice] = text ; redirect_to params[:came_from]}
-        format.js {render :text => "clearFormDiv('hi');", :layout => false}
+        format.js {render :text => "clearFormDiv('#{text}');", :layout => false}
       end
     end
 

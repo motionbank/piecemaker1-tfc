@@ -1,11 +1,11 @@
 $(function(){
 
-
 // any link with class jsc will pass through here
 // other classes will determine further actions
 $('#body a.jsc').live('click', function(){
 
     if($(this).hasClass('ignore')){return}
+    if($(this).hasClass('pause')){$f('rtmpPlayer').pause();}
     if($(this).parents().hasClass('menu-link')){
       DropMenu($(this),event)
       return false
@@ -19,13 +19,13 @@ $('#body a.jsc').live('click', function(){
         postFunction(theUrl);
         $(".hdble").show();
       }else{
-        alert('cancelled 22')
+
       }
     }else if($(this).hasClass('get-form')){ //actions which put up a form
       $.get(theUrl, function(data) {
         loadFormDiv(data,side);
         });
-    }else if($(this).hasClass('get-sc')){ //actions which put up a form
+    }else if($(this).hasClass('get-sc')){ //put upthe scratchpad
       $.get(theUrl, function(data){
         $('#scratchpad').html(data);
         $('#scratchpad').show();
@@ -42,13 +42,6 @@ $('#body a.jsc').live('click', function(){
 
 
 //   $('#body a').live('click', function(event){
-
-
-//    var theUrl = $(this).attr('href')+'.js';
-//    if($(this).hasClass('pause')){
-//      var player = $f('rtmpPlayer')
-//        player.pause();
-//      }
 
 //    if($(this).hasClass('get')){
 
@@ -104,23 +97,6 @@ $('#body a.jsc').live('click', function(){
 //        return false;
 //    }
 
-//    if($(this).attr('class')=='more'){
-//      var x = $(this).attr('href')
-//      address = '/capture/more_description/'+x+'.js';
-//      $.get(address, function(data) {
-//        $('#event-'+x).replaceWith(data);
-//      });
-//      return false;
-//    }
-//    if($(this).attr('class')=='less'){
-//      var x = $(this).attr('href')
-//      address = '/capture/less_description/'+x+'.js';
-//      $.get(address, function(data) {
-//        $('#event-'+x).replaceWith(data);
-//      });
-//      return false;
-//    }
-
 //    if($(this).attr('class') == 'photo-link'){
 //      var x = $(this).attr('href');
 //      var y = '<img src = "'+x+'" width ="700"></img>'
@@ -135,7 +111,6 @@ $('#body a.jsc').live('click', function(){
 //      return false;
 //    }
 //   });
-// // end first live block   body a
 
 
 

@@ -10,6 +10,7 @@ class CaptureController < ApplicationController
   end
 
   def search_by_performer
+    set_current_piece(params[:id])
     params[:performer_filter] = 'true'
     respond_to do |format|
       format.html
@@ -17,30 +18,37 @@ class CaptureController < ApplicationController
     end
   end
   def search_by_tag
+    set_current_piece(params[:id])
     respond_to do |format|
       format.html
       format.js {render :action => 'search_by_tag',:layout => false}
     end
   end
   def search_by_text
+    set_current_piece(params[:id])
     respond_to do |format|
       format.html
       format.js {render :action => 'search_by_text',:layout => false}
     end
   end
   def search_by_video
+    set_current_piece(params[:id])
     respond_to do |format|
       format.html
       format.js {render :action => 'search_by_video',:layout => false}
     end
   end
   def date_range
+    set_current_piece(params[:id])
     respond_to do |format|
       format.html
       format.js {render :action => 'date_range',:layout => false}
     end
   end
-
+  def last_50
+        @events = Event.normal.sub_events.not_video.order('happened_at DESC').limit(50).reverse
+        @show_piece = true
+  end
   def performer_names_from_params
     params[:search_ids] ||= []
     filterpeople = params[:search_ids].map{|x| x.downcase}.sort
@@ -79,10 +87,6 @@ class CaptureController < ApplicationController
     case filter_type
       when 'user_highlighted'
         @events = current_user.events.in_piece(current_piece.id)
-      when 'span'
-        span_count = params[:span_count] ? params[:span_count].to_i : 50
-        @events = Event.order('happened_at DESC').limit(span_count)
-        @show_piece = true
       when 'one_event'
         @events = [Event.find(params[:event])]
       when 'date_range'
@@ -121,9 +125,9 @@ class CaptureController < ApplicationController
         hide_trash = false
         @events = current_piece.events.select{|x| x.is_deleted?}
       when 'rating'
-        @events = Event.where("piece_id = ? AND (state = 'normal') AND (rating > ?)",current_piece.id,params[:rating].to_i).order('happened_at').includes([:video,:sub_scenes,:tags,:notes])
+        @events = Event.where("piece_id = ? AND (state = 'normal') AND (rating > ?)",current_piece.id,params[:rating].to_i).order('happened_at').includes([:video,:children,:users,:tags,:notes])
       when 'tail'
-        @events = Event.where("piece_id = ? AND (state = 'normal')",current_piece.id).order('happened_at DESC').includes([:video,:sub_scenes,:tags,:notes]).limit(100)
+        @events = Event.where("piece_id = ? AND (state = 'normal')",current_piece.id).order('happened_at DESC').includes([:video,:children,:users,:tags,:notes]).limit(100)
         vids = @events.map{|x| x.video}.uniq.compact
       when  'none'
         @events = get_events
@@ -310,16 +314,17 @@ class CaptureController < ApplicationController
     @create = true
     @event = Event.new
     if params[:after_id]
-      after_event = Event.find(params[:after_id].to_i)
+      @after_event = Event.find(params[:after_id].to_i)
       @event.event_type = params[:event_type]
-      @event.happened_at = after_event.happened_at + 1
+      @event.video_id = @after_event.video_id
+      @event.happened_at = @after_event.happened_at + 1
     else
       @event.happened_at = Time.now
-      after_event = nil
+      @after_event = nil
     end
 
 
-    @after_event = @event.set_attributes_from_params(params,current_user,current_piece)
+    @event.set_attributes_from_params(params,current_user,current_piece)
     respond_to do |format|
       format.html {render :action => 'event_form'}
       format.js {render :partial => 'event_form',:layout => false}
