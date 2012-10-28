@@ -6,6 +6,7 @@ class ViewerController < ApplicationController
     def get_video_from_params
       @video = Event.find(params[:id])
       @piece = @video.piece
+      set_current_piece(@piece.id)
   end
 
     def viewer
@@ -33,13 +34,13 @@ class ViewerController < ApplicationController
     end
 
     def prepare_params
-      params[:video][:piece_id] = params[:piece_id].present? ? params[:piece_id] : nil
       params[:video][:state] = params[:video][:state].present? ? 'uploaded' : 'normal'
       params[:video][:description] = params[:video][:description].present? ? params[:video][:description] : ''
     end
 
     def edit_from_viewer
         @video = Event.find(params[:id])
+        set_current_piece(@video.piece_id)
         respond_to do |format|
           format.html
           format.js {render :layout => false}
@@ -175,11 +176,33 @@ class ViewerController < ApplicationController
     #puts up the modify form
     @create = false
     @event = Event.find(params[:id])
+    set_current_piece(@event.piece_id)
     @video = @event.video
     @modify = true
     respond_to do |format|
       format.html
       format.js {render :partial => 'annot_form', :layout => false}
+    end
+  end
+  # from subscene controller
+  #   def move_from_viewer
+  #   @sub_scene = SubScene.find(params[:id])
+  #   time = params[:time].gsub('.js','')
+  #   @sub_scene.happened_at = @sub_scene.event.video.recorded_at + time.to_i
+  #   @sub_scene.save
+  #   #@sub_scene.check_for_reposition
+  #   @video = @sub_scene.event.video
+  #   respond_to do |format|
+  #     format.html
+  #     format.js {render :controller => 'events', :action => 'move_from_viewer'}
+  #   end
+  # end
+  def edit_sub_annotation
+    @sub_scene = Event.find(params[:id])
+    set_current_piece(@sub_scene.piece_id)
+    respond_to do |format|
+      format.html
+      format.js {render :layout => false}
     end
   end
   def rate

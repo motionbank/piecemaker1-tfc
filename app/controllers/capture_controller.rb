@@ -684,26 +684,6 @@ class CaptureController < ApplicationController
         format.js {render :action => 'convert_to_sub_scene', :layout => false}
       end
     end
-# from subscene controller
-  #   def move_from_viewer
-  #   @sub_scene = SubScene.find(params[:id])
-  #   time = params[:time].gsub('.js','')
-  #   @sub_scene.happened_at = @sub_scene.event.video.recorded_at + time.to_i
-  #   @sub_scene.save
-  #   #@sub_scene.check_for_reposition
-  #   @video = @sub_scene.event.video
-  #   respond_to do |format|
-  #     format.html
-  #     format.js {render :controller => 'events', :action => 'move_from_viewer'}
-  #   end
-  # end
-  # def edit_sub_annotation
-  #   @sub_scene = SubScene.find(params[:id])
-  #   respond_to do |format|
-  #     format.html
-  #     format.js {render :layout => false}
-  #   end
-  # end
 
 end
 

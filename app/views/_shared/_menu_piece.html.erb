@@ -1,10 +1,7 @@
 <%= menu_first_level('Pieces') do -%>
-  <%- if cookies[:current_piece_id] -%>
-    <li><%= link_to 'Capture '+cookies[:current_piece_title],{ :controller => :capture, :action => :present, :id => cookies[:current_piece_id] }, :class => 'ignore' %></li>
-  <% end %>
 <%- @pieces.reject! {|x| !x.is_active} -%>
   <%- if @pieces.length > 0-%>
-    <%= menu_second_level('Show Piece Details','Open Piece') do -%>
+    <%= menu_second_level('Go to Capture Page','Capture Piece') do -%>
       <%- @pieces.sort_by{|x| x.title}.each do |piece| -%>
       <li><%= link_to piece.title,{ :controller => :capture, :action => :present, :id => piece.id }, :class => 'ignore' %></li>
       <%- end -%>

@@ -11,6 +11,7 @@
 <br />
 <b>Recording started at:</b><%= text_field_tag 'video[happened_at]',@video.recorded_at, :size => 30 %>
 <span style = 'color:#c00'><br />Changing the recording starting time will affect all events times!</span>
+<b>Piece Id:</b><%= text_field_tag 'video[piece_id]',@video.piece_id, :size => 10 %>
 <br />
 <b>Duration:</b><%= text_field_tag 'video[dur]',@video.dur, :size => 10 %> Seconds<br />
 <b>Meta Data</b><br />

@@ -17,15 +17,15 @@
 <div	href="<%= flowplayer_div_url(@flow_type,@video) %>" id="rtmpPlayer"></div>
 <script>
 window.onload = function() {
-    
+
   flowplayer("rtmpPlayer", "/swfs/flowplayer-3.2.7.swf", {
 	log : {
 			level  : 'debug',
 			filter : 'org.flowplayer.pseudostreaming.*'
 		},
    plugins:  {
-     controls:  {            
-                    all: false, 
+     controls:  {
+                    all: false,
                     scrubber: true,
                     play: true,
                     time: true,
@@ -33,7 +33,7 @@ window.onload = function() {
                     autoHide:{
                       enabled: false}
                 }<%= flowplayer_type_string(@flow_type) %>
-      
+
    },
    clip: {
      url: '<%= raw flowplayer_clip_url(@flow_type,@video,@ur) %>',
@@ -41,7 +41,7 @@ window.onload = function() {
      onStart: function(){startPolling();playerJumpTo(<%= params[:seek] %>)},
      <%= flowplayer_provider_string(@flow_type) %>
      scaling: 'fit'
-     
+
    }
   });
 }
@@ -52,8 +52,20 @@ window.onload = function() {
 <%= render 'video_info_div',:video => @video %>
 <%- end -%>
 <%- content_for :menus do -%>
-  <%= render :partial => 'event_drop_down' %>
-  <%= render :partial => 'sub_event_drop_down' %>
+<script type="text/html" id="vevdm">
+  <%= render :partial => 'event_drop_down' -%>
+</script>
+<script type="text/html" id="vsevdm">
+  <%= render :partial => 'sub_event_drop_down' -%>
+</script>
+
+<div id = 'drop' class = 'menu-box' style='display:none'>
+  <div id = 'show-id'></div>
+  <div class = 'menclose'></div>
+  <br />
+  <ul id = 'drop-down-list' class = "dropdown">
+  </ul>
+</div>
 <%- end -%>
 
   <div class = 'vidlinks' id = "mark" data-shortcut = 'enabled' data-vidid = "<%= @video.id %>" data-pieceid = "<%= @piece.id %>">

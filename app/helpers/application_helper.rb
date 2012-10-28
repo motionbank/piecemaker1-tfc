@@ -21,7 +21,7 @@ module ApplicationHelper
   end
   def taglist
     taglist = ['select some tags from this list']
-    taglist += current_piece.owned_tags.uniq
+    #taglist += current_piece.owned_tags.uniq
   end
   def put_search_field(options)
     return '' unless options
@@ -74,14 +74,6 @@ module ApplicationHelper
   def put_select_all_checkbox(name='')
     "<input type='checkbox' class = 'check-all #{name.gsub(']','').gsub('[','')}' name=''/>Select / De-select All"
   end
-
-
-  def put_viewer_sub_menu
-    text = "<ul id = \"viewsubmenlist\">"
-    text << "<li><a class='get pause' href='/sub_scene/edit_sub_annotation/' >Edit</a></li>"
-    text << "</ul>"
-  end
-
 
   def menu_first_level(title, &block)
   content = with_output_buffer(&block)

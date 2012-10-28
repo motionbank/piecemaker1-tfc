@@ -11,7 +11,7 @@ New Annotation for: <%= @video.title %>
  </p>
 
  <%= hidden_field_tag 'event[happened_at]', @event.happened_at %>
- <%= hidden_field_tag 'event[piece_id]', @video.piece_id %>
+ <%= hidden_field_tag 'event[piece_id]', @event.piece_id %>
  <p>
  <label for="event_tags">Tags (separated by commas): </label>
  <input id="event_tags" name="tags" size="25" type="text" value = "<%= @event.tag_list %>"/>
