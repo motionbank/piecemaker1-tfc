@@ -17,7 +17,6 @@
 <div	href="<%= flowplayer_div_url(@flow_type,@video) %>" id="rtmpPlayer"></div>
 <script>
 window.onload = function() {
-
   flowplayer("rtmpPlayer", "/swfs/flowplayer-3.2.7.swf", {
 	log : {
 			level  : 'debug',
@@ -39,9 +38,8 @@ window.onload = function() {
      url: '<%= raw flowplayer_clip_url(@flow_type,@video,@ur) %>',
      start: 0,
      onStart: function(){startPolling();playerJumpTo(<%= params[:seek] %>)},
-     <%= flowplayer_provider_string(@flow_type) %>
+     <%= raw  flowplayer_provider_string(@flow_type) %>
      scaling: 'fit'
-
    }
   });
 }
