@@ -464,6 +464,7 @@ class Event < ActiveRecord::Base
   end
     def promote_to_scene
     siblings = parent.children.select{|x| x.happened_at > happened_at}
+    self.video_id = parent.video_id
     self.parent_id = nil
     save
     siblings.each do |sibling|
