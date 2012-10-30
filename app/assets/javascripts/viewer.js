@@ -146,7 +146,7 @@ function findHighlightable(time){
   var highlightable = new Array();
   for(i=0;i<eventTimesLength;i++){
     // if the event is before the time and its endtime is after the time
-    if(eventTimes[i][0] < time && eventTimes[i][0] + eventTimes[i][1] >= time){
+    if(eventTimes[i][0] < time && !eventTimes[i][1] || (eventTimes[i][0] + eventTimes[i][1] >= time)){
       winner = i;
       highlightable.push(eventTimes[i]);
     }
