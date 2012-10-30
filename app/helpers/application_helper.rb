@@ -538,13 +538,14 @@ module ApplicationHelper
   end
 
   def display_performers(event,search = nil)
-    if event.performers && event.performers.length
-      text = "<div class='evpe'>"
-      text << event.performers.join(' ')
-      text << '</div>'
-    else
-      text = ''
-    end
+    ''
+    # if event.performers && event.performers.length
+    #   text = "<div class='evpe'>"
+    #   text << event.performers.join(' ')
+    #   text << '</div>'
+    # else
+    #   text = ''
+    # end
 
   end
 
