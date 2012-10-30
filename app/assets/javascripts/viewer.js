@@ -1,6 +1,5 @@
 var showType = ['Markers','Others'];
 
-
 function filter_listing_type(){
   $('.one-listing').hide();
   $.each(showType,function(i,tp){

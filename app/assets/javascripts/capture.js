@@ -182,7 +182,8 @@ $(function(){
 					getFunction(theUrl)
 				}else{
 					if(confirm('Do you wish to stop the video?')){
-					ajaxFunction(theUrl)
+						alert(theUrl)
+						$.post(theUrl)
 					}
 				}
 				return false;
