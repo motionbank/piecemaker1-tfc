@@ -134,7 +134,7 @@ function startPolling(){
 function checkTime(){
   if(vidPlayer.isPlaying()){
     var x = vidPlayer.getTime();
-    findHighlightable(x);
+    highlightNearest(x);
   }
 }
 function stopPolling(){
@@ -164,7 +164,7 @@ function highlightNearest(time){
   var winner = -1
   for(i=0;i<eventTimesLength;i++){
     // if the event is before the time and its endtime is after the time
-    if(eventTimes[i][0] < time && eventTimes[i][0] + eventTimes[i][1] >= time){
+    if(eventTimes[i][0] < time && !eventTimes[i][1] || (eventTimes[i][0] + eventTimes[i][1] >= time)){
       winner = i;
       break;
     }
