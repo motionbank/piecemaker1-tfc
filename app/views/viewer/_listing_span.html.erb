@@ -1,21 +1,21 @@
 <div class = 'one-listing <%= "type#{event.event_type}" %> small user-<%= event.created_by %>' id = 'listing-<%= event.id %>' data-time="<%= event.video_start_time %>" data-duration="<%= event.dur %>"data-id="<%= event.id %>"data-user="<%= event.created_by %>" >
 
 
-<%= link_to event.video_start_time.to_time_string, {},:class => 'go_to bolda', :id => "go-#{event.video_start_time.to_s}"  %>
+<%= link_to event.video_start_time.to_time_string, {},:class => 'jsc go_to bolda', :data => {:seek => event.video_start_time.to_s}  %>
 <%- if user_has_right?('normal_actions') -%>
-<%= raw display_menu_link(event,'vevdm','','div',true)%> 
-<%= link_to "set in","/events/move_from_viewer/#{event.id}",:class => 'ajx', 'data-confirm' => 'Move Event Start to Current Play Position?'  %>
-<%= link_to "set out","/events/set_out/#{event.id}",:class => 'ajx', 'data-confirm' => 'Move Event End to Current Play Position?' %>
+<%= raw display_menu_link(event,'vevdm','','div',true)%>
+<%= link_to "set in","/viewer/move_from_viewer/#{event.id}",:class => 'jsc player-time', 'data-confirmation' => 'Move Event Start to Current Play Position?'  %>
+<%= link_to "set out","/viewer/set_out/#{event.id}",:class => 'jsc player-time', 'data-confirmation' => 'Move Event End to Current Play Position?' %>
 <%= event.dur %>
 <%- end -%>
 <br />
 <span style = "font-size:14px;<%= 'color:#600' if event.event_type == 'marker' %>"><%= event.title %></span><br />
-<span>&nbsp;&nbsp;&nbsp;&nbsp;<%= event.description %><br /> 
+<span>&nbsp;&nbsp;&nbsp;&nbsp;<%= event.description %><br />
 </span>
 <%- event.children.each do |sub| -%>
 <div class = 'one-listing sb <%= "sub-#{event.event_type}" %>'>
 <%= link_to sub.video_start_time.to_time_string, {},:class => 'bolda go_to', :id => "go-#{sub.video_start_time.to_s}" %>
-<%= link_to "set in","/sub_scene/move_from_viewer/#{sub.id}",:class => 'ajx' ,'data-confirm' => 'Move Sub Scene Start to Current Play Position?'  %>
+<%= link_to "set in","/viewer/move_from_viewer/#{sub.id}",:class => 'jsc player-time' ,'data-confirmation' => 'Move Sub Scene Start to Current Play Position?'  %>
 <%= raw display_menu_link(sub,'vsevdm','','span',false) %>
 <br />
 <b><%= sub.title %></b><br /><%= sub.description %>

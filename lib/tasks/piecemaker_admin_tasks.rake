@@ -1,5 +1,5 @@
 namespace :piecemaker do
-  #require Rails.root.to_s + '/config/environment'
+  require Rails.root.to_s + '/config/environment'
   def video_base_folder
     'video'
   end
@@ -38,7 +38,7 @@ namespace :piecemaker do
     @compressed_files ||= get_files_from_directory(comp)
     cf = @full_files - @compressed_files
     #cf.reject!{|x| video_uploaded(x)}
-    @cf ||= cf.select{|x| Video.parse_date_from_title(x) >= Date.today - days_back_to_compress.days}
+    @cf ||= cf.select{|x| y = Video.parse_date_from_title(x); y && y >= Date.today - days_back_to_compress.days}
   end
   def archivable_files(full = nil, arch = nil)
     full ||= uncompressed_folder
@@ -69,7 +69,7 @@ namespace :piecemaker do
   task :move_it do
     puts 'moving'
   end
-  
+
   desc 'Listing Archiveable Files'
   task :list_archivable do
     puts "List of non-archived files."
@@ -78,7 +78,7 @@ namespace :piecemaker do
     end
     puts "#{archivable_files.length.to_s} files."
   end
-  
+
   desc 'Archiving Archivable Files'
   task :archive_archivable do
     puts "#{archivable_files.length.to_s} files to archive."
@@ -87,24 +87,24 @@ namespace :piecemaker do
       Video.copy_file(uncompressed_folder + '/' + x,archive_folder + '/' + x)
     end
   end
-  
-  
+
+
   desc 'Listing Compressable Files'
   task :list_compressable do
     puts "List of non-compressed files."
     compressable_files.each do |x|
       puts x
-    end 
+    end
   end
   desc 'Compressing Compressable Videos'
   task :compress_compressable do
     puts "#{compressable_files.length.to_s} files to compress."
     compressable_files.each do |x|
       puts "Compressing #{x}"
-      Video.compress_file(uncompressed_folder + '/' + x, compressed_folder + '/' + x) 
+      Video.compress_file(uncompressed_folder + '/' + x, compressed_folder + '/' + x)
     end
   end
-  
+
   desc 'List Uploadable'
   task :list_uploadable do
     if uploadable_files.any?
@@ -126,7 +126,7 @@ namespace :piecemaker do
       start_time = Time.now
       puts "Uploading #{uploadable_files.length.to_s} files, #{total_size.to_s} bytes."
       puts "This will take at least #{time_estimate_string(total_size)}"
-      puts "Starting #{start_time.strftime("%H:%M:%S")}" 
+      puts "Starting #{start_time.strftime("%H:%M:%S")}"
       uploadable_files.each do |filename|
         full_file_path = compressed_folder + '/' + filename
         full_s3_path = Configuration.s3_base_folder + '/video/' + filename
@@ -142,14 +142,14 @@ namespace :piecemaker do
               puts "Updated database for #{filename}"
             end
           rescue Exception => e
-            
+
             puts "#{Time.now.strftime('%H:%M:%S')} AWS S#3 Error: #{e.inspect}"
             puts e.backtrace.inspect
             puts full_file_path
           end
         else
           puts "Problem finding #{full_file_path}"
-        end          
+        end
       end
       finish_time = Time.now
       tot = finish_time - start_time

@@ -1,7 +1,6 @@
 clearFormDiv('<%= @flash_message || '' -%>');
 $('#listing_div').html("<%= escape_javascript(render(:partial => '/viewer/listing_div', :locals => {:video => @video})) -%>");
 $('#video_info_div').replaceWith("<%= escape_javascript(render(:partial => '/viewer/video_info_div', :locals => {:video => @video})) -%>");
-localStorage.removeItem('event[title]');
-localStorage.removeItem('event[description]');
 filter_listing_div();
 filter_listing_type();
+getEventTimes();

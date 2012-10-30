@@ -130,13 +130,16 @@ function startPolling(){
   getEventTimes();
   eventTimesLength = eventTimes.length;
   vidPlayer = $f('rtmpPlayer');
-  //moverint = setInterval('checkTime()', 500);
+  moverint = setInterval('checkTime()', 500);
 };
 function checkTime(){
   if(vidPlayer.isPlaying()){
     var x = vidPlayer.getTime();
     findHighlightable(x);
   }
+}
+function stopPolling(){
+  clearInterval(moverint)
 }
 function findHighlightable(time){
   var i = 0;
@@ -229,8 +232,7 @@ $(function(){
   }
 
 
-  // viewer name filter and player control
-
+// viewer name filter and player control
   $(".name-toggle").live('click',function(){
     if($(this).hasClass('greenish')){
       addToHideList($(this).html())
@@ -240,50 +242,47 @@ $(function(){
     filter_listing_div()
   });
 
+//turns off all listings of all names
   $(".turn_off").live('click',function(){
     $('#listing_div').data('hide',listOfNames())
     filter_listing_div()
   });
 
+// turns on all listings of all names
   $(".turn_on").live('click',function(){
     $('#listing_div').data('hide',[])
     filter_listing_div()
   });
+
+
+
+
   $('.one-listing').live('click',function(){
-    highlightListing($(this));
+      $(this).addClass('list-high');
+      $(this).children('.sb').addClass('list-sub-high');
+    //highlightListing($(this));
     playerJumpTo($(this).data('time'))
-    //alert($(this).data('time'))
+    alert($(this).data('time'))
     return false;
   });
+
+
+
+
 
   $("#toggle-markers").bind('click',function(){
     if($(this).hasClass('greenish')){
       showType.splice($.inArray('Markers', showType), 1);
-      // $(this).removeClass('greenish');
-      // $(this).addClass('reddish');
-      // $(".typemarker").hide();
     }else{
       showType.push('Markers')
-      // $(this).removeClass('reddish');
-      // $(this).addClass('greenish');
-      // $('.one-listing').hide();
-      // $(".typemarker").show();
     }
     filter_listing_type()
   })
   $("#toggle-others").bind('click',function(){
     if($(this).hasClass('greenish')){
       showType.splice($.inArray('Others', showType), 1);
-      // $(this).removeClass('greenish');
-      // $(this).addClass('reddish');
-      // $('.one-listing').hide();
-      // $(".typemarker").show();
     }else{
       showType.push('Others')
-      // $(this).removeClass('reddish');
-      // $(this).addClass('greenish');
-      // $('.one-listing').show();
-      // $(".typemarker").hide();
     }
     filter_listing_type()
   })
@@ -304,9 +303,6 @@ $(function(){
     }
     return false
   })
-
-
-
 
 
 });// end jquery dom ready block

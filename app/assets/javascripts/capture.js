@@ -217,6 +217,7 @@ $(function(){
     }
     if($(this).attr('class') == 'cancel_mod'){
     	disableFormElements();
+    	clearFormDiv('');
       $("form.timer").stopTime('backup');
 			ajaxFunction($(this),$(this).attr("href")+'.js')
       $(".hdble").show();

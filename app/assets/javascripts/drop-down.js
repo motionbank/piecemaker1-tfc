@@ -10,8 +10,21 @@ $('#body a.jsc').live('click', function(){
       DropMenu($(this),event)
       return false
     }
+    var theUrl = $(this).attr('href') // I don't like all this but it's to add the time if necessary
+
+    if($(this).hasClass('player-time')){
+     var player = $f('rtmpPlayer')
+     player.pause();
+     time = Math.round(player.getTime());
+     theUrl = theUrl + '?time=' + time
+   }
+    if($(this).hasClass('go_to')){
+     var seekto = $(this).data('seek') - 0
+     $f('rtmpPlayer').seek(seekto);
+     return false;
+   }
     var side = $(this).hasClass('pause') ? true : false
-    var theUrl = $(this).attr('href')+ '.js';
+    theUrl = theUrl + '.js';
 
       // main decisions
     if($(this).data('confirmation') ){ //actions with confirmations
@@ -63,22 +76,7 @@ $('#body a.jsc').live('click', function(){
 //      return false;
 //    }
 
-//    if($(this).hasClass('ajx')){
-//      var player = $f('rtmpPlayer')
-//      player.pause();
-//      time = Math.round(player.getTime());
-//      if(confirm($(this).data('confirm'))){
-//        ajaxFunction($(this),$(this).attr('href')+'?time='+time+'.js')
-//      }
-//      return false;
-//    }
 
-//    if($(this).hasClass('go_to')){
-//      var player = $f('rtmpPlayer')
-//      var seekto = $(this).attr('id').replace('go-','') - 0
-//      player.seek(seekto);
-//      return false;
-//    }
 
 
 //    if($(this).hasClass('dgdelp')){

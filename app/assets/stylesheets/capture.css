@@ -135,8 +135,26 @@
 		margin-right:3px;
 		font-size:11px;
 	}
+  .greenish{
+    color: #0a0;
+  }
+  .reddish{
+    color: #a00
+  }
+#viewer-type-select{
+  position:absolute;
+  top:-10px;
+  left:500px;
+  font-size: 14px;
+}
 #listing_div{
-	position:absolute; top:15px;left:500px; width:45%;height:450px; background:#eee;overflow:auto; padding:4px;
+	position:absolute;
+  top:15px;left:500px;
+  width:45%;
+  height:450px;
+  background:#eee;
+  overflow:auto;
+  padding:4px;
 }
 .listing-sub {
 	margin-left:10px;
