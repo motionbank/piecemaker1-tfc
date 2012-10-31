@@ -424,7 +424,7 @@ class CaptureController < ApplicationController
     @viewer = params[:viewer] && params[:viewer] == 'true.js' ? true : false
     @event = Event.find(params[:id])
     set_current_piece(@event.piece_id)
-    if(@event.locked_by)
+    if(@event.locked_by && @event.locked_by != current_user.login)
       partial_name = 'locked'
       @unlock = true
     else
