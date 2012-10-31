@@ -86,13 +86,13 @@ class Event < ActiveRecord::Base
   delegate :tags, :to => :piece, :prefix => true
 
   def viewable?
-    true#is_uploaded
+    is_uploaded
   end
   # def s3_path
   #   'tfc/video/' + title
   # end
   def is_uploaded
-    true
+    state == 'uploaded'
   end
   def video_viewable?
     return false unless video_id && video

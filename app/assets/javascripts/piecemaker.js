@@ -11,12 +11,9 @@ $(function(){
 	 	 checkAll(this,'check_all_able',modelName);
 	 });
 
-	// stops the automatic saving and submits ajax forms
+	// submits ajax forms
 	$('form.ajax input:submit').live('click', function(){
 		disableFormElements();
-		if($(this).parent().hasClass('timer')){
-		 	$("form.timer").stopTime('backup');
-		}
 		ajaxFunction($(this).parent(),$(this).parent().attr('action'))
 		return false;
 	});
@@ -60,9 +57,9 @@ function flashMessage(message){
 
 function clearStorage(keyName){
 	localStorage.removeItem(keyName)
-	alert('removed old-app57')
 }
 function clearFormDiv(messageForFlash){
+
 	$("#form_div").hide();
 	$("#form_div").html('');
 	$(".hdble").show();
@@ -94,7 +91,7 @@ function loadFormDiv(data,isSide){
 				alert('Refilling Description with recovered data.');
 				$('textarea[name="'+textName+'"]').val(description)
 			}
-			$('form.timer').everyTime(2000,'backup',function (){
+			$('form.timer').live('keydown',function (){
 				localStorage[titleName] = $('input[name="'+titleName+'"]').val();
 				localStorage[textName] = $('textarea[name="'+textName+'"]').val();
 			},

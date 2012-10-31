@@ -10,15 +10,14 @@ $(function(){
 		ajaxFunction($(this),$('#marker').attr('href')+'.js')
 		return false;
 	});
-	
+
 	$('#quick a').bind('click', function(event){
 			ajaxFunction($(document),$('#marker').attr('href')+'.js')
 			return false;
 		});
-	
+
 	$('.a-marker a').live('click',function(){
 		ajaxFunction($(document),$(this).attr('href')+'.js')
-		return false;
 		return false;
 	})
 });
