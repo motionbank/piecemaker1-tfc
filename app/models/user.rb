@@ -25,6 +25,7 @@
 #  last_name                 :string(255)
 #  is_performer              :boolean          default(TRUE)
 #  password_digest           :string(255)
+#  account_id                :integer
 #
 
 class User < ActiveRecord::Base

@@ -8,6 +8,7 @@
 #  piece_id    :integer
 #  title       :string(255)
 #  description :text
+#  account_id  :integer
 #
 
 class MetaInfo < ActiveRecord::Base

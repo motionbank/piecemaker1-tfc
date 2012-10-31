@@ -8,6 +8,7 @@
 #  from_id    :integer
 #  created_at :datetime
 #  updated_at :datetime
+#  account_id :integer
 #
 
 class Message < ActiveRecord::Base

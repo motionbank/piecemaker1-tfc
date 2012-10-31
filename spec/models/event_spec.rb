@@ -22,6 +22,7 @@
 #  location       :string(255)
 #  rating         :integer          default(0)
 #  parent_id      :integer
+#  account_id     :integer
 #
 
 require 'spec_helper'

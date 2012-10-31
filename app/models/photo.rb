@@ -11,6 +11,7 @@
 #  piece_id             :integer
 #  path                 :string(255)
 #  has_thumb            :boolean          default(FALSE)
+#  account_id           :integer
 #
 
 

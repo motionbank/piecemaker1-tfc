@@ -9,6 +9,7 @@
 #  modified_by :string(255)
 #  short_name  :string(255)
 #  is_active   :boolean          default(TRUE)
+#  account_id  :integer
 #
 
 class Piece < ActiveRecord::Base
