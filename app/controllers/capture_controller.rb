@@ -661,7 +661,7 @@ class CaptureController < ApplicationController
       end
     end
     def update_scratchpad #OK
-      current_user.scratchpad = params[:scratchpad]
+      current_user.scratchpad = params[:scratchpadtext]
       current_user.save
       respond_to do |format|
         format.html

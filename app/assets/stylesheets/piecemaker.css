@@ -109,7 +109,7 @@ z-index:20;
 color:#060;
 }
 
-.error {
+#error {
 background: #fbb;
 padding: 6px;
 border-bottom:2px solid #a00;
@@ -177,9 +177,19 @@ z-index:2000;
 padding:6px;
 overflow:auto;
 }
-#scratchpad{
 
+
+
+.form_div a {display:inline;padding:4px;background:#55b;color:#ccc;text-decoration:none;font-size:11px;}
+.form_div a:hover{color:#fff;background:#99f;}
+
+.form_div strong {
+background:#f7b;
 }
+#scratchpad{
+top:20px;width:600px;margin-left:-300px;
+}
+
 
 .found{
 font-weight:bold;
@@ -187,13 +197,6 @@ background:#0df
 }
 .no-video{
   color:#f00;
-}
-
-.form_div a {display:inline;padding:4px;background:#55b;color:#ccc;text-decoration:none;font-size:11px;}
-.form_div a:hover{color:#fff;background:#99f;}
-
-.form_div strong {
-background:#f7b;
 }
 
 input[type="submit"] {

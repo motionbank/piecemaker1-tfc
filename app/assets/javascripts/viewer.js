@@ -129,7 +129,7 @@ function startPolling(){
   getEventTimes();
   eventTimesLength = eventTimes.length;
   vidPlayer = $f('rtmpPlayer');
-  moverint = setInterval('checkTime()', 500);
+  moverint = setInterval('checkTime()', 3000);
 };
 function checkTime(){
   if(vidPlayer.isPlaying()){
@@ -163,10 +163,9 @@ function highlightNearest(time){
   var i = 0;
   var winner = -1
   for(i=0;i<eventTimesLength;i++){
-    // if the event is before the time and its endtime is after the time
-    if(eventTimes[i][0] < time && !eventTimes[i][1] || (eventTimes[i][0] + eventTimes[i][1] >= time)){
+    //find the last event that's before time
+    if(eventTimes[i][0] < time && (!eventTimes[i][1] || (eventTimes[i][0] + eventTimes[i][1] >= time))){
       winner = i;
-      break;
     }
   }
   if(winner >= 0){

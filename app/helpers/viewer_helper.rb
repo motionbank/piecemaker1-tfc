@@ -18,7 +18,7 @@ module ViewerHelper
   def flowplayer_type_string(flow_type)
     case flow_type
     when 's3'
-      ",rtmp:{url: '/swfs/flowplayer.rtmp-3.2.3.swf',netConnectionUrl:'rtmp://#{S3Config.cloudfront_address}'}"
+      ",rtmp:{url: '/swfs/flowplayer.rtmp-3.2.11.swf',netConnectionUrl:'rtmp://#{S3Config.cloudfront_address}'}"
     when 's3_plain'
       ""
     when 'local_plain'

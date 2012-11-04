@@ -18,17 +18,17 @@
     <div id ="message" <%= raw "style='display:none'" unless flash[:notice] || flash[:searched_for] -%>>
       <%= flash[:notice] %>&nbsp;&nbsp;&nbsp;<%= flash[:searched_for] %>
     </div>
-    <div id ="error" <%= raw "style='display:none'" -%>>
+    <div id ="error" <%= raw "style='display:none'" unless flash[:error] -%>>
       <%= flash[:error] %>
     </div>
-  </div>
+  </div> <!-- header -->
   <div id = "main" class = 'main'>
     <%= yield  %>
   </div>
   <%= yield :quick -%>
   <%= yield :jump -%>
   <div  style='display:none' id = "form_div" class = 'form_div'></div>
-  <div  style='top:20px;width:600px;margin-left:-300px;display:none' id = "scratchpad" class = 'form_div'></div>
+  <div  style='display:none' id = "scratchpad" class = 'form_div'></div>
   <%= yield :menus %>
   </body>
 </html>
