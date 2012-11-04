@@ -22,6 +22,7 @@
 //= require jquery-periodical
 //= require jquery-jtruncate
 //= require jquery.dataTables
+//= require flowplayer-3.2.11.min
 //= require piecemaker
 //= require capture
 //= require viewer
