@@ -1,19 +1,21 @@
-<h2><%= s3_bucket %></h2>
-<%- if @list != 'false' -%>
-<table>
-  <tr>
+<h2>Listing Bucket <%= s3_bucket_and_sub_folder %></h2>
+<table id = 'piece-table' class = 'pretty'>
+    <thead>
+        <tr>
     <th>key</th>
     <th>file-size</th>
     <th>action</th>
-  </tr>
-<%- @list.each do |x| -%>
-<tr>
-<td><%= x.key %></td>
-<td><%= x.size %></td>
-<td><%= link_to('delete',:action => 'delete_s3',:id => CGI::escape(x.key)) %></td>
-</tr>
-<% end -%>
+        </tr>
+    </thead>
+    <tbody>
+        <%- @list.each do |s3obj| -%>
+        <tr id = 'rowId<%= s3obj.key %>'>
+          <td><%= s3obj.key %></td>
+          <td><%= s3obj.size %></td>
+          <td><%= link_to('delete',:action => 'delete_s3',:id => CGI::escape(s3obj.key)) %></td>
+        <%#= render :partial =>'piece_table_row',:locals =>{:piece => piece} %>
+        </tr>
+        <%- end -%>
+    </tbody>
+
 </table>
-<%- else -%>
-No S3 Access
-<% end %>

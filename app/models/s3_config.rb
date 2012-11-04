@@ -1,25 +1,25 @@
 class S3Config
 
-  def self.access_key_id     
+  def self.access_key_id
     ENV['S3_ACCESS_KEY_ID']
   end
-  def self.secret_access_key 
+  def self.secret_access_key
     ENV['S3_SECRET_ACCESS_KEY']
   end
-  def self.bucket            
+  def self.bucket
     'piecemaker'
   end
-  def self.max_file_size     
+  def self.max_file_size
     ENV['S3_SWF_MAX_FILE_SIZE'] || 535544320
   end
-  def self.acl               
+  def self.acl
     ENV['S3_SWF_UPLOAD_ACL'] || 'public-read'
   end
   def self.cloudfront_address
     's3bulcu47zau6v.cloudfront.net/cfx/st'
   end
 
-  
+
   def self.connect_to_s3
     begin
       result = AWS::S3::Base.establish_connection!(
@@ -37,15 +37,16 @@ class S3Config
     begin
       S3Config.connect_to_s3
       connection_bucket = AWS::S3::Bucket.find(S3Config.bucket)
-      puts("****** found #{S3Config.bucket} on s3")
+      puts("****** found bucket '#{S3Config.bucket}' on s3")
+      connection_bucket
     rescue
-      puts("****** failed to find #{S3Config.bucket} on s3")
+      puts("****** failed to find bucket '#{S3Config.bucket}' on s3")
       return false
     end
   end
   def self.connect_and_get_list(group_string = nil)
       @llst = S3Config.connect_and_get_objects(group_string)
-      if @llst 
+      if @llst
         @llst = @llst.map{|x| x.key}
       end
         @llst
@@ -80,18 +81,18 @@ class S3Config
         puts "Bucket #{bucket_name} exists already! Skipping."
         if File.exists?(xml_file_location)
           AWS::S3::S3Object.store('crossdomain.xml', open(xml_file_location), bucket_name)
-          puts 'Crossdomain.xml file added.'     
+          puts 'Crossdomain.xml file added.'
         else
           puts "I couldn't find crossdomain.xml file. It should be in lib/tasks."
         end
-        
+
       else
         puts "Creating Bucket #{bucket_name}"
         if AWS::S3::Bucket.create(bucket_name)
           puts 'Bucket created. Adding crossdomain.xml file.'
           if File.exists?(xml_file_location)
             AWS::S3::S3Object.store('crossdomain.xml', open(xml_file_location), bucket_name)
-            puts 'Crossdomain.xml file added.'     
+            puts 'Crossdomain.xml file added.'
           else
             puts "I couldn't find crossdomain.xml file. It should be in lib/tasks."
           end

@@ -32,10 +32,6 @@ module ViewerHelper
       when 's3'
         x = video.s3_path.split('.')
         "#{x[1]}:#{x[0]}"
-
-
-
-
        # "http://s3.amazonaws.com/#{S3Config.bucket}/#{video.s3_path}"#video.full_s3_path
       when 's3_plain'
         "http://s3.amazonaws.com/#{S3Config.bucket}/#{video.s3_path}"

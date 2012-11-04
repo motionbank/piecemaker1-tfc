@@ -1,5 +1,8 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
+  def s3_bucket_and_sub_folder
+      @bucketandsub ||= S3Config.bucket.to_s + '/' + SetupConfiguration.s3_sub_folder
+  end
   def found_text_replacement_string
     Piecemaker.config.found_text_replacement_string || '<span class="found">\1</span>'
   end

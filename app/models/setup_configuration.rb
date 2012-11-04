@@ -9,7 +9,7 @@ class SetupConfiguration
   def self.cdn?
     true
   end
-  def s3_sub_folder
+  def self.s3_sub_folder
     'tfc'
   end
   def self.app_is_local?
@@ -26,7 +26,7 @@ class SetupConfiguration
     Piece.all
   end
 
-  
+
   def self.event_types
     %w[discussion headline light_cue performance_notes scene sound_cue dev_notes marker video]
   end
@@ -42,7 +42,7 @@ class SetupConfiguration
       'view_dev_notes'      => %w[group_admin]
     }
   end
-  
+
 end
 
 # == Schema Information
