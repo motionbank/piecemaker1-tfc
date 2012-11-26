@@ -1,2 +1,2 @@
 clearFormDiv('');
-$("#note-<%= @note.id %>").html("<%= escape_javascript(raw display_whole_note(@note)) -%>");
+$("#note-<%= @note.id %>").html("<%= j(raw display_whole_note(@note)) -%>");

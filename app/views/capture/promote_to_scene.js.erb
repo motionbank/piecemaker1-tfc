@@ -1,5 +1,5 @@
-$("#event-<%= @event.id -%>").replaceWith("<%= escape_javascript(render(:partial => 'one_event', :locals => {:event => @event})) -%>");
+$("#event-<%= @event.id -%>").replaceWith("<%= j(render(:partial => 'one_event', :locals => {:event => @event})) -%>");
 <%- @old_event = @event -%>
 <%- @event = @new_event -%>
-$('#event-<%= @old_event.id -%>').after("<%= escape_javascript(render(:partial => 'one_event', :locals => {:event => @event})) -%>")
+$('#event-<%= @old_event.id -%>').after("<%= j(render(:partial => 'one_event', :locals => {:event => @event})) -%>")
 clearFormDiv('');

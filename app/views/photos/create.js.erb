@@ -1,2 +1,2 @@
 jQuery("#form_div").hide();
-$('#gallery').append("<%= escape_javascript(render(:partial => 'one_photo',:locals => {:photo => @photo})) -%>")
+$('#gallery').append("<%= j(render(:partial => 'one_photo',:locals => {:photo => @photo})) -%>")

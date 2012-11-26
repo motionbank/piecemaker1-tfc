@@ -1,2 +1,2 @@
 clearFormDiv('');
-$("#event-<%= @event.id -%>").replaceWith("<%= escape_javascript(render(:partial => 'one_event', :locals => {:event => @event})) -%>");
+$("#event-<%= @event.id -%>").replaceWith("<%= j(render(:partial => 'one_event', :locals => {:event => @event})) -%>");

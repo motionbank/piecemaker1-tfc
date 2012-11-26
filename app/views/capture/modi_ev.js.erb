@@ -7,17 +7,17 @@ localStorage.removeItem('event[description]');
 
 
 <%- if params[:viewer] -%>
-  $("#listing-<%= @event.id -%>").replaceWith("<%= escape_javascript(render(:partial => 'listing_span', :locals =>{:event => @event})) -%>");
+  $("#listing-<%= @event.id -%>").replaceWith("<%= j(render(:partial => 'listing_span', :locals =>{:event => @event})) -%>");
 <%- elsif @after_id -%>
-  $("#event-<%= @after_id -%>").after("<%= escape_javascript(render(:partial => 'one_event', :locals => {:event => @event})) -%>");
+  $("#event-<%= @after_id -%>").after("<%= j(render(:partial => 'one_event', :locals => {:event => @event})) -%>");
 <%- else -%>
   <%- if @event.video -%>
-    $("#vid_<%= @event.video.id -%>").replaceWith("<%= escape_javascript(render(:partial => 'video_block', :locals => {:video => @event.video, :piece_id => current_piece.id})) -%>")
+    $("#vid_<%= @event.video.id -%>").replaceWith("<%= j(render(:partial => 'video_block', :locals => {:video => @event.video, :piece_id => current_piece.id})) -%>")
   <%- else -%>
     <%- if @create -%>
-      $('#events_presentation').append("<%= escape_javascript(render(:partial => 'one_event', :locals => {:event => @event})) -%>")
+      $('#events_presentation').append("<%= j(render(:partial => 'one_event', :locals => {:event => @event})) -%>")
     <%- else # if created-%>
-      $("#event-<%= @event.id -%>").replaceWith("<%= escape_javascript(render(:partial => 'one_event', :locals => {:event => @event})) -%>");
+      $("#event-<%= @event.id -%>").replaceWith("<%= j(render(:partial => 'one_event', :locals => {:event => @event})) -%>");
     <%- end # if not created-%>
   <%- end -%>
 <%- end  -%>

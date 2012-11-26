@@ -1,2 +1,2 @@
-$("#listing_div").html("<%= escape_javascript(render(:partial => '/viewer/listing_div', :locals =>{:video => @video})) -%>");
+$("#listing_div").html("<%= j(render(:partial => '/viewer/listing_div', :locals =>{:video => @video})) -%>");
 getEventTimes();

@@ -1,1 +1,1 @@
-$("#listing_div").html("<%= escape_javascript(render(:partial => '/video/listing_div', :locals =>{:video => @video})) -%>");
+$("#listing_div").html("<%= j(render(:partial => '/video/listing_div', :locals =>{:video => @video})) -%>");
