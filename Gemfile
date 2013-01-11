@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 3.2.2'
+gem 'rails', '~> 3.2.11'
 gem 'bcrypt-ruby', '~> 3.0.0'
 gem 'aws-s3', :require => 'aws/s3'
 #gem 'acts-as-list', :require => 'acts_as_list'
@@ -20,12 +20,12 @@ group :development do
   gem 'taps'
 end
 
-gem 'rspec-rails', '~> 2.9.0',  :group => [:test, :development, :cucumber] 
+gem 'rspec-rails', '~> 2.9.0',  :group => [:test, :development, :cucumber]
 gem 'factory_girl_rails', '~> 3.0.0' ,:group => [:test, :cucumber]
 
 group :test do
   gem 'capybara'           # better than webrat
-  gem 'guard-rspec' 
+  gem 'guard-rspec'
   gem 'database_cleaner'   # clean database between tests
   gem 'cucumber-rails'
   gem 'cucumber'
