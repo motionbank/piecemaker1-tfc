@@ -66,7 +66,7 @@ function DropMenu(clickedLink,theEvent){
 	  top_pos = theEvent.pageY;
 	}
 	$('.menu-box').css('top',top_pos + 'px');
-	$('.menu-box').css('left',event.pageX-150 + 'px');
+	$('.menu-box').css('left',theEvent.pageX-150 + 'px');
 	//
 	$('#show-id').html(clickedLink.data('id'));
 	$("#drop-down-list").html(Mustache.to_html($("#"+clickedLink.data('menuName')).html(), musData))

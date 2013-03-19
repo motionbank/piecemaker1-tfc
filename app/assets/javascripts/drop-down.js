@@ -2,7 +2,7 @@ $(function(){
 
 // any link with class jsc will pass through here
 // other classes will determine further actions
-$('#body a.jsc').live('click', function(){
+$('#body a.jsc').live('click', function(event){
     if($(this).hasClass('ignore')){return}
     if($(this).hasClass('pause')){$f('rtmpPlayer').pause();}
     if($(this).parents().hasClass('menu-link')){
