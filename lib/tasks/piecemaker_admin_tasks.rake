@@ -1,10 +1,10 @@
 namespace :piecemaker do
-  #require Rails.root.to_s + '/config/environment'
+  require Rails.root.to_s + '/config/environment'
   def video_base_folder
     'video'
   end
   def days_back_to_compress
-    40
+    3
   end
   def upload_speed
     94000
@@ -52,7 +52,7 @@ namespace :piecemaker do
   end
   def uploadable_file_listing
     puts "Fetching S3 List"
-    bucket_list = S3Config.connect_and_get_list.select{|x| y = x.split('/'); y.first == Configuration.s3_base_folder && y[1] == 'video'}.map{|x| x.split('/').last}
+    bucket_list = S3Config.connect_and_get_list.select{|x| y = x.split('/'); y.first == SetupConfiguration.s3_base_folder && y[1] == 'video'}.map{|x| x.split('/').last}
     compressed_list = get_files_from_directory(compressed_folder).select{|x| !bucket_list.include?(x)}
   end
   def calculate_time(size)
@@ -92,7 +92,9 @@ namespace :piecemaker do
   desc 'Listing Compressable Files'
   task :list_compressable do
     puts "List of non-compressed files."
-    compressable_files.each do |x|
+    com = compressable_files
+    puts com.length.to_s + ' files'
+    com.each do |x|
       puts x
     end
   end
