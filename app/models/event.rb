@@ -25,7 +25,7 @@
 #  account_id     :integer
 #
 
-#class Array
+#classArray
 #  def has_everyone
 #    newself = self.select{|x| x.performers && x.performers[0] == 'Everyone'}
 #  end
@@ -36,8 +36,8 @@ class Event < ActiveRecord::Base
   require 's3_paths'
   include S3Paths
   has_one :command
-  #after_save :record_save
-  #after_destroy :record_destroy
+  after_save :record_save
+  after_destroy :record_destroy
 
   def record_save
     c = command
