@@ -19,6 +19,6 @@ class SyncController < ApplicationController
   @response = http.start {|htt| htt.request(req)}
   end
   def catch_sync
-
+    render :layout => false
   end
 end
