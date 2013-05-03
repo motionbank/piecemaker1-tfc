@@ -18,6 +18,7 @@ class SyncController < ApplicationController
   end
   def catch_sync
     @obj = params[:command][:ivars][:attributes]
+    @event = Event.find(@obj[:id].to_i)
     render :layout => false
   end
 end

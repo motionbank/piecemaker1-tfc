@@ -1,1 +1,1 @@
-<%= @response.body %>
+<%= raw CGI.unescapeHTML(@response.body) %>
