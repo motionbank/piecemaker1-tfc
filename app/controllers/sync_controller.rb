@@ -19,7 +19,6 @@ c = [Command.first.event_data]
   end
 
   def catch_sync
-    @obj = params[:command][:ivars][:attributes]
     @events = params[:command].map do |com|
       Event.find(com[:ivars][:attributes][:id].to_i)
     end
