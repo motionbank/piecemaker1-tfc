@@ -3,7 +3,7 @@ class SyncController < ApplicationController
   def run_sync
   uri = URI.parse('http://piecemaker.org/sync/catch_sync')
   c = Command.first.event_data
-  c = Marshal.dump(c)
+  #c = Marshal.dump(c)
   post_params = {
     :command => c
   }
@@ -17,7 +17,7 @@ class SyncController < ApplicationController
   @response = http.start {|htt| htt.request(req)}
   end
   def catch_sync
-    @obj = Marshal.load(params[:command])
+    @obj = JSON.load(params[:command])
     render :layout => false
   end
 end
