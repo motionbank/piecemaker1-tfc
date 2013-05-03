@@ -2,9 +2,9 @@ class SyncController < ApplicationController
   require 'json'
   def run_sync
   uri = URI.parse('http://piecemaker.org/sync/catch_sync')
-  c = Command.first
+  c = Command.first.event_data
   post_params = {
-    command => c
+    :command => c
   }
 
   # Convert the parameters into JSON and set the content type as application/json
