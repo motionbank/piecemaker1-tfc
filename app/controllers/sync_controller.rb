@@ -1,7 +1,7 @@
 class SyncController < ApplicationController
   require 'json'
   def run_sync
-  uri = URI.parse('http://piecemaker.org/catch_sync')
+  uri = URI.parse('http://piecemaker.org/sync/catch_sync')
 
   post_params = {
     :title => "2BR Apartment For Rent in NYC",
@@ -17,5 +17,8 @@ class SyncController < ApplicationController
 
   http = Net::HTTP.new(uri.host, uri.port)
   @response = http.start {|htt| htt.request(req)}
+  end
+  def catch_sync
+
   end
 end
