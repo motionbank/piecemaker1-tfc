@@ -16,7 +16,7 @@ class SyncController < ApplicationController
   @response = http.start {|htt| htt.request(req)}
   end
   def catch_sync
-    obj = JSON.load(params[:command])
+    obj = JSON.load(params[:command].to_s)
     render :layout => false
   end
 end
