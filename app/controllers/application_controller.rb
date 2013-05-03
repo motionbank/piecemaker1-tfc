@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
     # Pick a unique cookie name to distinguish our session data from others'
     #session :session_key => '_piecemaker_session_id'
 
-    before_filter :login_required, :except => [:login, :welcome, :documentation, :contact,:update_vid_time,:mark_from_marker_list]
+    before_filter :login_required, :except => [:login, :welcome, :documentation, :contact,:update_vid_time,:mark_from_marker_list,:catch_sync]
 
     before_filter :set_defaults, :except => [:authorize,:update_vid_time,:fill_video_menu,:fill_extra_menu,:quick_marker,:mark_from_marker_list]
     before_filter :catch_came_from
