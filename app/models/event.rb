@@ -35,7 +35,34 @@ class Event < ActiveRecord::Base
 
   require 's3_paths'
   include S3Paths
+  has_one :command
+  after_save :record_save
+  after_destroy :record_destroy
 
+  def record_save
+    c = command
+    if c
+      c.event_data = self
+      c.save
+    else
+     Command.create(
+      :event_data => self,
+      :event_id => id
+      )
+    end
+  end
+  def record_destroy
+        c = command
+    if c
+      c.event_data = 'destroy'
+      c.save
+    else
+     Command.create(
+      :event_data => 'destroy',
+      :event_id => id
+      )
+    end
+  end
 
   def self.event_types
     %w[dev_notes discussion headline light_cue performance_notes scene sound_cue marker video sub_scene note]

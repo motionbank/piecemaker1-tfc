@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120910135608) do
+ActiveRecord::Schema.define(:version => 20130501162829) do
 
   create_table "castings", :force => true do |t|
     t.integer  "user_id",                       :null => false
@@ -25,6 +25,13 @@ ActiveRecord::Schema.define(:version => 20120910135608) do
   add_index "castings", ["piece_id"], :name => "index_castings_on_piece_id"
   add_index "castings", ["user_id"], :name => "index_castings_on_performer_id"
 
+  create_table "commands", :force => true do |t|
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.text     "event_data"
+    t.integer  "event_id"
+  end
+
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
     t.integer  "attempts",   :default => 0
@@ -36,6 +43,7 @@ ActiveRecord::Schema.define(:version => 20120910135608) do
     t.string   "locked_by"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "account_id"
   end
 
   create_table "documents", :force => true do |t|
@@ -45,6 +53,7 @@ ActiveRecord::Schema.define(:version => 20120910135608) do
     t.integer  "piece_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "account_id"
   end
 
   add_index "documents", ["id"], :name => "index_documents_on_id"
@@ -70,6 +79,7 @@ ActiveRecord::Schema.define(:version => 20120910135608) do
     t.string   "location"
     t.integer  "rating",         :default => 0
     t.integer  "parent_id"
+    t.integer  "account_id"
   end
 
   add_index "events", ["id"], :name => "index_events_on_id"
@@ -101,6 +111,7 @@ ActiveRecord::Schema.define(:version => 20120910135608) do
     t.integer  "from_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "account_id"
   end
 
   add_index "messages", ["from_id"], :name => "index_messages_on_from_id"
@@ -112,7 +123,23 @@ ActiveRecord::Schema.define(:version => 20120910135608) do
     t.integer  "piece_id"
     t.string   "title"
     t.text     "description"
+    t.integer  "account_id"
   end
+
+  create_table "notes", :force => true do |t|
+    t.datetime "created_at"
+    t.string   "created_by"
+    t.text     "note"
+    t.integer  "event_id"
+    t.string   "img"
+    t.datetime "updated_at"
+    t.string   "private_note"
+    t.integer  "account_id"
+  end
+
+  add_index "notes", ["event_id"], :name => "event_id"
+  add_index "notes", ["event_id"], :name => "index_notes_on_event_id"
+  add_index "notes", ["id"], :name => "index_notes_on_id"
 
   create_table "photos", :force => true do |t|
     t.string   "picture_file_name"
@@ -123,6 +150,7 @@ ActiveRecord::Schema.define(:version => 20120910135608) do
     t.integer  "piece_id"
     t.string   "path"
     t.boolean  "has_thumb",            :default => false
+    t.integer  "account_id"
   end
 
   add_index "photos", ["id"], :name => "index_photos_on_id"
@@ -135,14 +163,35 @@ ActiveRecord::Schema.define(:version => 20120910135608) do
     t.string   "modified_by"
     t.string   "short_name"
     t.boolean  "is_active",   :default => true
+    t.integer  "account_id"
   end
 
   add_index "pieces", ["id"], :name => "index_pieces_on_id"
 
+  create_table "setup_configurations", :force => true do |t|
+    t.integer  "location_id"
+    t.string   "time_zone"
+    t.boolean  "use_auto_video",    :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "read_only",         :default => false
+    t.boolean  "use_heroku",        :default => false
+    t.string   "s3_sub_folder"
+    t.integer  "default_piece_id"
+    t.text     "file_locations"
+    t.integer  "desired_on_time"
+    t.integer  "min_entrances"
+    t.integer  "max_entrances"
+    t.integer  "min_entrance_time"
+    t.integer  "max_entrance_time"
+    t.integer  "account_id"
+  end
+
   create_table "tags", :force => true do |t|
     t.string  "name"
     t.integer "piece_id"
-    t.string  "tag_type", :default => "normal"
+    t.string  "tag_type",   :default => "normal"
+    t.integer "account_id"
   end
 
   add_index "tags", ["id"], :name => "index_tags_on_id"
@@ -171,9 +220,26 @@ ActiveRecord::Schema.define(:version => 20120910135608) do
     t.string   "last_name"
     t.boolean  "is_performer",                             :default => true
     t.string   "password_digest"
+    t.integer  "account_id"
   end
 
   add_index "users", ["id"], :name => "index_users_on_id"
   add_index "users", ["role_id"], :name => "index_users_on_role_id"
+
+  create_table "videos", :force => true do |t|
+    t.string   "title"
+    t.datetime "recorded_at"
+    t.integer  "duration"
+    t.integer  "rating",      :default => 0
+    t.text     "meta_data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "piece_id"
+    t.boolean  "is_uploaded", :default => false
+    t.integer  "account_id"
+  end
+
+  add_index "videos", ["id"], :name => "index_videos_on_id"
+  add_index "videos", ["title"], :name => "index_videos_on_title"
 
 end
