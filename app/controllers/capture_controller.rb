@@ -72,7 +72,7 @@ class CaptureController < ApplicationController
   end
 
   def get_events(piece_id = current_piece.id)
-    conditions = "(piece_id = #{piece_id}) AND (state = 'normal' OR state = 'uploaded')"
+    conditions = "(piece_id = #{piece_id}) AND (state = 'normal' OR state = 'uploaded' OR state = 'uncompressed' OR state = 'compressed')"
     conditions += "AND (event_type != 'dev_notes') " unless user_has_right?('view_dev_notes')
     conditions += "AND (event_type != 'marker')" unless current_user.markers_on
     conditions += "AND (parent_id is NULL )"
@@ -531,6 +531,7 @@ class CaptureController < ApplicationController
     @video = Event.find_by_id(params[:id])
     set_current_piece(@video.piece_id)
     @video.dur = Time.now - @video.happened_at
+    @video.state = 'uncompressed'
     @video.save
     @truncate = :less unless @truncate == :none
     result = Video.stop_recording(@video.title) if SetupConfiguration.use_auto_video?
