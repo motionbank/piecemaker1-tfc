@@ -2,7 +2,7 @@ class SyncController < ApplicationController
   require 'json'
   def run_sync
   uri = URI.parse('http://piecemaker.org/sync/catch_sync')
-  c = Command.first.event_data
+  c = Command.all.map{|x| x.event_data}
   #c = Marshal.dump(c)
   post_params = {
     :command => c
@@ -18,7 +18,9 @@ class SyncController < ApplicationController
   end
   def catch_sync
     @obj = params[:command][:ivars][:attributes]
-    @event = Event.find(@obj[:id].to_i)
+    @events = params[:command].map do |com|
+      Event.find(com[:ivars][:attributes][:id].to_i)
+    end
     render :layout => false
   end
 end

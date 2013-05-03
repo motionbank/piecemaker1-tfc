@@ -1,1 +1,3 @@
-<%= @event.title %>
+<%- @events.each do |event| -%>
+<%= event.title %><br />
+<%- end -%>
