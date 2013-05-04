@@ -30,7 +30,7 @@ class SyncController < ApplicationController
         event.attributes = com
         event.save
       else
-        event = Event.create_with_id(com[:ivars][:attributes])
+        event = Event.create_with_id(com)
       end
 
       @commands << com

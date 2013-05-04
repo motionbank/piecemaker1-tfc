@@ -45,7 +45,7 @@ class Event < ActiveRecord::Base
   obj = new(params)
   obj.id = params[:id]
   obj.save!
-      obj
+  obj
   end
 
 
