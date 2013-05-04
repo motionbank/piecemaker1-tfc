@@ -1,6 +1,7 @@
 class SyncController < ApplicationController
   require 'json'
 
+
   def run_sync
   uri = URI.parse('http://piecemaker.org/sync/catch_sync')
     c = Command.all.map{|x| x.event_data}
@@ -12,7 +13,7 @@ class SyncController < ApplicationController
 
     # Convert the parameters into JSON and set the content type as application/json
     req = Net::HTTP::Get.new(uri.path)
-    req.body = JSON.generate(post_params)
+    req.body = post_params.to_json
     req["Content-Type"] = "application/json"
 
     http = Net::HTTP.new(uri.host, uri.port)
@@ -24,9 +25,14 @@ class SyncController < ApplicationController
     @commands = []
     # @obj = params[:command][:ivars][:attributes]
     params[:command].each do |com|
-      event = Event.find(com[:ivars][:attributes][:id].to_i)
-      event.attributes = com[:ivars][:attributes]
-      event.save
+
+      if event = Event.find_by_id(com[:ivars][:attributes][:id].to_i)
+        event.attributes = com[:ivars][:attributes]
+        event.save
+      else
+        event = Event.create_with_id(com[:ivars][:attributes])
+      end
+
       @commands << com
       @events << event
     end

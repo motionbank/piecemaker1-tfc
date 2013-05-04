@@ -41,6 +41,14 @@ class Event < ActiveRecord::Base
     after_destroy :record_destroy
   end
 
+  def self.create_with_id(params)
+  obj = new(params)
+  obj.id = params[:id]
+  obj.save!
+      obj
+  end
+
+
   def record_save
     c = command
     if c
