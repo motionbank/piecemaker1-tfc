@@ -126,21 +126,6 @@ ActiveRecord::Schema.define(:version => 20130501162829) do
     t.integer  "account_id"
   end
 
-  create_table "notes", :force => true do |t|
-    t.datetime "created_at"
-    t.string   "created_by"
-    t.text     "note"
-    t.integer  "event_id"
-    t.string   "img"
-    t.datetime "updated_at"
-    t.string   "private_note"
-    t.integer  "account_id"
-  end
-
-  add_index "notes", ["event_id"], :name => "event_id"
-  add_index "notes", ["event_id"], :name => "index_notes_on_event_id"
-  add_index "notes", ["id"], :name => "index_notes_on_id"
-
   create_table "photos", :force => true do |t|
     t.string   "picture_file_name"
     t.string   "picture_content_type"
@@ -225,21 +210,5 @@ ActiveRecord::Schema.define(:version => 20130501162829) do
 
   add_index "users", ["id"], :name => "index_users_on_id"
   add_index "users", ["role_id"], :name => "index_users_on_role_id"
-
-  create_table "videos", :force => true do |t|
-    t.string   "title"
-    t.datetime "recorded_at"
-    t.integer  "duration"
-    t.integer  "rating",      :default => 0
-    t.text     "meta_data"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "piece_id"
-    t.boolean  "is_uploaded", :default => false
-    t.integer  "account_id"
-  end
-
-  add_index "videos", ["id"], :name => "index_videos_on_id"
-  add_index "videos", ["title"], :name => "index_videos_on_title"
 
 end

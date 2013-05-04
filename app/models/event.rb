@@ -52,15 +52,16 @@ class Event < ActiveRecord::Base
   def record_save
     c = command
     if c
-      c.event_data = self
+      c.event_data = self.attributes
       c.save
     else
      Command.create(
-      :event_data => self,
+      :event_data => self.attributes,
       :event_id => id
       )
     end
   end
+
   def record_destroy
         c = command
     if c
