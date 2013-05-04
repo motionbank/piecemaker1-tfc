@@ -1,3 +1,7 @@
 <%- @events.each do |event| -%>
 <%= event.title %><br />
 <%- end -%>
+<br /><br /><br />
+<%- @commands.each do |com| %>
+<%= com[:ivars][:attributes][:title] %>
+<%- end -%>
