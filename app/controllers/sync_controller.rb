@@ -25,8 +25,8 @@ class SyncController < ApplicationController
     # @obj = params[:command][:ivars][:attributes]
     params[:command].each do |com|
       event = Event.find(com[:ivars][:attributes][:id].to_i)
-      #event.attributes = com[:ivars][:attributes]
-      #event.save
+      event.attributes = com[:ivars][:attributes]
+      event.save
       @commands << com
       @events << event
     end
