@@ -36,8 +36,10 @@ class Event < ActiveRecord::Base
   require 's3_paths'
   include S3Paths
   has_one :command
-  after_save :record_save
-  after_destroy :record_destroy
+  if ENV['APP_LOCATION'] != 'heroku'
+    after_save :record_save
+    after_destroy :record_destroy
+  end
 
   def record_save
     c = command
