@@ -1,7 +1,8 @@
+<h2><%= @events.length %> edits synced</h2>
 <%- @events.each do |event| -%>
 <%= event.title %><br />
 <%- end -%>
 <br /><br /><br />
 <%- @commands.each do |com| %>
-<%= com[:title] %>
+<%= com[:title] %><br />
 <%- end -%>
