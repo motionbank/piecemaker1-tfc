@@ -63,7 +63,7 @@ class Event < ActiveRecord::Base
   end
 
   def record_destroy
-        c = command
+      c = Command.find_by_event_id(id)
     if c
       c.event_data = ['destroy',id]
       c.save

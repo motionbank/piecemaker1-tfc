@@ -38,7 +38,7 @@ class SyncController < ApplicationController
       params[:command].each do |com|
         if com.first == 'destroy'
           if event = Event.find_by_id(com[1].to_i)
-            @destroyed << event
+            @destroyed << event.title
             event.destroy
           end
         else
