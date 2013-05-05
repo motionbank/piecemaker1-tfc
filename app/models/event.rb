@@ -65,11 +65,11 @@ class Event < ActiveRecord::Base
   def record_destroy
         c = command
     if c
-      c.event_data = 'destroy'
+      c.event_data = ['destroy',id]
       c.save
     else
      Command.create(
-      :event_data => 'destroy',
+      :event_data => ['destroy',id],
       :event_id => id
       )
     end
