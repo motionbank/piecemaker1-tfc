@@ -1,0 +1,9 @@
+<h2>Unsynced Commands</h2>
+<%= link_to 'Clear All', '/sync/clear_all' %> | <%= link_to 'Sync to Heroku', '/sync/run_sync' %><br /><br />
+<table>
+<%- @commands.each do |command| -%>
+<tr>
+  <td><%= command.id %></td>
+</tr>
+<% end -%>
+</table>

@@ -2,6 +2,13 @@ class SyncController < ApplicationController
   require 'json'
 
   layout 'standard'
+  def index
+    @commands = Command.all
+  end
+  def clear_all
+    Command.all.each{|x| x.destroy}
+    redirect_to :action => 'index'
+  end
 
   def run_sync
     uri = URI.parse('http://piecemaker.org/sync/catch_sync')
