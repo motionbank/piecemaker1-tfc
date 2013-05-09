@@ -49,7 +49,11 @@ class Video
   def self.split_ext(file_name)
     file_name.split('.').last
   end
-
+  def old_date_format
+    split = base_name.split('_').first
+    return false unless split && split =~ /\d\d\d\d\d\d\d\d/
+    split
+  end
   def base_name
     return false unless title
     title.split('.').first
@@ -231,6 +235,8 @@ end
   def self.uncompressed_files
     Event.where("state = 'uncompressed'")
   end
+
+
   def self.compressable_files(days_back = nil)
     days_back ||= Video.days_back_to_compress
     full = Video.uncompressed_dir
@@ -239,12 +245,19 @@ end
     #cf.reject!{|x| video_uploaded(x)}
     cf = cf.select{|x| Video.parse_date_from_title(x) && (Video.parse_date_from_title(x) >= Date.today - days_back.days)}
   end
+  def self.compressable_files(days_back = nil)
+    Video.uncompressed_files.map{|x| x.title}
+  end
   def self.compress_compressable(days_back = nil)
-    files = Video.compressable_files(days_back)
-    puts "#{files.length.to_s} files to compress."
-    files.each do |x|
+    videos = Video.uncompressed_files
+    puts "#{videos.length.to_s} files to compress."
+    videos.each do |video|
+      x = video.title
       puts "Compressing #{x}"
       Video.compress_file(Video.uncompressed_dir + '/' + x, Video.compressed_dir + '/' + x)
+      video.state = 'compressed'
+      video.save
+
     end
   end
   def self.compress_file(from,to,force = false)
@@ -253,6 +266,7 @@ end
       if File.exists?(to) && !force
         puts "******** File #{to} exists already. Skipping"
       else
+        puts compression_command(from,to)
         system compression_command(from,to)
         puts "******** Finished compressing #{to}."
       end
@@ -265,7 +279,96 @@ end
     if type == 'ffmpeg'
       "/vendor/bin/#{Configuration.arch_type}/HEAD/bin/ffmpeg -i #{from} -acodec libfaac -ab 96k -vcodec libx264 -vpre medium -crf 20 -threads 0 -y -s 480x360 #{to}"
     else
-      "/usr/local/bin/HandBrakeCLI --encoder x264 -q 22 --maxWidth 480 --optimize -i #{from} -o #{to}"
+      "/Users/davidkern/bin/HandBrakeCLI --encoder x264 -q 22 --maxWidth 480 --optimize -i #{from} -o #{to}"
+    end
+  end
+
+  # def self.uploadable_files
+  #   @uploadable ||= uploadable_file_listing#[0..0]
+  # end
+  def self.uploadable_files_get
+    uploadable = []
+    files = Event.where("state = 'compressed'")
+    files.each do |file|
+      if File.exist?(Video.compressed_dir + '/' + file.title)
+        uploadable << file
+      else
+        puts "I couldn't find #{Video.compressed_dir + '/' + file.title}"
+      end
+    end
+    uploadable
+  end
+  def self.uploadable_files
+    @uploadable ||= Video.uploadable_files_get
+  end
+  def self.uploadable_file_listing
+    puts "Fetching S3 List"
+    bucket_list = S3Config.connect_and_get_list.select{|x| y = x.split('/'); y.first == SetupConfiguration.s3_base_folder && y[1] == 'video'}.map{|x| x.split('/').last}
+    compressed_list = get_files_from_directory(Video.compressed_dir).select{|x| !bucket_list.include?(x)}
+  end
+  def self.time_estimate_string(size)
+    "#{Video.calculate_time(size)} ETA: #{(Time.now + seconds_to_upload(size)).strftime('%H:%M:%S')}"
+  end
+  def self.calculate_time(size)
+    upload_time = Video.seconds_to_upload(size).floor.divmod(60)
+    "#{upload_time[0].to_s}m #{upload_time[1].to_s}s"
+  end
+  def self.seconds_to_upload(size)
+    (size.to_f / Video.upload_speed).to_i
+  end
+  def self.upload_speed
+    94000
+  end
+  def self.total_size
+      total_size = uploadable_files.inject(0){|sum, x| sum + File.size(Video.compressed_dir + '/' + x.title)}
+      puts "#{uploadable_files.length} videos to upload."
+      puts "This will take at least #{Video.time_estimate_string(total_size)}"
+      puts "#{total_size} bytes."
+  end
+  def self.list_uploadable
+    if uploadable_files.any?
+     Video.total_size
+      uploadable_files.each do |one_file|
+        puts one_file.title
+      end
+    else
+      puts "Nothing to do."
+    end
+  end
+
+  def self.upload_uploadable
+    if uploadable_files.any?
+      start_time = Time.now
+      Video.total_size
+
+      uploadable_files.each do |video|
+        filename = video.title
+        full_file_path = Video.compressed_dir + '/' + filename
+        full_s3_path = SetupConfiguration.s3_base_folder + '/video/' + filename
+        if file = File.open(full_file_path)
+          size = File.size(full_file_path)
+          puts "#{Time.now.strftime('%H:%M:%S')} Uploading #{filename}  #{time_estimate_string(size)}"
+          begin
+            AWS::S3::S3Object.store(full_s3_path, file, S3Config.bucket, :access => 'public_read')
+              video.state = 'uploaded'
+              video.save
+              puts "Updated database for #{filename}"
+          rescue Exception => e
+            puts "#{Time.now.strftime('%H:%M:%S')} AWS S#3 Error: #{e.inspect}"
+            puts e.backtrace.inspect
+            puts full_file_path
+          end
+        else
+          puts "Problem finding #{full_file_path}"
+        end
+      end
+      finish_time = Time.now
+      tot = finish_time - start_time
+      minu = tot.floor.divmod(60)
+      puts "Finished #{finish_time.strftime("%H:%M:%S")}"
+      puts "Total time: #{minu[0].to_s}m #{minu[1].to_s}s"
+    else
+      puts "Nothing to Upload"
     end
   end
 

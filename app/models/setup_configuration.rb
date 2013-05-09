@@ -12,6 +12,9 @@ class SetupConfiguration
   def self.s3_sub_folder
     'tfc'
   end
+  def self.s3_base_folder
+    'tfc'
+  end
   def self.app_is_local?
     ENV['APP_LOCATION'] != 'heroku' #'server' heroku
   end

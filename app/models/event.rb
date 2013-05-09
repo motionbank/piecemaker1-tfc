@@ -407,7 +407,22 @@ class Event < ActiveRecord::Base
       return false
     end
   end
-
+  def old_date_format
+    return false unless title
+    split = title.split('_').first
+    return false unless split && split =~ /\d\d\d\d\d\d\d\d/
+    split
+  end
+  def rename_to_new_date_format
+    oldtitle = old_date_format
+    newtitle = oldtitle[0..3] + '-' + oldtitle[4..5] + '-' + oldtitle[6..7]
+    split = title.split("_")
+    split[0] = newtitle
+    tit = split.join("_")
+    S3Config.rename("tfc/video/#{title}","tfc/video/#{tit}")
+    title = tit
+    save
+  end
   def latest_scene #tested
     scenes = Event.where("piece_id = ? AND event_type = 'scene'",piece_id).order("happened_at")
     scenes.reject!{|x| !x.is_active?}

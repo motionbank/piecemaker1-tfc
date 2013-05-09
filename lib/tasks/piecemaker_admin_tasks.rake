@@ -22,22 +22,13 @@ namespace :piecemaker do
     Dir.chdir(dir_name)
     Dir.glob('*').select{|x| ['mp4','mov'].include?(x.split('.').last)}
   end
-  def video_uploaded(filename)
-    vid = Video.find_by_title(filename.gsub('.mp4',''))
-    if vid
-      puts vid.fn_s3
-      vid.fn_s3 == '.mp4'
-    else
-      false
-    end
-  end
+
   def compressable_files(full = nil, comp = nil)
     full ||= uncompressed_folder
     comp ||= compressed_folder
     @full_files ||= get_files_from_directory(full)
     @compressed_files ||= get_files_from_directory(comp)
     cf = @full_files - @compressed_files
-    #cf.reject!{|x| video_uploaded(x)}
     @cf ||= cf.select{|x| y = Video.parse_date_from_title(x); y && y >= Date.today - days_back_to_compress.days}
   end
   def archivable_files(full = nil, arch = nil)

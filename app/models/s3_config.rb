@@ -33,6 +33,18 @@ class S3Config
     end
   end
 
+  def self.rename(from,to)
+    S3Config.connect_to_s3
+    begin
+      obj = AWS::S3::S3Object.find(from,S3Config.bucket)
+      puts "***** renaming #{obj.key} to #{to}"
+      obj.rename(to,:access => 'public_read')
+    rescue
+      puts "***** can't find #{obj.key}"
+    end
+    puts "***** done"
+  end
+
   def self.connect_and_get_bucket
     begin
       S3Config.connect_to_s3
