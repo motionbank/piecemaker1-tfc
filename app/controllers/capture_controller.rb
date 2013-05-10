@@ -285,7 +285,6 @@ class CaptureController < ApplicationController
 
   def delete_event
       @event.make_deleted
-      @event.save
       respond_to do |format|
         format.html {redirect_to :action => 'present'}
         format.js {render :text => "jQuery('#event-'+#{@event.id}).remove();", :layout => false}
