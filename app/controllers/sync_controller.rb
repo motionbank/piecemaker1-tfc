@@ -1,5 +1,4 @@
 class SyncController < ApplicationController
-  require 'json'
 
   layout 'standard'
   def index
@@ -9,13 +8,14 @@ class SyncController < ApplicationController
     Command.all.each{|x| x.destroy}
     redirect_to :action => 'index'
   end
+  def error_string
+    'big error'
+  end
 
   def run_sync
     uri = URI.parse('http://piecemaker.org/sync/catch_sync')
     c = Command.all.map{|x| x.event_data}
     if c.any?
-    #c = [Command.first.event_data]
-      #c = Marshal.dump(c)
       post_params = {
         :command => c
       }
@@ -28,7 +28,7 @@ class SyncController < ApplicationController
       http = Net::HTTP.new(uri.host, uri.port)
 
       @response = http.start {|htt| htt.request(req)}
-      if @response != 'big error'
+      if @response != error_string
         Command.all.each {|x| x.destroy}
       end
     else
@@ -41,27 +41,30 @@ class SyncController < ApplicationController
     @commands = []
     @destroyed = []
     # @obj = params[:command][:ivars][:attributes]
-    if params[:command]
-      params[:command].each do |com|
-        if com.first == 'destroy'
-          if event = Event.find_by_id(com[1].to_i)
-            @destroyed << event.title
-            event.destroy
-          end
-        else
-          if event = Event.find_by_id(com[:id].to_i)
-            event.attributes = com
-            event.save
+    begin
+      if params[:command]
+        params[:command].each do |com|
+          if com.first == 'destroy'
+            if event = Event.find_by_id(com[1].to_i)
+              @destroyed << event.title
+              event.destroy
+            end
           else
-            event = Event.create_with_id(com)
+            if event = Event.find_by_id(com[:id].to_i)
+              event.attributes = com
+              event.save
+            else
+              event = Event.create_with_id(com)
+            end
+            @events << event
           end
+          @commands << com
         end
-
-        @commands << com
-        @events << event
       end
+      render :layout => false
+    rescue
+      render :text => error_string
     end
-    render :layout => false
   end
 
 end

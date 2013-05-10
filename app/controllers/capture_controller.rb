@@ -276,7 +276,9 @@ class CaptureController < ApplicationController
     end
   end
 
-
+  def list_notes
+    @notes = Event.where("event_type = 'note'")
+  end
  #
  # methods for creating editing and deleting events
  #

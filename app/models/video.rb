@@ -232,23 +232,12 @@ end
     Dir.chdir(dir_name)
     Dir.glob('*').select{|x| ['mp4','mov'].include?(x.split('.').last)}
   end
+
   def self.uncompressed_files
     Event.where("state = 'uncompressed'")
   end
 
-
-  def self.compressable_files(days_back = nil)
-    days_back ||= Video.days_back_to_compress
-    full = Video.uncompressed_dir
-    comp = Video.compressed_dir
-    cf = Video.get_files_from_directory(full) - Video.get_files_from_directory(comp)
-    #cf.reject!{|x| video_uploaded(x)}
-    cf = cf.select{|x| Video.parse_date_from_title(x) && (Video.parse_date_from_title(x) >= Date.today - days_back.days)}
-  end
-  def self.compressable_files(days_back = nil)
-    Video.uncompressed_files.map{|x| x.title}
-  end
-  def self.compress_compressable(days_back = nil)
+  def self.compress_compressable
     videos = Video.uncompressed_files
     puts "#{videos.length.to_s} files to compress."
     videos.each do |video|
@@ -257,7 +246,6 @@ end
       Video.compress_file(Video.uncompressed_dir + '/' + x, Video.compressed_dir + '/' + x)
       video.state = 'compressed'
       video.save
-
     end
   end
   def self.compress_file(from,to,force = false)
@@ -283,9 +271,7 @@ end
     end
   end
 
-  # def self.uploadable_files
-  #   @uploadable ||= uploadable_file_listing#[0..0]
-  # end
+
   def self.uploadable_files_get
     uploadable = []
     files = Event.where("state = 'compressed'")
@@ -337,11 +323,10 @@ end
   end
 
   def self.upload_uploadable
-    if uploadable_files.any?
+    if Video.uploadable_files.any?
       start_time = Time.now
       Video.total_size
-
-      uploadable_files.each do |video|
+      Video.uploadable_files.each do |video|
         filename = video.title
         full_file_path = Video.compressed_dir + '/' + filename
         full_s3_path = SetupConfiguration.s3_base_folder + '/video/' + filename
@@ -352,7 +337,7 @@ end
             AWS::S3::S3Object.store(full_s3_path, file, S3Config.bucket, :access => 'public_read')
               video.state = 'uploaded'
               video.save
-              puts "Updated database for #{filename}"
+              puts "Uploaded and Updated database for #{filename}"
           rescue Exception => e
             puts "#{Time.now.strftime('%H:%M:%S')} AWS S#3 Error: #{e.inspect}"
             puts e.backtrace.inspect

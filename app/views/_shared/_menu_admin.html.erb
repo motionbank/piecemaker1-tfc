@@ -17,8 +17,8 @@
       <li><%= link_to 'Event Trash', :controller => "events", :action => 'list_trash',:id => nil -%></li>
       <li><%= link_to 'Videos', :controller => "video", :action => 'index' -%></li>
       <li><%= link_to 'Photos', :controller => "photos", :action => 'index',:id => nil -%></li>
-      <li><%= link_to 'Notes', :controller => "notes", :action => 'list' -%></li>
-      <li><%= link_to 'Documents', :controller => "documents", :action => 'list' -%></li>
+      <li><%= link_to 'Notes', :controller => "capture", :action => 'list_notes' -%></li>
+      <li><%= link_to 'Documents', :controller => "documents", :action => 'index' -%></li>
       <li><%= link_to 'Messages', :controller => "message", :action => 'list_all' -%></li>
     <%- end -%>
     <% end %>
