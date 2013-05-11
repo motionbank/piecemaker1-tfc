@@ -8,10 +8,6 @@ class Video
   require 's3_paths'
   include S3Paths
 
-  def self.days_back_to_compress
-    40
-  end
-
   def self.uncompressed_dir
     Rails.root.to_s + '/public/video/full'
   end
@@ -49,11 +45,11 @@ class Video
   def self.split_ext(file_name)
     file_name.split('.').last
   end
-  def old_date_format
-    split = base_name.split('_').first
-    return false unless split && split =~ /\d\d\d\d\d\d\d\d/
-    split
-  end
+  # def old_date_format
+  #   split = base_name.split('_').first
+  #   return false unless split && split =~ /\d\d\d\d\d\d\d\d/
+  #   split
+  # end
   def base_name
     return false unless title
     title.split('.').first
@@ -153,20 +149,23 @@ class Video
     meta_data ? 'True' : 'False'
   end
 
-  def self.fix_titles(from, to)
-    vids = all.select{|x| x.title =~ /#{Regexp.escape(from)}/}
+  def self.fix_titles
+    vids = Event.where("event_type = 'video'").select{|x| x.old_date_format}
       puts "fixing #{vids.length} files"
     vids.each do |vid|
-      new_title = vid.title.gsub(from,to)
       puts "renaming #{vid.title}"
-      rename_file_locations(vid.title,new_title)
-      rename_s3(vid.title,new_title)
+      vid.rename_to_new_date_format
+      #rename_file_locations(vid.title,new_title)
+      #self.rename_on_s3(vid.title,new_title)
     end
+    nil
   end
 
-
-
-
+  def self.rename_on_s3(old_title, new_title)
+    from = SetupConfiguration.s3_base_folder + '/video/' + old_title
+    to = SetupConfiguration.s3_base_folder + '/video/' + old_title
+    S3Config.rename(from,to)
+  end
 
   def self.prepare_recording(player_name = Piecemaker.config.quicktime_player)
     prep = <<ENDOT
@@ -242,12 +241,12 @@ end
     puts "#{videos.length.to_s} files to compress."
     videos.each do |video|
       x = video.title
-      puts "Compressing #{x}"
-      Video.compress_file(Video.uncompressed_dir + '/' + x, Video.compressed_dir + '/' + x)
+      Video.compress_file(Video.uncompressed_dir + '/' + x, Video.compressed_dir + '/' + x,true)
       video.state = 'compressed'
       video.save
     end
   end
+
   def self.compress_file(from,to,force = false)
     puts "******** Starting to compress #{from}."
     if File.exists?(from)
@@ -271,7 +270,6 @@ end
     end
   end
 
-
   def self.uploadable_files_get
     uploadable = []
     files = Event.where("state = 'compressed'")
@@ -284,35 +282,20 @@ end
     end
     uploadable
   end
+
   def self.uploadable_files
     @uploadable ||= Video.uploadable_files_get
   end
-  def self.uploadable_file_listing
-    puts "Fetching S3 List"
-    bucket_list = S3Config.connect_and_get_list.select{|x| y = x.split('/'); y.first == SetupConfiguration.s3_base_folder && y[1] == 'video'}.map{|x| x.split('/').last}
-    compressed_list = get_files_from_directory(Video.compressed_dir).select{|x| !bucket_list.include?(x)}
-  end
-  def self.time_estimate_string(size)
-    "#{Video.calculate_time(size)} ETA: #{(Time.now + seconds_to_upload(size)).strftime('%H:%M:%S')}"
-  end
-  def self.calculate_time(size)
-    upload_time = Video.seconds_to_upload(size).floor.divmod(60)
-    "#{upload_time[0].to_s}m #{upload_time[1].to_s}s"
-  end
-  def self.seconds_to_upload(size)
-    (size.to_f / Video.upload_speed).to_i
-  end
-  def self.upload_speed
-    94000
-  end
+
   def self.total_size
-      total_size = uploadable_files.inject(0){|sum, x| sum + File.size(Video.compressed_dir + '/' + x.title)}
-      puts "#{uploadable_files.length} videos to upload."
-      puts "This will take at least #{Video.time_estimate_string(total_size)}"
-      puts "#{total_size} bytes."
+    total_size = Video.uploadable_files.inject(0){|sum, x| sum + File.size(Video.compressed_dir + '/' + x.title)}
+    puts "#{uploadable_files.length} videos to upload."
+    puts "#{(total_size/1000000).to_int} MB."
+    puts "This will take at least #{S3Config.time_estimate_string(total_size)}"
   end
+
   def self.list_uploadable
-    if uploadable_files.any?
+    if Video.uploadable_files.any?
      Video.total_size
       uploadable_files.each do |one_file|
         puts one_file.title
@@ -327,24 +310,10 @@ end
       start_time = Time.now
       Video.total_size
       Video.uploadable_files.each do |video|
-        filename = video.title
-        full_file_path = Video.compressed_dir + '/' + filename
-        full_s3_path = SetupConfiguration.s3_base_folder + '/video/' + filename
-        if file = File.open(full_file_path)
-          size = File.size(full_file_path)
-          puts "#{Time.now.strftime('%H:%M:%S')} Uploading #{filename}  #{time_estimate_string(size)}"
-          begin
-            AWS::S3::S3Object.store(full_s3_path, file, S3Config.bucket, :access => 'public_read')
-              video.state = 'uploaded'
-              video.save
-              puts "Uploaded and Updated database for #{filename}"
-          rescue Exception => e
-            puts "#{Time.now.strftime('%H:%M:%S')} AWS S#3 Error: #{e.inspect}"
-            puts e.backtrace.inspect
-            puts full_file_path
-          end
-        else
-          puts "Problem finding #{full_file_path}"
+        if S3Config.upload_video_file(video)
+          video.state = 'uploaded'
+          video.save
+          puts "updated database for #{video.title}"
         end
       end
       finish_time = Time.now

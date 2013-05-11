@@ -18,7 +18,44 @@ class S3Config
   def self.cloudfront_address
     's3bulcu47zau6v.cloudfront.net/cfx/st'
   end
+  def self.upload_speed
+    94000
+  end
 
+  def self.time_estimate_string(size)
+    "#{calculate_time(size)} ETA: #{(Time.now + seconds_to_upload(size)).strftime('%H:%M:%S')}"
+  end
+
+  def self.calculate_time(size)
+    upload_time = seconds_to_upload(size).floor.divmod(60)
+    "#{upload_time[0].to_s}m #{upload_time[1].to_s}s"
+  end
+
+  def self.seconds_to_upload(size)
+    (size.to_f / upload_speed).to_i
+  end
+
+  def self.upload_video_file(video)
+    S3Config.connect_to_s3
+    filename = video.title
+    from = Video.compressed_dir + '/' + filename
+    to = SetupConfiguration.s3_base_folder + '/video/' + filename
+    if file = File.open(from)
+      size = File.size(from)
+      puts "#{Time.now.strftime('%H:%M:%S')} Uploading #{filename}  #{S3Config.time_estimate_string(size)}"
+      begin
+        AWS::S3::S3Object.store(to, file, S3Config.bucket, :access => 'public_read')
+          puts "Uploaded #{filename}"
+          true
+      rescue Exception => e
+        puts "#{Time.now.strftime('%H:%M:%S')} AWS S#3 Error: #{e.inspect}"
+        puts e.backtrace.inspect
+        puts from
+      end
+    else
+      puts "Problem finding #{from}"
+    end
+  end
 
   def self.connect_to_s3
     begin
@@ -56,6 +93,7 @@ class S3Config
       return false
     end
   end
+
   def self.connect_and_get_list(group_string = nil)
       @llst = S3Config.connect_and_get_objects(group_string)
       if @llst
@@ -63,6 +101,7 @@ class S3Config
       end
         @llst
   end
+
   def self.connect_and_get_objects(group_string = nil)
     bucket = S3Config.connect_and_get_bucket
     if bucket
@@ -85,6 +124,7 @@ class S3Config
       false
     end
   end
+
   def self.connect_and_create_bucket(bucket_name)
     xml_file_location = Rails.root + 'lib/tasks/crossdomain.xml'
     puts "Your bucket name is #{bucket_name}"
