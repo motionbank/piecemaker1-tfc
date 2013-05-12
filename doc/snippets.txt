@@ -49,38 +49,38 @@ end
 
 
 
-I needed images to be private within my application, and hosted on 
-Amazon S3. After some wrangling, this is the solution I came up with 
-to make it happen. It's not the most elegant but it works. 
-The 'url' method of the attachment doesn't seem to generate a 
-temporary publicly viewable url by default for Amazon S3 when you have 
-your permissions set to 'private'. 
-To fix this I have added the following to my Photo model: 
-  def time_limited_url(style) 
-    image.s3.interface.get_link(image.s3_bucket.to_s, 
-image.path(style), 1.hour) 
-  end 
-and here is the has_attached_file statement: 
-has_attached_file :image, 
-      :styles => { 
-        :square=> "50x50#", 
-        :small  => "175x250>" 
-      }, 
-        :storage => :s3, 
-        :s3_credentials => "#{RAILS_ROOT}/config/s3.yml", 
-        :s3_permissions => "private", 
-        :path => ":class/:id/:style.:extension", 
-        :bucket => "my-bucket" 
-        :s3_protocol => "https" 
-And then in the view: 
-        <%= image_tag photo.time_limited_url(:square) %></a> 
-This gives you an image that can be viewed from within your 
-application using your own authentication, with the image only being 
-available for a 1 hour period (you can change this to a shorter/longer 
-period as required). 
-If you're using caching, you could also wrap the image_tag in a time 
-expired cache of the same period to save on calls to S3. 
-If anyone has a better method for this please let me know. 
+I needed images to be private within my application, and hosted on
+Amazon S3. After some wrangling, this is the solution I came up with
+to make it happen. It's not the most elegant but it works.
+The 'url' method of the attachment doesn't seem to generate a
+temporary publicly viewable url by default for Amazon S3 when you have
+your permissions set to 'private'.
+To fix this I have added the following to my Photo model:
+  def time_limited_url(style)
+    image.s3.interface.get_link(image.s3_bucket.to_s,
+image.path(style), 1.hour)
+  end
+and here is the has_attached_file statement:
+has_attached_file :image,
+      :styles => {
+        :square=> "50x50#",
+        :small  => "175x250>"
+      },
+        :storage => :s3,
+        :s3_credentials => "#{RAILS_ROOT}/config/s3.yml",
+        :s3_permissions => "private",
+        :path => ":class/:id/:style.:extension",
+        :bucket => "my-bucket"
+        :s3_protocol => "https"
+And then in the view:
+        <%= image_tag photo.time_limited_url(:square) %></a>
+This gives you an image that can be viewed from within your
+application using your own authentication, with the image only being
+available for a 1 hour period (you can change this to a shorter/longer
+period as required).
+If you're using caching, you could also wrap the image_tag in a time
+expired cache of the same period to save on calls to S3.
+If anyone has a better method for this please let me know.
 Stef
 
 
@@ -110,9 +110,9 @@ tell application "QuickTime Player"
 		click menu button 1 of window "Movie Recording"
 		delay 1
 		click menu item "Choose…" of menu 1 of menu button 1 of window "Movie Recording"
-		
+
 	end tell
-	
+
 end tell
 
 
@@ -125,7 +125,7 @@ add mod-streaming stuff into /usr/libexec/apache2
 fix apache conf for mod-h264:
   LoadModule h264_streaming_module libexec/apache2/mod_h264_streaming.so
   AddHandler h264-streaming.extensions .mp4
-  
+
 fix apache confo to serve from video folder:
   Alias /videofolder "/piecemaker_videos"
   <Directory "/piecemaker_videos">
@@ -134,7 +134,7 @@ fix apache confo to serve from video folder:
     Order allow,deny
     Allow from all
   </Directory>
-  
+
 if you are a dev machine you can also do this:
   hosts file if necessary
     make  an entry for piecemakelocal at 127.0.0.1
@@ -149,38 +149,38 @@ if you are a dev machine you can also do this:
        Allow from all
      </directory>
    </VirtualHost>
-   
-   Optional: 
+
+   Optional:
        copy qt-faststart or recompile for 10.5
        add some aliases to .profile also compress alias 'pmak; rake jobs:work'
-       
-       
-       
+
+
+
 delayed job
 
 class NewsletterJob < Struct.new(:text, :emails)
     def perform
       emails.each { |e| NewsletterMailer.deliver_text_to_email(text, e) }
-    end    
-  end  
-  
+    end
+  end
+
   Delayed::Job.enqueue NewsletterJob.new('lorem ipsum...', Customers.find(:all).collect(&:email))
 
 
 There is also a second way to get jobs in the queue: send_later.
 
   BatchImporter.new(Shop.find(1)).send_later(:import_massive_csv, massive_csv)
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
+
   require 'yaml'
-  
+
   filename = "#{Rails.root}/config/amazon_s3.yml"
   file = File.open(filename)
   config = YAML.load(file)
@@ -192,7 +192,7 @@ There is also a second way to get jobs in the queue: send_later.
 
 
 
-  window.onload = function() {  
+  window.onload = function() {
   	flowplayer("example", '/video/flowplayer-3.1.0.swf',
   	{
   	  clip:{
@@ -203,3 +203,53 @@ There is also a second way to get jobs in the queue: send_later.
   	 )
   }
   </script>
+
+
+
+
+
+
+
+  # Postgres equivalent to heroku db:push.
+# Pushes local database up to heroku application database.
+$
+# Requirements: psql --version >= 9.2.2
+#
+# Usage:
+#
+# $ heroku_pg_push [appname] [local database name]
+#
+function heroku_pg_push(){
+  echo "!   WARNING: Data in the Heroku app '$1' will be destroyed."
+  echo "    Type '$1' to overwrite data in Heroku app '$1'"
+  read -p "> " heroku_app_name
+  echo
+  if [ "$heroku_app_name" == "$1" ]; then
+    heroku pg:reset DATABASE_URL -a $1
+    pg_dump -xO $2 | psql `heroku config:get DATABASE_URL -a $1`
+  else
+    echo "Aborted"
+  fi
+}
+
+
+# Postgres equivalent to heroku db:pull.
+# Pulls latest heroku pgbackups dump into local database
+#
+# Usage:
+#
+# $ heroku_pg_pull [appname] [local database name]
+#
+function heroku_pg_pull(){
+  echo "!   WARNING: Data in the local database '$2' will be destroyed."
+  echo "    Type '$2' to overwrite data in local database '$2'"
+  read -p "> " local_database_name
+  echo
+  if [ "$local_database_name" == "$2" ]; then
+    curl -o heroku_pg_pull_latest_backup.dump `heroku pgbackups:url -a $1`;
+    pg_restore --verbose --clean --no-acl --no-owner -h localhost -U `whoami` -d $2 heroku_pg_pull_latest_backup.dump;
+    rm heroku_pg_pull_latest_backup.dump;
+  else
+    echo "Aborted"
+  fi
+}
