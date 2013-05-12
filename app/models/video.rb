@@ -216,7 +216,7 @@ ENDOT
     new_file_name ||= qt_file_name
     new_name = Video.uncompressed_dir + '/' + new_file_name
     backup_name = Video.backup_dir + '/' + new_file_name
-    if true# system "which qt-fast"
+    if false# system "which qt-fast" very slow
       system "mv #{full_qt_file_name} #{backup_name}"
       system "/usr/local/bin/qt-fast #{backup_name} #{new_name}" # move output to temp and rename
       x = 'fast'
@@ -266,7 +266,7 @@ end
     if type == 'ffmpeg'
       "/vendor/bin/#{Configuration.arch_type}/HEAD/bin/ffmpeg -i #{from} -acodec libfaac -ab 96k -vcodec libx264 -vpre medium -crf 20 -threads 0 -y -s 480x360 #{to}"
     else
-      "/Users/davidkern/bin/HandBrakeCLI --encoder x264 -q 22 --maxWidth 480 --optimize -i #{from} -o #{to}"
+      "/usr/local/bin/HandBrakeCLI --encoder x264 -q 22 --maxWidth 480 --optimize -i #{from} -o #{to}"
     end
   end
 
