@@ -6,5 +6,5 @@
             <%- if true -%>
             <td><a href="/video_viewer/<%= video.id %>">Annotate</a></td>
             <td><a href="/video/edit/<%= video.id %>" class='get'>Edit</a></td>
-            <td><a href="/video/confirm_destroy/<%= video.id %>">Delete</a></td>
+            <td><a data-confirm = 'Are you sure?'href="/video/delete/<%= video.id %>">Delete</a></td>
             <% end -%>

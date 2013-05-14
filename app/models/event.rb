@@ -97,7 +97,7 @@ class Event < ActiveRecord::Base
   has_and_belongs_to_many :users
 
   has_many :subjects, :class_name => "Event",
-    :foreign_key => "video_id", :order => 'happened_at'
+    :foreign_key => "video_id", :order => 'happened_at',:dependent => :nullify
   belongs_to :video, :class_name => "Event"
 
   has_many :children, :class_name => "Event", :foreign_key => "parent_id", :order => 'happened_at', :conditions => "event_type != 'note'"

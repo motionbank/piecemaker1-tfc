@@ -1,6 +1,6 @@
 class VideoController < ApplicationController
   layout 'standard'
-  before_filter :get_video_from_params, :only => [:delete, :delete_all, :new]
+  before_filter :get_video_from_params, :only => [:delete, :delete_all, :new, :delete_from_menu]
   def get_video_from_params
       @video = Event.find(params[:id])
       @piece = @video.piece
@@ -24,6 +24,14 @@ class VideoController < ApplicationController
       @videos = Event.where("event_type = 'video' AND piece_id = #{params[:id]}").includes([:piece])
     else
       @videos = Event.where("event_type = 'video'").includes([:piece])
+    end
+  end
+  def delete_from_menu
+    if @video.destroy
+      respond_to do |format|
+        format.js {render :partial => 'delete_from_menu', :layout => false}
+      end
+    else
     end
   end
   def delete

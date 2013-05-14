@@ -470,7 +470,7 @@ module ApplicationHelper
   end
   def display_title(event, search = nil)
     content_tag(:div,:class => "evtit#{event.tagged_with_title? ? ' ital' : ''}") do
-      text = event.title ? highlight(sanitize(event.title), search, found_text_replacement_string) : ''
+      text = event.title ? highlight(sanitize(event.title), search, :highlighter => found_text_replacement_string) : ''
       text << " (#{event.piece.title})" if @show_piece
       text
     end
@@ -532,7 +532,7 @@ module ApplicationHelper
     if (event.description)
       text = "<div class='sm evdes'>"
       tt = my_tags(event.description)
-      tt = highlight(tt,search,found_text_replacement_string) if search
+      tt = highlight(tt,search, :highlighter => found_text_replacement_string) if search
       text << tt
       text << '</div>'
     else
@@ -722,7 +722,7 @@ def display_children(event,search = nil)
       text << '&nbsp;&nbsp;'
       ss.description ||= ''
       if search
-        ss.title = highlight(ss.title,search,found_text_replacement_string)
+        ss.title = highlight(ss.title,search,:highlighter =>found_text_replacement_string)
         ss.description = highlight(ss.description,search,found_text_replacement_string)
       end
       text << "#{ss.title}"

@@ -208,7 +208,9 @@ class CaptureController < ApplicationController
    else
      text << "<li style = 'color:#ccc'>Video Not Viewable.</li>"
    end
+
    text << "<li class = 'removable'><a href = '/video_upload/#{params[:id]}/#{piece_id}'>Upload</a></li>"
+   text << "<li class = 'removable'><a class = 'jsc' data-confirmation = 'Are you sure?' href = '/video/delete_from_menu/#{params[:id]}'>Delete</a></li>"
      render :text => text
  end
  #

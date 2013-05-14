@@ -240,6 +240,7 @@ end
     videos = Video.uncompressed_files
     puts "#{videos.length.to_s} files to compress."
     videos.each do |video|
+      Video.moov(video)
       x = video.title
       Video.compress_file(Video.uncompressed_dir + '/' + x, Video.compressed_dir + '/' + x,true)
       video.state = 'compressed'
@@ -323,6 +324,18 @@ end
       puts "Total time: #{minu[0].to_s}m #{minu[1].to_s}s"
     else
       puts "Nothing to Upload"
+    end
+  end
+
+
+  def self.moov(video)
+    failure_string = "last atom in file was not a moov atom\n"
+    from = Video.uncompressed_dir + '/' + video.title
+    temp = Video.backup_dir + '/' + video.title
+    system "mv #{from} #{temp}"
+    result = `/usr/local/bin/qt-fast #{temp} #{from}`
+    if result == failure_string
+      system "mv #{temp} #{from}"
     end
   end
 
