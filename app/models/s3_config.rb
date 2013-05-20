@@ -124,7 +124,20 @@ class S3Config
       false
     end
   end
-
+  def self.find_keys_with_string(search_string)
+    all_objects = self.connect_and_get_objects
+    all_objects.select{|x| /#{Regexp.escape(search_string)}/ =~ x.key}
+  end
+  def self.rename_all(search,replace)
+    self.find_keys_with_string(search).each do |obj|
+      from = obj.key
+      to = obj.key.gsub(search,replace)
+      puts "****** renaming #{from} to #{to}"
+      obj.rename(to,:access => 'public_read')
+      puts '****** done'
+    end
+    nil
+  end
   def self.connect_and_create_bucket(bucket_name)
     xml_file_location = Rails.root + 'lib/tasks/crossdomain.xml'
     puts "Your bucket name is #{bucket_name}"
