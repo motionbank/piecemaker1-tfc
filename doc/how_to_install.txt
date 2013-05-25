@@ -1,7 +1,7 @@
 How to install and Configure piecemaker on Mac OSX
 
   Installation Overview
-  
+
 You have to decide whether you are going to have an online version on heroku or not.
 
 You have to decide if you are going to use the server computer to record quicktime videos or not.
@@ -33,7 +33,7 @@ In the instructions below, the '>' means you should type the command in your ter
           launch bar
           gitx
           team viewer
-        
+
 
     - To be Able to Record Video Directly on Server
       - Quicktime Player
@@ -50,15 +50,15 @@ In the instructions below, the '>' means you should type the command in your ter
       - imagemagick
 
     Installation steps
-  
+
     - Enable sudo for your machine
     - Check ruby and sqlite versions
       - In a terminal run
-        > ruby -v 
+        > ruby -v
         The ruby version should be 1.8.7 or higher. MacOS 10.6 should be OK.
         > sqlite3 --version
         Sqlite should be version >= 1.3.3
-        
+
         If you have the right ruby and sqlite verisions you can skip down to step: Get git
         Otherwise you have to follow the next steps
     - Install Latest Apple Developer Tools
@@ -67,11 +67,11 @@ In the instructions below, the '>' means you should type the command in your ter
     - update your PATH in .profile
       export PATH="/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
       this makes sure you are linked to the right ruby installation
-    
+
     - Make a directory to work in and cd into it
         > mkdir src
         > cd src
-        
+
     - Get Ruby >= 1.8.7
         - download latest ruby
           > curl -O ftp://ftp.ruby-lang.org/pub/ruby/1.8/ruby-1.8.7-p174.tar.gz
@@ -81,48 +81,48 @@ In the instructions below, the '>' means you should type the command in your ter
           > make
           > sudo make install
           > cd ../
-      
+
         - download rubygems
           > curl -O http://production.cf.rubygems.org/rubygems/rubygems-1.7.2.tgz
           > tar xzvf rubygems-1.7.2.tgz
           > cd rubygems-1.7.2
           > sudo /usr/local/bin/ruby setup.rb
           > cd ..
-          
+
         - update system gems
           > sudo gem update
           > sudo gem install bundler
-      
+
     - Get sqlite3 OSX 10.5 or less
-        
+
         > curl -O download sqlite 3.7.5 http://www.sqlite.org/sqlite-amalgamation-3070500.zip
         > double click to unzip
         > cd sqlite-amalgamation-3070500
         > ./configure
         > make
         > sudo make install
-       
-    
-    
-    - Get git 
+
+
+
+    - Get git
       - for 32 bit
         > curl -O http://code.google.com/p/git-osx-installer/downloads/detail?name=git-1.7.4.1-i386-leopard.dmg&can=3&q=
       - for 64 bit
         > curl -O http://code.google.com/p/git-osx-installer/downloads/detail?name=git-1.7.4.1-x86_64-leopard.dmg&can=3&q=
       - double click package to install
-      
+
     - Get github account
       - go to github com and sign up
       - set up ssh keys for github(see github site for details)
       - ask david to be included on project so you can pull the repository
-      
+
     - Get repository
-      
+
       - if you want to run apache from the default /Library/WebServer/Documents using passenger
         - Remove everything from /Library/WebServer/Documents
         > cd /Library/WebServer/Documents
         > git clone git@github.com:nutbits/piecemaker.git .      (the dot at the end is important)
-      
+
       - if you will run script/server or as an apache virtual host
         > cd path/where/you/want/to/install/piecemaker
         > git clone git@github.com:nutbits/piecemaker.git
@@ -132,7 +132,7 @@ If you use script/server
 If you use apache/passenger
    - make sure you have the Apple developer tools installed
    - Set up apache / passenger (skip if you will use script/server)
-      
+
       > sudo gem install passenger
       > sudo  passenger-install-apache2-module
         - the passenger installer will guide you through the installation process
@@ -140,35 +140,35 @@ If you use apache/passenger
           into your httpd.conf file
         - httpd.conf is located at /etc/apache2/httpd.conf  this is true for 10.6
           and maybe 10.5 I'm not sure about 10.4
-          
+
         - paste the code into the bottom of the file add this too:
-        
+
         PassengerPoolIdleTime 0
         RailsEnv development
         SetEnv S3_SECRET_ACCESS_KEY *******  #(if you use s3 uploading)
         SetEnv S3_ACCESS_KEY_ID *********    #(if you use s3 uploading)
         SetEnv S3_BUCKET bucket_name         #(if you use s3 uploading)
         SetEnv ARCH_TYPE 32                  #(or 64 if you have a 64 bit machine)
-        
+
         - if you want pseudo streaming
           - Download the source code
             > cd path/to/src/folder
             > wget http://h264.code-shop.com/download/apache_mod_h264_streaming-2.2.7.tar.gz
             > tar -zxvf apache_mod_h264_streaming-2.2.7.tar.gz
             > cd ~/mod_h264_streaming-2.2.7
-          
+
           -32 bit machine
             > ./configure CFLAGS='-arch i386' APXSLDFLAGS='-arch i386' --with-apxs=/usr/sbin/apxs
             > make
             > sudo make install
-          
+
           -64 bit machine
             > ./configure CFLAGS='-arch x86_64' APXSLDFLAGS='-arch x86_64' --with-apxs=/usr/sbin/apxs
             > make
             > sudo make install
 
           - Add these lines to your httpd.conf. Look for a long set of lines which have LoadModule and add it after the last of those lines.
-          
+
             LoadModule h264_streaming_module libexec/apache2/mod_h264_streaming.so
             AddHandler h264-streaming.extensions .mp4
 
@@ -181,7 +181,7 @@ If you want to serve a virtual host from apache you’re not quite done yet.
       - add an entry like this and save the file
        127.0.0.1 piecemakerlocal
   - open httpd.conf again add this and save the file
-     
+
      <VirtualHost 127.0.0.1>
        ServerName piecemakerlocal
        DocumentRoot "/path/to/piecemaker/public"
@@ -194,14 +194,14 @@ If you want to serve a virtual host from apache you’re not quite done yet.
      </VirtualHost>
 
 	Now go to configuration section.
-            
+
   SetupConfiguration Overview
-  
+
     Once you've installed the system stuff you have to configure the app itself.
       - What database will you use. sqlite is easiest
       - If you will use s3 to store videos online
         - you need to get the aws s3 api keys from amazon and add the info as environment variables in you shell.
-         
+
     Set Quicktime Player save folder to '/path_to_app/public/video/full'
 
 
@@ -223,7 +223,7 @@ If you want to serve a virtual host from apache you’re not quite done yet.
         this will create the video folders and create an admin user to start with
         username: Administrator
     	  password: Administrator
-        
+
 
 
 	restart apache if you use it
@@ -232,33 +232,29 @@ If you want to serve a virtual host from apache you’re not quite done yet.
 	  > script/server
 	if you server from /Library/WebServer/Documents
 	  go to http://localhost
-	if you have a virtual host 
+	if you have a virtual host
 	  go to http://piecemakerlocal
 	if you use script/server
-	  go to http://localhost:3000 
-	login with 
+	  go to http://localhost:3000
+	login with
     username: Administrator
 	  password: Administrator
 
 
 If you want to use s3 to upload stuff you have to create an s3 bucket with the same name as the config variable you set previously.
-	  
+
 
 Heroku instructions
 
 create heroku account & environment variables
-    heroku create
-    heroku rename piecemaker-example
+    heroku create piecemaker-example
     heroku config:add S3_SECRET_ACCESS_KEY=
     heroku config:add S3_ACCESS_KEY_ID=
-    heroku config:add S3_BUCKET=piecemaker-palucca
-    heroku config:add APP_LOCATION=heroku 
+    heroku config:add S3_BUCKET=piecemaker-example
+    heroku config:add APP_LOCATION=heroku
     heroku config:add BUNDLE_WITHOUT="development:test"
-    git remote --verbose
-    git remote rm heroku
-    git remote add heroku-example git@heroku.com:piecemaker-example.git
     git push heroku-example master
-    
+
     heroku rake db:schema:load
     heroku rake db:seed
 
