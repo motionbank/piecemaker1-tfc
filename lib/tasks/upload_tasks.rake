@@ -1,5 +1,5 @@
 namespace :piecemaker do
-  require Rails.root.to_s + '/config/environment'
+  #require Rails.root.to_s + '/config/environment'
 
   def get_files_from_directory(dir_name)
     Dir.chdir(dir_name)
