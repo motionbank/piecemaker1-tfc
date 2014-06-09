@@ -15,6 +15,7 @@ gem "pg", "~> 0.13.2"
 gem 'ancestry'
 gem 'thin'
 gem 'term-ansicolor'
+gem 'newrelic_rpm'
 group :development do
   gem 'annotate', ">=2.5.0"
   gem 'taps'
