@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-
+ruby '1.9.2'
 gem 'rails', '~> 3.2.13'
 gem 'bcrypt-ruby', '~> 3.0.0'
 gem 'aws-s3', :require => 'aws/s3'
@@ -16,6 +16,7 @@ gem 'ancestry'
 gem 'thin'
 gem 'term-ansicolor'
 gem 'newrelic_rpm'
+gem 'rails_12factor'
 group :development do
   gem 'annotate', ">=2.5.0"
   gem 'taps'
