@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
-ruby '1.9.2'
-gem 'rails', '~> 3.2.13'
+ruby '1.9.3'
+gem 'rails', '~> 3.2.19'
 gem 'bcrypt-ruby', '~> 3.0.0'
 gem 'aws-s3', :require => 'aws/s3'
 #gem 'acts-as-list', :require => 'acts_as_list'

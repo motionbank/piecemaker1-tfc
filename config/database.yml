@@ -1,27 +1,3 @@
-# development:
-#   adapter: mysql
-#   database: piecemaker
-#   username: root
-#   password: swordfis
-#   encoding: utf8
-#   socket: /tmp/mysql.sock
-# #
-# production:
-#   adapter: mysql
-#   database: piecemaker
-#   username: root
-#   password: swordfis
-#   encoding: utf8
-#   socket: /tmp/mysql.sock
-#
-# development:
-#   adapter: mysql
-#   database: piecemaker
-#   username: root
-#   password: swordfis
-#   encoding: utf8
-#   socket: /tmp/mysql.sock
-
 development:
   adapter: postgresql
   database: piecemaker-tfc
