@@ -16,7 +16,7 @@ class S3Config
     ENV['S3_SWF_UPLOAD_ACL'] || 'public-read'
   end
   def self.cloudfront_address
-    's3bulcu47zau6v.cloudfront.net/cfx/st'
+    's117io70xp4y5p.cloudfront.net/cfx/st'
   end
   def self.upload_speed
     94000
