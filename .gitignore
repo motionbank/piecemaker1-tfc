@@ -18,3 +18,5 @@
 /tmp
 
 /public/video/*
+.idea
+.DS_Store
