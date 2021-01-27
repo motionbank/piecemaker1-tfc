@@ -7,7 +7,7 @@ class S3Config
     ENV['S3_SECRET_ACCESS_KEY']
   end
   def self.bucket
-    'piecemaker'
+    'piecemaker1'
   end
   def self.max_file_size
     ENV['S3_SWF_MAX_FILE_SIZE'] || 535544320
